@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h4 ng-bind="vm.newsprivate.targeted_issue"></h4>
+      </div>
+      <div class="card-body">
+        <section>
+          <!--<div class="page-header">
+    <h1 ng-bind="vm.newsprivate.name"></h1>
+  </div>-->
+          <div class="pull-right"
+               ng-show="vm.newsprivate.isCurrentUserOwner">
+            <a class="btn btn-primary"
+               ui-sref="newsprivates.edit({ newsprivateId: vm.newsprivate._id })">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a class="btn btn-primary" ng-click="vm.remove()">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+          <br />
+          <!--src="/api/newsprivates/63d776beb4b1bd259c19abe1/readnews"-->
+          <iframe src="{{vm.loadapi}}" style="width:100%; height:600px;" frameborder="0"></iframe>
+          <br />
+          <small>
+            <em class="text-muted">
+              Posted on
+              <span ng-bind="vm.newsprivate.created | date:'mediumDate'"></span>
+              by
+              <span ng-if="vm.newsprivate.user"
+                    ng-bind="vm.newsprivate.user.displayName"></span>
+              <span ng-if="!vm.newsprivate.user">Deleted User</span>
+            </em>
+          </small>
+          <p class="lead" ng-bind="vm.newsprivate.content"></p>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

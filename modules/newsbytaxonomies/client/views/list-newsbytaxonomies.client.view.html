@@ -1,0 +1,95 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">News to Taxonomy</h3>
+        <div class="card-tools">
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <button id="btn_export_excel" class="btn btn-success btn-sm">
+              <i class="fas fa-file-excel" aria-hidden="true"></i>
+            </button>
+            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-default">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <!--<th>Key</th>-->
+              <th>Taxonomy</th>
+              <th>Newsdaily</th>
+              <th style="width: 100px">URL</th>
+              <th>Created</th>
+              <th ng-if="vm.isAdmin">User</th>
+              <th style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, row) in vm.pagedItems">
+              <td ui-sref="newsbytaxonomies.view({ newsbytaxonomyId: row._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <!--<td ui-sref="newsbytaxonomies.view({ newsbytaxonomyId: row._id })"><span ng-bind="row.keylabelstudio"></span></td>-->
+              <td><span ng-bind="row.taxonomy.taxonomy_name"></span></td>
+              <td><span ng-bind="row.newsdaily.news_title"></span></td>
+              <td><a href="{{ row.newsdaily.news_url }}"><span ng-bind="row.newsdaily.news_url"></span></a></span></td>
+              <td><span ng-bind="row.created | date:'mediumDate'"></span></td>
+              <td ng-if="vm.isAdmin"><span ng-if="row.user" ng-bind="row.user.displayName"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="newsbytaxonomies.view({ newsbytaxonomyId: row._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                    ng-if="vm.isAdmin || vm.isManager"
+                     ui-sref="newsbytaxonomies.edit({ newsbytaxonomyId: row._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a class="btn btn-danger" ng-click="vm.remove(row._id)" style="color: white;" ng-if="vm.isAdmin || vm.isManager">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix" ng-if="vm.filterLength > 0">
+          <b style="color: blue;">Total: {{vm.filterLength}} (rows)</b>
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div> 
+        <div ng-if="vm.filterLength == 0" style="text-align: center;">
+          <span style="color: black; font-weight: bold;">No search results were found!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<section>
+  <div class="page-header">
+    <h1>Newsbytaxonomies</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="newsbytaxonomy in vm.newsbytaxonomies"
+       ui-sref="newsbytaxonomies.view({ newsbytaxonomyId: newsbytaxonomy._id })"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="newsbytaxonomy.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="newsbytaxonomy.user" ng-bind="newsbytaxonomy.user.displayName"></span>
+        <span ng-if="!newsbytaxonomy.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="newsbytaxonomy.name"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.newsbytaxonomies.$resolved && !vm.newsbytaxonomies.length">
+    No Newsbytaxonomies yet, why don't you <a ui-sref="newsbytaxonomies.create">create one</a>?
+  </div>
+</section>-->

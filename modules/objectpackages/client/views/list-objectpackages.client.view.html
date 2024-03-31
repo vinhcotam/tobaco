@@ -1,0 +1,90 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">Packages</h3>
+        <div class="card-tools">
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-default">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Name</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th>Created</th>
+              <th ng-if="vm.isAdmin">User</th>
+              <th style="width: 170px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, objectpackage) in vm.pagedItems">
+              <td ui-sref="objectpackages.view({ objectpackageId: objectpackage._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td ui-sref="objectpackages.view({ objectpackageId: objectpackage._id })"><span ng-bind="objectpackage.package_name"></span></td>
+              <td ui-sref="objectpackages.view({ objectpackageId: objectpackage._id })"><span ng-bind="objectpackage.start"></span></td>
+              <td ui-sref="objectpackages.view({ objectpackageId: objectpackage._id })"><span ng-bind="objectpackage.end"></span></td>
+              <td ui-sref="objectpackages.view({ objectpackageId: objectpackage._id })"><span ng-bind="objectpackage.created | date:'mediumDate'"></span></td>
+              <td ng-if="objectpackage.user && vm.isAdmin"><span ng-bind="objectpackage.user.displayName"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="objectpackages.view({ objectpackageId: objectpackage._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="objectpackages.edit({ objectpackageId: objectpackage._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a class="btn btn-danger" ng-click="vm.remove(objectpackage._id)" style="color:white;">
+                    <i class="fas fa-trash" style="color:white"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix" ng-if="vm.filterLength > 0">
+          <b style="color: blue;">Total: {{vm.filterLength}} (rows)</b>
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+        <div ng-if="vm.filterLength == 0" style="text-align: center;">
+          <span style="color: black; font-weight: bold;">No search results were found!</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<section>
+  <div class="page-header">
+    <h1>Objectpackages</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="objectpackage in vm.objectpackages"
+       ui-sref="objectpackages.view({ objectpackageId: objectpackage._id })"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="objectpackage.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="objectpackage.user" ng-bind="objectpackage.user.displayName"></span>
+        <span ng-if="!objectpackage.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="objectpackage.name"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.objectpackages.$resolved && !vm.objectpackages.length">
+    No Objectpackages yet, why don't you <a ui-sref="objectpackages.create">create one</a>?
+  </div>
+</section>-->

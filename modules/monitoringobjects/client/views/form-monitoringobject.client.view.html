@@ -1,0 +1,107 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+    <div class="card-header">
+      <h3>{{vm.monitoringobject._id ? 'Edit Monitoring object' : 'New Monitoring object'}}</h3>
+    </div>
+    <div class="card-body">
+  <section>
+  <div class="col-md-12">
+    <form name="vm.form.monitoringobjectForm" class="form-horizontal" ng-submit="vm.save(vm.form.monitoringobjectForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="topic">Topic</label>
+          <div class="row">
+            <div class="col-sm-12">
+              <select class="form-control" name="topic" id="topic"
+                      ng-model="vm.monitoringobject.topic"
+                      ng-options="item._id as item.topic_name for item in vm.topics">
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="topic">Social config</label>
+          <div class="row">
+            <div class="col-sm-12">
+              <select class="form-control" name="socialcrawlerconfig" id="socialcrawlerconfig"
+                      ng-model="vm.monitoringobject.socialcrawlerconfig"
+                      ng-options="item._id as item.socialconfig_name for item in vm.socialcrawlerconfigs[0].data">
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="monitoringtype">Monitor Type</label>
+          <div class="row">
+            <div class="col-sm-12">
+              <select class="form-control" name="monitoringtype" id="monitoringtype"
+                      ng-model="vm.monitoringobject.monitoringtype"
+                      ng-options="item._id as item.type_name for item in vm.monitoringtypes[0].data">
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="object_name">object Name</label>
+          <input name="object_name" type="text" ng-model="vm.monitoringobject.object_name" id="object_name" class="form-control" placeholder="Object Name" required>
+          <div ng-messages="vm.form.monitoringobjectForm.object_name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Object name is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="object_url">Object URL</label>
+          <input name="object_url" type="text" ng-model="vm.monitoringobject.object_url" id="object_url" class="form-control" placeholder="Object url">
+          <div ng-messages="vm.form.monitoringobjectForm.object_url.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Object url is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="subject_type">Subject Type</label>
+          <input name="subject_type" type="text" ng-model="vm.monitoringobject.subject_type" id="subject_type" class="form-control" placeholder="Object type">
+          <div ng-messages="vm.form.monitoringobjectForm.subject_type.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Subject type is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="location">Location</label>
+          <input name="location" type="text" ng-model="vm.monitoringobject.location" id="location" class="form-control" placeholder="Location">
+          <div ng-messages="vm.form.monitoringobjectForm.location.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Location is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="image_url">Image URL</label>
+          <input name="image_url" type="text" ng-model="vm.monitoringobject.image_url" id="image_url" class="form-control" placeholder="Image Url">
+          <div ng-messages="vm.form.monitoringobjectForm.image_url.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Image URL is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="full_name">Full Name</label>
+          <input name="full_name" type="text" ng-model="vm.monitoringobject.full_name" id="full_name" class="form-control" placeholder="Full Name">
+          <div ng-messages="vm.form.monitoringobjectForm.full_name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Full Name is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="condition_filter">Condition Filter</label>
+          <input name="condition_filter" type="text" ng-model="vm.monitoringobject.condition_filter" id="condition_filter" class="form-control" placeholder="Condition Filter">
+          <div ng-messages="vm.form.monitoringobjectForm.condition_filter.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Condition Filter is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.monitoringobject._id ? 'Update' : 'Create'}}</button>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
+      </div>
+    </div>
+  </div>
+</div>

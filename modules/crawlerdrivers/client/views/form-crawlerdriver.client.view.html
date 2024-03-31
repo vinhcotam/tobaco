@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3>{{vm.crawlerdriver._id ? 'Edit Crawlerdriver' : 'New Crawlerdriver'}}</h3>
+      </div>
+      <div class="card-body">
+    <section>
+  <div class="col-md-12">
+    <form name="vm.form.crawlerdriverForm" class="form-horizontal" ng-submit="vm.save(vm.form.crawlerdriverForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="crawlerdriver_name">Name</label>
+          <input name="crawlerdriver_name" type="text" ng-model="vm.crawlerdriver.crawlerdriver_name" id="crawlerdriver_name" class="form-control" placeholder="Name" required>
+          <div ng-messages="vm.form.crawlerdriverForm.crawlerdriver_name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Crawlerdriver name is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="crawlerdriver_path">Path</label>
+          <input name="crawlerdriver_path" type="text" ng-model="vm.crawlerdriver.crawlerdriver_path" id="crawlerdriver_path" class="form-control" placeholder="Path" required>
+          <div ng-messages="vm.form.crawlerdriverForm.crawlerdriver_path.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Crawlerdriver path is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="crawlerdriver_class">Class</label>
+          <input name="crawlerdriver_class" type="text" ng-model="vm.crawlerdriver.crawlerdriver_class" id="crawlerdriver_class" class="form-control" placeholder="Class" required>
+          <div ng-messages="vm.form.crawlerdriverForm.crawlerdriver_class.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Crawlerdriver class is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="crawlerdriver_description">Description</label>
+          <textarea name="crawlerdriver_description" type="text" ng-model="vm.crawlerdriver.crawlerdriver_description" id="crawlerdriver_description" class="form-control" placeholder="Description" required></textarea>
+          <div ng-messages="vm.form.crawlerdriverForm.crawlerdriver_description.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Crawlerdriver description is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.crawlerdriver._id ? 'Update' : 'Create'}}</button>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+    </section>
+      </div>
+    </div>
+  </div>
+</div>
+

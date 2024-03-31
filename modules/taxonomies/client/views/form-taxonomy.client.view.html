@@ -1,0 +1,57 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3>{{vm.taxonomy._id ? 'Edit Taxonomy' : 'New Taxonomy'}}</h3>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="col-md-12">
+            <form name="vm.form.taxonomyForm" class="form-horizontal" ng-submit="vm.save(vm.form.taxonomyForm.$valid)" novalidate>
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="topic">Topic</label>
+                  <select class="form-control" name="topic" id="topic" ng-model="vm.taxonomy.topic">
+                    <option ng-repeat="item in vm.topics" value="{{item.topic._id}}" [selected]="item.topic._id == vm.taxonomy.topic._id">
+                      {{item.topic.topic_name}}
+                    </option>
+                  </select>
+                </div>
+              </fieldset>
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="parentId">Parent ID</label>
+                  <input name="parent" type="text" ng-model="vm.taxonomy.parentId" id="parentId" class="form-control" placeholder="Parent Id">
+                  <div ng-messages="vm.form.taxonomyForm.parentId.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Taxonomy name is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="taxonomy_name">Name</label>
+                  <input name="taxonomy_name" type="text" ng-model="vm.taxonomy.taxonomy_name" id="taxonomy_name" class="form-control" placeholder="Name" required>
+                  <div ng-messages="vm.form.taxonomyForm.taxonomy_name.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Taxonomy name is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="taxonomy_description">Description</label>
+                  <input name="taxonomy_description" type="text" ng-model="vm.taxonomy.taxonomy_description" id="taxonomy_description" class="form-control" placeholder="Description" required>
+                  <div ng-messages="vm.form.taxonomyForm.taxonomy_description.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Taxonomy description is required.</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-default">{{vm.taxonomy._id ? 'Update' : 'Create'}}</button>
+                </div>
+                <div ng-show="vm.error" class="text-danger">
+                  <strong ng-bind="vm.error"></strong>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</div>

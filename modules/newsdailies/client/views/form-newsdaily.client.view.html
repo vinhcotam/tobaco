@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3>{{ vm.newsdaily._id ? 'Edit News' : 'New News Daily' }}</h3>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="col-md-12">
+            <form name="vm.form.newsdailyForm" class="form-horizontal" ng-submit="vm.save(vm.form.newsdailyForm.$valid)" novalidate>
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="news_title">Title <span class="span_required">*</span></label>
+                  <input name="news_title" type="text" ng-model="vm.newsdaily.news_title" id="news_title" class="form-control" placeholder="Title" required>
+                  <div ng-messages="vm.form.newsdailyForm.news_title.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Newsdaily title is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="news_summary">News Summary<span class="span_required">*</span></label>
+                  <input name="news_summary" type="text" ng-model="vm.newsdaily.news_summary" id="news_summary" class="form-control" placeholder="Summary" required>
+                  <div ng-messages="vm.form.newsdailyForm.news_summary.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Newsdaily Summary is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="npl_content">News Content<span class="span_required">*</span></label>
+                  <textarea name="npl_content" ng-model="vm.newsdaily.npl_content" class="form-control" rows="20" required></textarea>
+                  <div ng-messages="vm.form.newsdailyForm.npl_content.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Newsdaily Content is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="topic">Topic <span class="span_required">*</span></label>
+                  <select class="form-control" name="topic" id="topic" ng-model="vm.newsdaily.topic._id" required>
+                    <option ng-repeat="item in vm.topics" value="{{item.topic._id}}" ng-selected="item.topic._id === vm.newsdaily.topic._id">
+                      {{item.topic.topic_name}}
+                    </option>
+                  </select>
+                  <div ng-messages="vm.form.newsdailyForm.topic.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Newsdaily Topic is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="news_url">News Url <span class="span_required">*</span></label>
+                  <input name="news_url" type="url" ng-model="vm.newsdaily.news_url" id="news_url" class="form-control" placeholder="URL" required>
+                  <div ng-messages="vm.form.newsdailyForm.news_url.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Newsdaily Url is required.</p>
+                    <p class="help-block error-text" ng-message="url">Newsdaily Url is invalid.</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary">{{vm.newsdaily._id ? 'Update' : 'Create'}}</button>
+                </div>
+                <div ng-show="vm.error" class="text-danger">
+                  <strong ng-bind="vm.error"></strong>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

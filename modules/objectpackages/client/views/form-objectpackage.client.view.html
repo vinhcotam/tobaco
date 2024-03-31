@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h4>{{vm.objectpackage._id ? 'Edit Objectpackage' : 'New Objectpackage'}}</h4>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="col-md-12">
+            <form name="vm.form.objectpackageForm" class="form-horizontal" ng-submit="vm.save(vm.form.objectpackageForm.$valid)" novalidate>
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="topic">Social crawlerConfig</label>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <select class="form-control" name="socialcrawlerconfig" id="socialcrawlerconfig"
+                              ng-model="vm.objectpackage.socialcrawlerconfig"
+                              ng-options="item._id as item.socialconfig_name for item in vm.scconfigs">
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="package_name">Name</label>
+                  <input name="name" type="text" ng-model="vm.objectpackage.package_name" id="package_name" class="form-control" placeholder="Name" required>
+                  <div ng-messages="vm.form.objectpackageForm.package_name.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Objectpackage name is required.</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group" show-errors>
+                        <label class="control-label" for="last_run_date">Start date</label>
+                        <input name="start" type="date" ng-model="vm.objectpackage.start" id="start" class="form-control" placeholder="start date">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group" show-errors>
+                        <label class="control-label" for="next_run_date">End date</label>
+                        <input name="end" type="date" ng-model="vm.objectpackage.end" id="end" class="form-control" placeholder="to date">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-default">{{vm.objectpackage._id ? 'Update' : 'Create'}}</button>
+                </div>
+                <div ng-show="vm.error" class="text-danger">
+                  <strong ng-bind="vm.error"></strong>
+                </div>
+              </fieldset>
+
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

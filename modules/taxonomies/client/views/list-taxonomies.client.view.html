@@ -1,0 +1,87 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">Taxonomies</h3>
+        <div class="card-tools">
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-default">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th style="width: 50%;">Name</th>
+              <th>Topic</th>
+              <th>Created</th>
+              <th>User</th>
+              <th style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, taxonomy) in vm.pagedItems">
+              <td ui-sref="taxonomy.view({ taxonomyId: taxonomy._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td ui-sref="taxonomy.view({ taxonomyId: taxonomy._id })"><span ng-bind="taxonomy.taxonomy_name"></span></td>
+              <td ui-sref="taxonomy.view({ taxonomyId: taxonomy._id })"><span ng-bind="taxonomy.topic.topic_name"></span></td>
+              <td ui-sref="taxonomy.view({ taxonomyId: taxonomy._id })"><span ng-bind="taxonomy.created | date:'mediumDate'"></span></td>
+              <td><span ng-if="taxonomy.user" ng-bind="taxonomy.user.displayName"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <!--<a class="btn btn-primary"
+    ui-sref="taxonomies.view({ taxonomyId: taxonomy._id })">-->
+                  <a class="btn btn-primary"
+                     ui-sref="taxonomies.treeview({ taxonomyId: taxonomy._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="taxonomies.edit({ taxonomyId: taxonomy._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a class="btn btn-primary" ng-click="vm.remove(taxonomy._id)">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix">
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--<section>
+  <div class="page-header">
+    <h1>Taxonomies</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="taxonomy in vm.taxonomies"
+       ui-sref="taxonomies.view({ taxonomyId: taxonomy._id })"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="taxonomy.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="taxonomy.user" ng-bind="taxonomy.user.displayName"></span>
+        <span ng-if="!taxonomy.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="taxonomy.name"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.taxonomies.$resolved && !vm.taxonomies.length">
+    No Taxonomies yet, why don't you <a ui-sref="taxonomies.create">create one</a>?
+  </div>
+</section>
+-->

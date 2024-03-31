@@ -1,0 +1,46 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+    <div class="card-header">
+      <h1>{{vm.crawlerschedule._id ? 'Edit Crawlerschedule' : 'New Crawlerschedule'}}</h1>
+    </div>
+    <div class="card-body">
+  <section>
+  <div class="col-md-12">
+    <form name="vm.form.crawlerscheduleForm" class="form-horizontal" ng-submit="vm.save(vm.form.crawlerscheduleForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="frequency">Frequency</label>
+          <input name="frequency" type="text" ng-model="vm.crawlerschedule.frequency" id="frequency" class="form-control" placeholder="Frequency" required>
+          <div ng-messages="vm.form.crawlerscheduleForm.frequency.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Crawlerschedule frequency is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="last_run_date">Last run date</label>
+          <input name="last_run_date" type="date" ng-model="vm.crawlerschedule.last_run_date" id="last_run_date" class="form-control" placeholder="Last run date" required>
+          <div ng-messages="vm.form.crawlerscheduleForm.last_run_date.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Crawlerschedule last date is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="next_run_date">Next run date</label>
+          <input name="next_run_date" type="date" ng-model="vm.crawlerschedule.next_run_date" id="next_run_date" class="form-control" placeholder="Next run date" required>
+          <div ng-messages="vm.form.crawlerscheduleForm.next_run_date.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Crawlerschedule next date is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.crawlerschedule._id ? 'Update' : 'Create'}}</button>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
+      </div>
+    </div>
+  </div>
+</div>

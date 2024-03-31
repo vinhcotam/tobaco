@@ -1,0 +1,99 @@
+<div class="login-box block">
+  <div class="text-center">
+    <h1 class="h1 text-h">Tobacco Industry Monitoring</h1>
+  </div>
+  <div class="card-body">
+    <form name="vm.userForm" ng-submit="vm.signin(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
+      <fieldset>
+        <div class="form-group" show-errors>
+          <uib-alert type="danger" ng-show="vm.error" class="text-center text-danger">
+            <span ng-bind="vm.error"></span>
+          </uib-alert>
+          <label for="usernameOrEmail">Username or Email</label>
+          <input type="text" id="usernameOrEmail" name="usernameOrEmail" class="form-control" ng-model="vm.credentials.usernameOrEmail" placeholder="Username or Email" required autofocus>
+          <div ng-messages="vm.userForm.usernameOrEmail.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Username or Email is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" ng-model="vm.credentials.password" placeholder="Password" required>
+          <div ng-messages="vm.userForm.password.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Password is required.</p>
+          </div>
+        </div>
+        <div class="text-center form-group">
+          <button type="submit" class="btn btn-primary">Sign in</button>
+          &nbsp; or&nbsp;
+          <a ui-sref="authentication.signup">Sign up</a>
+        </div>
+        <div class="text-center forgot-password">
+          <a ui-sref="password.forgot">Forgot your password?</a>
+        </div>
+        <br />
+      </fieldset>
+      <!--<div class="form-group">
+        <input type="email" class="form-control form-control-user" name="email" placeholder="Email">
+      </div>
+      <div class="form-group">
+        <input type="password" class="form-control form-control-user" name="password" placeholder="Password">
+      </div>
+      <div class="form-group">
+        <div class="small">
+          <input type="checkbox" id="customCheck">
+          <label for="customCheck" style="color: #979393;">Remember Me</label>
+        </div>
+      </div>-->
+    </form>
+    <hr>
+    <!--<div class="text-center form-group">
+      <button type="submit" class="btn btn-primary btn-user">Sign in</button> &nbsp; <span style="color: #000000;">or</span>&nbsp;
+      <a class="small text-shadow" href="#">Sign up</a>
+    </div>
+    <div class="text-center forgot-password text-shadow">
+      <a class="small" href="#">Forgot your password?</a>
+    </div>-->
+    <div class="seperator text-center text-shadow" style="color: #000000;"><b>OR</b></div>
+    <div class="icon-social">
+      <div class="social-account-container social-button"><a class="btn"><img class="img-responsive" ng-click="vm.callOauthProvider('/api/auth/facebook')" ng-src="/modules/users/client/img/buttons/facebook.png"></a></div>
+      <div class="social-account-container social-button"><a class="btn"><img class="img-responsive" ng-click="vm.callOauthProvider('/api/auth/twitter')" ng-src="/modules/users/client/img/buttons/twitter.png"></a></div>
+      <div class="social-account-container social-button"><a class="btn"><img class="img-responsive" ng-click="vm.callOauthProvider('/api/auth/google')" ng-src="/modules/users/client/img/buttons/google.png"></a></div>
+      <!--<div class="social-account-container social-button"><a class="btn"><img class="img-responsive" ng-click="vm.callOauthProvider('/api/auth/linkedin')" ng-src="/modules/users/client/img/buttons/linkedin.png"></a></div>
+      <div class="social-account-container social-button"><a class="btn"><img class="img-responsive" ng-click="vm.callOauthProvider('/api/auth/github')" ng-src="/modules/users/client/img/buttons/github.png"></a></div>
+      <div class="social-account-container social-button"><a class="btn"><img class="img-responsive" ng-click="vm.callOauthProvider('/api/auth/paypal')" ng-src="/modules/users/client/img/buttons/paypal.png"></a></div>-->
+    </div>
+  </div>
+</div>
+<!--<div>
+    <h3 class="col-xs-12 text-center">Or with your account</h3>
+    <form name="vm.userForm" ng-submit="vm.signin(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
+      <fieldset>
+        <div class="form-group" show-errors>
+          <uib-alert type="danger" ng-show="vm.error" class="text-center text-danger">
+            <span ng-bind="vm.error"></span>
+          </uib-alert>
+          <label for="usernameOrEmail">Username or Email</label>
+          <input type="text" id="usernameOrEmail" name="usernameOrEmail" class="form-control" ng-model="vm.credentials.usernameOrEmail" placeholder="Username or Email" required autofocus>
+          <div ng-messages="vm.userForm.usernameOrEmail.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Username or Email is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label for="password">Password</label>
+          <input type="password" id="password" name="password" class="form-control" ng-model="vm.credentials.password" placeholder="Password" required>
+          <div ng-messages="vm.userForm.password.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Password is required.</p>
+          </div>
+        </div>
+        <div class="text-center form-group">
+          <button type="submit" class="btn btn-primary">Sign in</button>
+          &nbsp; or&nbsp;
+          <a ui-sref="authentication.signup">Sign up</a>
+        </div>
+        <div class="text-center forgot-password">
+          <a ui-sref="password.forgot">Forgot your password?</a>
+        </div>
+        <br />
+      </fieldset>
+    </form>
+</div>-->

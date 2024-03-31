@@ -1,0 +1,42 @@
+<body class="bg-login">
+  <div class="container-0">
+    <div class="login-box block">
+      <div class="text-center-0">
+        <h1 class="h1 text-h">Tobacco Industry Monitoring</h1>
+      </div>
+      <div class="card-body-0">
+        <form name="vm.userForm" ng-submit="vm.signin(vm.userForm.$valid)" class="signin" novalidate autocomplete="off">
+          <div class="form-group-0">
+            <!--<input type="email" class="form-control-0 form-control-user" name="email" placeholder="Email">-->
+            <input type="text" id="usernameOrEmail" name="usernameOrEmail" class="form-control-0 form-control-user" ng-model="vm.credentials.usernameOrEmail" placeholder="Username or Email" required autofocus>
+          </div>
+          <div class="form-group-0">
+            <!--<input type="password" class="form-control-0 form-control-user" name="password" placeholder="Password">-->
+            <input type="password" id="password" name="password" class="form-control-0 form-control-user" ng-model="vm.credentials.password" placeholder="Password" required>
+          </div>
+          <div class="form-group-0">
+            <div class="small">
+              <input type="checkbox" id="customCheck">
+              <label for="customCheck" style="color: #979393;">Remember Me</label>
+            </div>
+          </div>
+          <hr>
+          <div class="text-center-0 form-group-0">
+            <button type="submit" class="btn btn-primary btn-user">Sign in</button> &nbsp; <span style="color: #000000;">or</span>&nbsp;
+            <a class="small text-shadow" href="#">Sign up</a>
+          </div>
+        </form>
+        
+        <div class="text-center-0 forgot-password text-shadow">
+          <a class="small" href="#">Forgot your password?</a>
+        </div>
+        <div class="seperator text-center-0 text-shadow" style="color: #ffffff;"><b>OR</b></div>
+        <div class="icon-social">
+          <a href="#" class="fa fa-facebook"></a>
+          <a href="#" class="fa fa-twitter"></a>
+          <a href="#" class="fa fa-google"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>

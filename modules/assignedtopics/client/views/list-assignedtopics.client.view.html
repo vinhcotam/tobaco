@@ -1,0 +1,83 @@
+﻿<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h2 class="card-title">Research topics</h2>
+        <div ng-if="vm.isAdmin" class="card-tools">
+          <div class="input-group input-group-sm">
+            <select class="form-control" ng-model="vm.filterbytopic" ng-change="vm.figureOutItemsToDisplay()" ng-options="item as item.topic_name for item in vm.topics track by item._id">
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Topic Name</th>
+              <th>Topic Description</th>
+              <th ng-if="vm.isAdmin">Owner</th>
+              <th ng-if="vm.isManager || vm.isAdmin">Assinged</th>
+              <th>Active</th>
+              <th>Created</th>
+              <th style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, assignedtopic) in vm.pagedItems">
+              <td ui-sref="assignedtopics.view({ assignedtopicId: assignedtopic._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td><span ng-bind="assignedtopic.topic.topic_name"></span></td>
+              <td><span ng-bind="assignedtopic.topic.topic_description"></span></td>
+              <td ng-if="vm.isAdmin"><span ng-bind="assignedtopic.topic.owner.displayName"></span></td>
+              <td ng-if="vm.isManager || vm.isAdmin"><span ng-bind="assignedtopic.assigned_user.displayName"></span></td>
+              <td>
+                <span ng-if="assignedtopic.working_status==1" style="color: blue;">Actived</span>
+                <span ng-if="assignedtopic.working_status==0">Inactive</span>
+              </td>
+              <td><span ng-bind="assignedtopic.created | date:'mediumDate'"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="assignedtopics.view({ assignedtopicId: assignedtopic._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="assignedtopics.edit({ assignedtopicId: assignedtopic._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a ng-if="vm.isManager || vm.isAdmin" class="btn btn-danger" ng-click="vm.remove(topic._id)" style="color:white;">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix">
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+        <!--<section>
+          <div class="list-group">
+            <a ng-repeat="assignedtopic in vm.assignedtopics"
+               ui-sref="assignedtopics.view({ assignedtopicId: assignedtopic._id })"
+               class="list-group-item">
+              <small class="list-group-item-text">
+                Posted on
+                <span ng-bind="assignedtopic.created | date:'mediumDate'"></span>
+                by
+                <span ng-if="assignedtopic.user" ng-bind="assignedtopic.user.displayName"></span>
+                <span ng-if="!assignedtopic.user">Deleted User</span>
+              </small>
+              <h4 class="list-group-item-heading" ng-bind="assignedtopic.name"></h4>
+            </a>
+          </div>
+          <div class="alert alert-warning text-center" ng-if="vm.assignedtopics.$resolved && !vm.assignedtopics.length">
+            No Assignedtopics yet, why don't you <a ui-sref="assignedtopics.create">create one</a>?
+          </div>
+        </section>-->
+      </div>
+
+    </div>
+  </div>
+</div>

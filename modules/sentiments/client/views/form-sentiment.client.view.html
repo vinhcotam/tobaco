@@ -1,0 +1,41 @@
+<div class="row">
+    <div class="col-md-12">
+      <div class="card card-info">
+        <div class="card-header">
+          <h3>{{vm.sentiment._id ? 'Edit Sentiment' : 'New Sentiment'}}</h3>
+        </div>
+        <div class="card-body">
+          <section>
+            <div class="col-md-12">
+              <form name="vm.form.sentimentForm" class="form-horizontal" ng-submit="vm.save(vm.form.sentimentForm.$valid)" novalidate>
+                <fieldset>
+                  <div class="form-group" show-errors>
+                    <label class="control-label" for="sentiment_name">Sentiment Name</label>
+                    <input name="sentiment_name" type="text" ng-model="vm.sentiment.sentiment_name" id="sentiment_name" class="form-control" placeholder="Name" required>
+                    <div ng-messages="vm.form.sentimentForm.sentiment_name.$error" role="alert">
+                      <p class="help-block error-text" ng-message="required">Sentiment name is required.</p>
+                    </div>
+                  </div>
+                  <div class="form-group" show-errors>
+                    <label class="control-label" for="sentiment_description">Description</label>
+                    <input name="sentiment_description" type="text" ng-model="vm.sentiment.sentiment_description" id="sentiment_description" class="form-control" placeholder="Description" required>
+                    <div ng-messages="vm.form.sentimentForm.sentiment_description.$error" role="alert">
+                      <p class="help-block error-text" ng-message="required">Sentiment description is required.</p>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-default">{{vm.sentiment._id ? 'Update' : 'Create'}}</button>
+                  </div>
+                  <div ng-show="vm.error" class="text-danger">
+                    <strong ng-bind="vm.error"></strong>
+                  </div>
+                </fieldset>
+              </form>
+            </div>
+          </section>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  

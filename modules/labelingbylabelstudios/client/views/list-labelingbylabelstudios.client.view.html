@@ -1,0 +1,22 @@
+<section>
+  <div class="page-header">
+    <h1>Labelingbylabelstudios</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="labelingbylabelstudio in vm.labelingbylabelstudios"
+       ui-sref="labelingbylabelstudios.view({ labelingbylabelstudioId: labelingbylabelstudio._id })"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="labelingbylabelstudio.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="labelingbylabelstudio.user" ng-bind="labelingbylabelstudio.user.displayName"></span>
+        <span ng-if="!labelingbylabelstudio.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="labelingbylabelstudio.name"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.labelingbylabelstudios.$resolved && !vm.labelingbylabelstudios.length">
+    No Labelingbylabelstudios yet, why don't you <a ui-sref="labelingbylabelstudios.create">create one</a>?
+  </div>
+</section>

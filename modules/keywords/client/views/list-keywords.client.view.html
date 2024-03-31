@@ -1,0 +1,83 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <!---->
+      <div class="card-header">
+        <h3 class="card-title">Keywords</h3>
+        <div class="card-tools">
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-default">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!---->
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Name</th>
+              <th>Topic</th>
+              <th>Created</th>
+              <th ng-if="keyword.user && vm.isAdmin">User</th>
+              <th style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, keyword) in vm.pagedItems">
+              <td ui-sref="keywords.view({ keywordId: keyword._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td><span ng-bind="keyword.keyword_name"></span></td>
+              <td><span ng-bind="keyword.topic.topic_name"></span></td>
+              <td><span ng-bind="keyword.created | date:'mediumDate'"></span></td>
+              <td><span ng-if="keyword.user && vm.isAdmin" ng-bind="keyword.user.displayName"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="keywords.view({ keywordId: keyword._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="keywords.edit({ keywordId: keyword._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a class="btn btn-danger" ng-click="vm.remove(keyword._id)">
+                    <i class="fas fa-trash" style="color: white;"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix">
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+        <!--<section>
+    <div class="list-group">
+      <a ng-repeat="keyword in vm.keywords"
+         ui-sref="keywords.view({ keywordId: keyword._id })"
+         class="list-group-item">
+        <small class="list-group-item-text">
+          Posted on
+          <span ng-bind="keyword.created | date:'mediumDate'"></span>
+          by
+          <span ng-if="keyword.user" ng-bind="keyword.user.displayName"></span>
+          <span ng-if="!keyword.user">Deleted User</span>
+        </small>
+        <h4 class="list-group-item-heading" ng-bind="keyword.keyword_name"></h4>
+      </a>
+    </div>
+    <div class="alert alert-warning text-center" ng-if="vm.keywords.$resolved && !vm.keywords.length">
+      No Keywords yet, why don't you <a ui-sref="keywords.create">create one</a>?
+    </div>
+  </section>-->
+      </div>
+    </div>
+  </div>
+</div>
+        

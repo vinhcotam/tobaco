@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col-md-4">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3>{{vm.contentidentification._id ? 'Edit Contentidentification' : 'New Contentidentification'}}</h3>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="col-md-12">
+            <form name="vm.form.contentidentificationForm" class="form-horizontal" ng-submit="vm.save(vm.form.contentidentificationForm.$valid)" novalidate>
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="website">Website</label>
+                  <select class="form-control" name="website" id="website" ng-model="vm.contentidentification.website._id">
+                    <option ng-repeat="website in vm.websites" source_url="{{website.source_url}}" value="{{website._id}}" [selected]="website._id == vm.contentidentification.website._id">
+                      {{website.website_name}}
+                    </option>
+                  </select>
+                </div>
+              </fieldset>
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="key">Key</label>
+                  <input name="key" type="text" ng-model="vm.contentidentification.key" id="key" class="form-control" placeholder="Key" required>
+                  <div ng-messages="vm.form.contentidentificationForm.key.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Contentidentification name is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="type">Type</label>
+                  <input name="type" type="text" ng-model="vm.contentidentification.type" id="type" class="form-control" placeholder="Type" required>
+                  <div ng-messages="vm.form.contentidentificationForm.type.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Contentidentification name is required.</p>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <button type="submit" class="btn btn-default">{{vm.contentidentification._id ? 'Update' : 'Create'}}</button>
+                </div>
+                <div ng-show="vm.error" class="text-danger">
+                  <strong ng-bind="vm.error"></strong>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card card-info">
+      <div class="card-header">
+        <h2>Web Preview</h2>
+      </div>
+      <div class="card-body">
+        <iframe id="inlineFrameWebsite"
+                title="Inline Frame Example"
+                width="100%"
+                height="500">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>

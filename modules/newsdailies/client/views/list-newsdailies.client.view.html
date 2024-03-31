@@ -1,0 +1,116 @@
+﻿<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h2 class="card-title">News</h2>
+        <div class="card-tools">
+
+          <div class="input-group input-group-sm" style="width: 600px;">
+            <!--<div class="form-group">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">
+        <i class="fa fa-calendar"></i>
+      </span>
+    </div>
+    <input type="text" class="form-control float-right" id="reservation">
+  </div>-->
+            <!-- /.input group -->
+            <!--</div>-->
+            <button id="btn_export" class="btn btn-success btn-sm">
+              <i class="fas fa-file-excel" aria-hidden="true"></i>
+            </button>
+            <select class="form-control" ng-model="vm.filterbycrawlerconfig" ng-change="vm.figureOutItemsToDisplay()">
+              <option value="0">Tất cả</option>
+              <option ng-repeat="config in vm.crawlerconfigs" value="{{config._id}}">
+                {{config.config_name}}
+              </option>
+            </select>
+            <input id="datetimefilter" type="text" class="form-control float-right" ng-model="vm.filterbydate" ng-change="vm.figureOutItemsToDisplay()">
+            <select name="group_news" class="form-control" ng-model="vm.filterbygroup" ng-change="vm.figureOutItemsToDisplay()">
+              <!--<option value="0">Tất cả</option>
+  <option value="1">Ủng hộ ngành công nghiệp thuốc lá</option>
+  <option value="2">Ủng hộ ngành Y tế công cộng</option>
+  <option value="3">Không rõ</option>-->
+              <option value="0">Tất cả</option>
+              <option ng-repeat="group in vm.newsgroups" value="{{group._id}}">
+                {{group.name}}
+              </option>
+            </select>
+            <select name="labeling" class="form-control" ng-model="vm.filterbylabeled" ng-change="vm.figureOutItemsToDisplay()">
+              <option value="-1">All</option>
+              <option value="0">UnLabeled</option>
+              <option value="1">Labeled</option>
+            </select>
+            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-default">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <!--<table class="table table-hover text-wrap"
+              id="table"
+              data-toggle="table"
+              data-sortable="true">-->
+        <table class="table table-bordered table-hover">
+          <thead ng-if="vm.filterLength > 0">
+            <tr>
+              <th style="width: 10px">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Description</th>
+              <th scope="col" ng-click="vm.sortPostedFunc()" width="95">
+                <div class="row">
+                  <div class="col-sm-10">Posted</div>
+                  <div id="sortbyposted" class="float-right"><i class="fas fa-sort"></i></div>
+                </div>
+              </th>
+              <th scope="col">Created</th>
+              <th style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, news) in vm.pagedItems">
+              <td ui-sref="newsdailies.view({ newsdailyId: news._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td><span ng-bind="news.news_title"></span></td>
+              <td><span ng-bind="news.news_summary"></span></td>
+              <td><span ng-bind="news.posted | date:'mediumDate'"></span></td>
+              <td><span ng-bind="news.created | date:'mediumDate'"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="newsdailies.labeling({ newsdailyId: news._id })">
+                    <i class="fas fa-tag"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="newsdailies.view({ newsdailyId: news._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="newsdailies.edit({ newsdailyId: news._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a style="color:white;" class="btn btn-danger" ng-click="vm.remove(news._id)">
+                    <i class="fas fa-trash" style="color:white"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix" ng-if="vm.filterLength > 0">
+          <b style="color: blue;">Total: {{vm.filterLength}} (news)</b>
+          <button style="float: right;"  type="button" class="btn btn-danger" ng-if="vm.listDelete.length > 0" ng-click="vm.forceRemove()">Force Delete ( {{ vm.listDelete.length }} )</button>
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+        <div class="card-footer clearfix" ng-if="vm.filterLength == 0" style="text-align: center;">
+          <b style="color: black;">No search results were found!</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

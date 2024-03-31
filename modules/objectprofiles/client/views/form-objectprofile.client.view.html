@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+    <div class="card-header">
+      <h1>{{vm.objectprofile._id ? 'Edit Objectprofile' : 'New Objectprofile'}}</h1>
+    </div>
+    <div class="card-body">
+  <section>
+  <div class="col-md-12">
+    <form name="vm.form.objectprofileForm" class="form-horizontal" ng-submit="vm.save(vm.form.objectprofileForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="profile">Profile</label>
+          <input name="profile" type="text" ng-model="vm.objectprofile.profile" id="profile" class="form-control" placeholder="Profile" required>
+          <div ng-messages="vm.form.objectprofileForm.profile.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Profile is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="profile_url">Profile URL</label>
+          <input name="profile_url" type="text" ng-model="vm.objectprofile.profile_url" id="profile_url" class="form-control" placeholder="Profile url" required>
+          <div ng-messages="vm.form.objectprofileForm.profile_url.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Profile URL is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="profile_name">Profile Name</label>
+          <input name="profile_name" type="text" ng-model="vm.objectprofile.profile_name" id="profile_name" class="form-control" placeholder="Profile name" required>
+          <div ng-messages="vm.form.objectprofileForm.profile_name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Profile Name is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="date_created">Date Created</label>
+          <input name="date_created" type="date" ng-model="vm.objectprofile.date_created" id="date_created" class="form-control" placeholder="Date created" required>
+          <div ng-messages="vm.form.objectprofileForm.date_created.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Date Created is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="date_updated">Date Updated</label>
+          <input name="date_updated" type="date" ng-model="vm.objectprofile.date_updated" id="date_updated" class="form-control" placeholder="Date updated" required>
+          <div ng-messages="vm.form.objectprofileForm.date_updated.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Date Updated is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.objectprofile._id ? 'Update' : 'Create'}}</button>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+    <div class="card-header">
+      <h1>{{vm.activitylog._id ? 'Edit Activitylog' : 'New Activitylog'}}</h1>
+    </div>
+    <div class="card-body">
+      <section>
+          <div class="col-md-12">
+            <form name="vm.form.activitylogForm" class="form-horizontal" ng-submit="vm.save(vm.form.activitylogForm.$valid)" novalidate>
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="log_type">Log type</label>
+                  <input name="log_type" type="text" ng-model="vm.activitylog.log_type" id="log_type" class="form-control" placeholder="Log type" required>
+                  <div ng-messages="vm.form.activitylogForm.log_type.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Log type is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="log_content">Log content</label>
+                  <input name="log_content" type="text" ng-model="vm.activitylog.log_content" id="log_content" class="form-control" placeholder="Log content" required>
+                  <div ng-messages="vm.form.activitylogForm.log_content.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Log content is required.</p>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-default">{{vm.activitylog._id ? 'Update' : 'Create'}}</button>
+                </div>
+                <div ng-show="vm.error" class="text-danger">
+                  <strong ng-bind="vm.error"></strong>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

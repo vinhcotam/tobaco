@@ -1,0 +1,12 @@
+docker run -d -p 27017:27017  mongo:latest
+docker exec -it 513dbf986462 mongosh
+
+docker container ls -a
+docker logs container id
+docker ps
+docker images
+
+
+command build docker in dockerfile
+
+https://github.com/meanjs/mean/branches/stale?page=5

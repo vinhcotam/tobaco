@@ -1,0 +1,76 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h4>Key informant's news</h4>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Targeted issue</th>
+              <th>Topic</th>
+              <th>Taxonomy</th>
+              <th>Keyinformant</th>
+              <th>Filename</th>
+              <th>Created</th>
+              <th>User</th>
+              <th style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, newsprivate) in vm.pagedItems">
+              <td ui-sref="newsprivates.view({ newsprivateId: newsprivate._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td><span ng-bind="newsprivate.targeted_issue"></span></td>
+              <td><span ng-bind="newsprivate.topic.topic_name"></span></td>
+              <td><span ng-bind="newsprivate.taxonomy.taxonomy_name"></span></td>
+              <td><span ng-bind="newsprivate.keyinformant"></span></td>
+              <td><span ng-bind="newsprivate.filename"></span></td>
+              <td><span ng-bind="newsprivate.created | date:'mediumDate'"></span></td>
+              <td><span ng-if="newsprivate.user" ng-bind="newsprivate.user.displayName"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="newsprivates.view({ newsprivateId: newsprivate._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="newsprivates.edit({ newsprivateId: newsprivate._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a class="btn btn-danger" ng-click="vm.remove(newsprivate._id)">
+                    <i class="fas fa-trash" style="color: white;"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix">
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+
+        <!--<section>
+      <div class="list-group">
+        <a ng-repeat="newsprivate in vm.newsprivates"
+           ui-sref="newsprivates.view({ newsprivateId: newsprivate._id })"
+           class="list-group-item">
+          <small class="list-group-item-text">
+            Posted on
+            <span ng-bind="newsprivate.created | date:'mediumDate'"></span>
+            by
+            <span ng-if="newsprivate.user" ng-bind="newsprivate.user.displayName"></span>
+            <span ng-if="!newsprivate.user">Deleted User</span>
+          </small>
+          <h4 class="list-group-item-heading" ng-bind="newsprivate.name"></h4>
+        </a>
+      </div>
+      <div class="alert alert-warning text-center" ng-if="vm.newsprivates.$resolved && !vm.newsprivates.length">
+        No Newsprivates yet, why don't you <a ui-sref="newsprivates.create">create one</a>?
+      </div>
+    </section>-->
+      </div>
+    </div>
+  </div>
+</div>

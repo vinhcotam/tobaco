@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 ng-bind="vm.taxonomy.taxonomy_name"></h3>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="pull-right"
+               ng-show="vm.taxonomy.isCurrentUserOwner">
+            <a class="btn btn-primary"
+               ui-sref="taxonomies.edit({ taxonomyId: vm.taxonomy._id })">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a class="btn btn-primary" ng-click="vm.remove()">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              <p ng-bind="vm.taxonomy.taxonomy_description"></p>
+            </div>
+          </div>
+          <small>
+            <em class="text-muted">
+              Posted on
+              <span ng-bind="vm.taxonomy.created | date:'mediumDate'"></span>
+              by
+              <span ng-if="vm.taxonomy.user"
+                    ng-bind="vm.taxonomy.user.displayName"></span>
+              <span ng-if="!vm.taxonomy.user">Deleted User</span>
+            </em>
+          </small>
+          <p class="lead" ng-bind="vm.taxonomy.content"></p>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

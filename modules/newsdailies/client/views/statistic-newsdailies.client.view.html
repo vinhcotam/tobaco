@@ -1,0 +1,23 @@
+﻿<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h4 class="card-title">Statistic by Websites</h4>
+        <div class="card-tools">
+          <div class="input-group input-group-sm" style="width: 350px;">
+            <input id="datetimefilter" type="text" class="form-control float-right" ng-model="vm.filterbydate" ng-change="vm.figureOutItemsToDisplay()">
+            <select name="group_news" class="form-control" ng-model="vm.filterbygroup" ng-change="vm.figureOutItemsToDisplay()">
+              <option value="0">Tất cả</option>
+              <option ng-repeat="group in vm.newsgroups" value="{{group._id}}">
+                {{group.name}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <canvas id="pieChart" style="width: 100%;"></canvas>
+      </div>
+    </div>
+  </div>
+</div>

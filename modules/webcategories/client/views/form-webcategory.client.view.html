@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+    <div class="card-header">
+      <h1>{{vm.webcategory._id ? 'Edit Webcategory' : 'New Webcategory'}}</h1>
+    </div>
+    <div class="card-body">
+  <section>
+  <div class="col-md-12">
+    <form name="vm.form.webcategoryForm" class="form-horizontal" ng-submit="vm.save(vm.form.webcategoryForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="description">Description</label>
+          <input name="description" type="text" ng-model="vm.webcategory.description" id="description" class="form-control" placeholder="Description" required>
+          <div ng-messages="vm.form.webcategoryForm.description.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Description is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="language">Language</label>
+          <input name="language" type="text" ng-model="vm.webcategory.language" id="language" class="form-control" placeholder="Language" required>
+          <div ng-messages="vm.form.webcategoryForm.language.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Language is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="user_name">User Name</label>
+          <input name="user_name" type="text" ng-model="vm.webcategory.user_name" id="user_name" class="form-control" placeholder="User Name" required>
+          <div ng-messages="vm.form.webcategoryForm.user_name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">User Name is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="source_cate">Source Cate</label>
+          <input name="source_cate" type="text" ng-model="vm.webcategory.source_cate" id="source_cate" class="form-control" placeholder="Source Cate" required>
+          <div ng-messages="vm.form.webcategoryForm.source_cate.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Source Cate is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.webcategory._id ? 'Update' : 'Create'}}</button>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
+      </div>
+    </div>
+  </div>
+</div>

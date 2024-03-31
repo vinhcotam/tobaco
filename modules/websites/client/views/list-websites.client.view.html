@@ -1,0 +1,91 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <!---->
+      <div class="card-header">
+        <h3 class="card-title">Websites</h3>
+        <div class="card-tools">
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <button id="btn_export" class="btn btn-success btn-sm">
+              <i class="fas fa-file-excel" aria-hidden="true"></i>
+            </button>
+            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-default">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!---->
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Website</th>
+              <th>URL</th>
+              <th>Address</th>
+              <th>Created</th>
+              <th>User</th>
+              <th style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, website) in vm.pagedItems">
+              <td ui-sref="websites.view({ websiteId: website._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td><span ng-bind="website.website_name"></span></td>
+              <td><span ng-bind="website.source_url"></span></td>
+              <td><span ng-bind="website.source_address"></span></td>
+              <td><span ng-bind="website.created | date:'mediumDate'"></span></td>
+              <td><span ng-if="website.user" ng-bind="website.user.displayName"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="websites.view({ websiteId: website._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="websites.edit({ websiteId: website._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a class="btn btn-danger" ng-click="vm.remove(website._id)">
+                    <i class="fas fa-trash" style="color:white"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix">
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!--<section>
+  <div class="page-header">
+    <h1>Websites</h1>
+  </div>
+  <div class="list-group">
+    <a ng-repeat="website in vm.websites"
+       ui-sref="websites.view({ websiteId: website._id })"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="website.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="website.user" ng-bind="website.user.displayName"></span>
+        <span ng-if="!website.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="website.name"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.websites.$resolved && !vm.websites.length">
+    No Websites yet, why don't you <a ui-sref="websites.create">create one</a>?
+  </div>
+</section>-->

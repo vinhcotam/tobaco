@@ -1,0 +1,71 @@
+﻿<div ng-controller="SlidebarController as vm">
+  <!-- Brand Logo -->
+  <a href="/" class="brand-link">
+    <div class="row">
+      <img src="/images/icons/vape-logo.png" alt="Tobacco Logo" class="brand-image img-circle elevation-3" style="opacity: .8; margin-top:10px;">
+      <span class="brand-text font-weight-light">Tobacco Industry <br> Monitoring System</span>
+    </div>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+      <div class="image">
+        <img ng-src="{{vm.authentication.user.profileImageURL}}" alt="{{vm.authentication.user.displayName}}" class="img-circle elevation-2">
+      </div>
+      <div class="info">
+        <a href="/settings/profile" class="d-block">{{vm.authentication.user.displayName}}</a>
+      </div>
+    </div>
+
+    <!-- SidebarSearch Form -->
+    <div class="form-inline">
+      <div class="input-group" data-widget="sidebar-search">
+        <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+          <button class="btn btn-sidebar">
+            <i class="fas fa-search fa-fw"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <!--<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">-->
+      <ul class="nav nav-pills nav-sidebar nav-child-indent flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <li ng-repeat="item in vm.menu.items | orderBy: 'position'"
+            ng-if="item.shouldRender(vm.authentication.user);"
+            ng-switch="item.type"
+            ui-sref-active="active"
+            class="nav-item"
+            uib-dropdown="item.type === 'nav-item'">
+          <a href="#" class="nav-link">
+            <i class="nav-icon {{item.icon}}"></i>
+            <p>
+              {{::item.title}}
+              <i class="right fas fa-angle-left"></i>
+            </p>
+          </a>
+          <ul ng-switch-when="dropdown" class="nav nav-treeview">
+            <li ng-repeat="subitem in item.items | orderBy: 'position'"
+                ng-if="subitem.shouldRender(vm.authentication.user);"
+                class="nav-item">
+              <a ui-sref="{{subitem.state}}({{subitem.params}})" class="nav-link">
+                <i class="{{subitem.icon}} nav-icon"></i>
+                <p>{{::subitem.title}}</p>
+              </a>
+            </li>
+          </ul>
+        </li>
+    </nav>
+
+    <br />
+    <br />
+    <br />
+    <br />
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</div>

@@ -1,0 +1,212 @@
+<div ng-if="vm.authentication.user" class="container-fluid dashboard">
+
+  <!-- Small boxes (Stat box) -->
+  <div class="row">
+    <!--style="padding-bottom: 30px;">-->
+    <div class="col-lg-4 col-6">
+      <div class="small-box bg-info">
+        <div class="inner">
+          <a href="/assignedtopics" style="color:white;"><h3>{{vm.topics}}</h3></a>
+          <p>Topics</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-edit"></i>
+        </div>
+        <a href="/assignedtopics" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-4 col-6">
+      <div class="small-box bg-success">
+        <div class="inner">
+          <a href="/newsdailies" style="color:white;"><h3>{{vm.articles}}</h3></a>
+          <p>News</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-stats-bars"></i>
+        </div>
+        <a href="/newsdailies" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-4 col-6">
+      <div class="small-box bg-primary">
+        <div class="inner">
+          <a href="/websites" style="color:white;"><h3>{{vm.websites}}</h3></a>
+          <p>Websites</p>
+        </div>
+        <div class="icon">
+          <i class="ion ion-stats-bars"></i>
+        </div>
+        <a href="/websites" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <!--<div class="col-lg-3 col-6 dashboard">
+      <div class="dashboard_icon_list">
+        <img src="/modules/core/client/img/topic.png" alt="Topic icons" class="dashboard_icon">
+        <div class="inner">
+          <p><strong>Topics</strong></p>
+          <a href="/assignedtopics"><h3>{{vm.topics}}</h3></a>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-6 dashboard">
+      <div class="dashboard_icon_list">
+        <img src="/modules/core/client/img/news.png" alt="Topic icons" class="dashboard_icon">
+        <div class="inner">
+          <p><strong>News</strong></p>
+          <a href="/newsdailies"><h3>{{vm.articles}}</h3></a>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-6 dashboard">
+      <div class="dashboard_icon_list">
+        <img src="/modules/core/client/img/website.png" alt="Topic icons" class="dashboard_icon">
+        <div class="inner">
+          <p><strong>Website</strong></p>
+          <a href="/assignedtopics"><h3>{{vm.websites}}</h3></a>
+        </div>
+      </div>
+    </div>-->
+  </div>
+  <h1>Packages</h1>
+  <div class="row">
+    <section class="col-lg-12">
+      <div class="card bg-gradient-light">
+        <div class="card-header border-0">
+          <h3 class="card-title">
+            Working area: {{vm.topic_active.topic.topic_name}}
+          </h3>
+          <div class="card-tools">
+            <div class="btn-group">
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+              <!--<button type="button" class="btn btn-light btn-sm" data-card-widget="maximize">
+                <i class="fas fa-expand"></i>
+              </button>-->
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!--<div class="card-body pt-0">
+
+        </div>-->
+      </div>
+    </section>
+  </div>
+  <div class="row">
+    <section class="col-lg-6">
+      <div class="card bg-gradient-light">
+        <div class="card-header border-0">
+          <h3 class="card-title">
+            <a href="/labelingbytaxonomies/labelingbytaxonomies/statistic/argument">Statistic by Argument</a>
+          </h3>
+          <div class="card-tools">
+            <!-- button with a dropdown -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="maximize">
+                <i class="fas fa-expand"></i>
+              </button>
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body pt-0">
+          <canvas id="argumentChart" style="min-height: 250px; height: 300px; max-width: 100%; display: block;" class="chartjs-render-monitor"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <section class="col-lg-6">
+      <div class="card bg-gradient-light">
+        <div class="card-header border-0">
+          <h3 class="card-title">
+            <a href="/newsdailies/statistic/groupnews">Statistic by News Group</a>
+            <!--<p style="font-size: 24px;"><strong>{{ vm.newsGroup }}</strong></p>-->
+          </h3>
+          <div class="card-tools">
+            <!-- button with a dropdown -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="maximize">
+                <i class="fas fa-expand"></i>
+              </button>
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body pt-0">
+          <canvas id="newsGroupChart" style="min-height: 250px; height: 300px; max-width: 100%; display: block;" class="chartjs-render-monitor"></canvas>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="row">
+    <section class="col-lg-12">
+      <div class="card bg-gradient-light">
+        <div class="card-header border-0">
+          <h3 class="card-title">
+            <a href="/newsdailies/statistic">Statisic by Websites</a>
+            <p style="font-size: 24px;"><strong>{{vm.websites}}</strong></p>
+          </h3>
+          <div class="card-tools">
+            <div class="btn-group">
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="maximize">
+                <i class="fas fa-expand"></i>
+              </button>
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body pt-0">
+          <canvas id="websiteChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%; display: block; width: 444px;" width="666" height="375" class="chartjs-render-monitor"></canvas>
+        </div>
+      </div>
+    </section>
+  </div>
+  <div class="row">
+    <section class="col-lg-12">
+      <div class="card bg-gradient-light">
+        <div class="card-header border-0">
+          <h3 class="card-title">
+            <a href="/newsdailies/statistic">Statistic by TI Tactic</a>
+          </h3>
+          <div class="card-tools">
+            <!-- button with a dropdown -->
+            <div class="btn-group">
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="maximize">
+                <i class="fas fa-expand"></i>
+              </button>
+              <button type="button" class="btn btn-light btn-sm" data-card-widget="remove">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body table-responsive p-0">
+          <section id="visualisation" style="border: 1px black solid; max-width: 100%;">
+          </section>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

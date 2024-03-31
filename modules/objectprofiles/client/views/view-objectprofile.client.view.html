@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h4>View</h4>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="page-header">
+            <h1 ng-bind="vm.objectprofile.name"></h1>
+          </div>
+          <div class="pull-right"
+               ng-show="vm.objectprofile.isCurrentUserOwner">
+            <a class="btn btn-primary"
+               ui-sref="objectprofiles.edit({ objectprofileId: vm.objectprofile._id })">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a class="btn btn-danger" ng-click="vm.remove()">
+              <i class="fas fa-trash" style="color:white;"></i>
+            </a>
+          </div>
+          <small>
+            <em class="text-muted">
+              Posted on
+              <span ng-bind="vm.objectprofile.created | date:'mediumDate'"></span>
+              by
+              <span ng-if="vm.objectprofile.user"
+                    ng-bind="vm.objectprofile.user.displayName"></span>
+              <span ng-if="!vm.objectprofile.user">Deleted User</span>
+            </em>
+          </small>
+          <p class="lead" ng-bind="vm.objectprofile.profile_name"></p>
+          <p class="lead" ng-bind="vm.objectprofile.profile_code"></p>
+          <p class="lead" ng-bind="vm.objectprofile.profile_url"></p>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

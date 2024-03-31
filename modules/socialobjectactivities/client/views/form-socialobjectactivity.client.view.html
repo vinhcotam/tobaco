@@ -1,0 +1,81 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+    <div class="card-header">
+      <h1>{{vm.socialobjectactivity._id ? 'Edit Socialobjectactivity' : 'New Socialobjectactivity'}}</h1>
+    </div>
+    <div class="card-body">
+  <section>
+  <div class="col-md-12">
+    <form name="vm.form.socialobjectactivityForm" class="form-horizontal" ng-submit="vm.save(vm.form.socialobjectactivityForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="date_activity">Date Activity</label>
+          <input name="date_activity" type="date" ng-model="vm.socialobjectactivity.date_activity" id="date_activity" class="form-control" placeholder="Date Activity" required>
+          <div ng-messages="vm.form.socialobjectactivityForm.date_activity.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Date Activity is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="subject_name">Subject Name</label>
+          <input name="subject_name" type="text" ng-model="vm.socialobjectactivity.subject_name" id="subject_name" class="form-control" placeholder="Subject Name" required>
+          <div ng-messages="vm.form.socialobjectactivityForm.subject_name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Subject Name is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="content">Content</label>
+          <input name="content" type="text" ng-model="vm.socialobjectactivity.content" id="content" class="form-control" placeholder="Content" required>
+          <div ng-messages="vm.form.socialobjectactivityForm.content.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Content is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="action_type">Action Type</label>
+          <input name="action_type" type="text" ng-model="vm.socialobjectactivity.action_type" id="action_type" class="form-control" placeholder="Action Type" required>
+          <div ng-messages="vm.form.socialobjectactivityForm.action_type.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Action Type is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="content_vi">Content vi</label>
+          <input name="content_vi" type="text" ng-model="vm.socialobjectactivity.content_vi" id="content_vi" class="form-control" placeholder="Content vi" required>
+          <div ng-messages="vm.form.socialobjectactivityForm.content_vi.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Content vi is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="activity_liked">Activity Liked</label>
+          <input name="activity_liked" type="text" ng-model="vm.socialobjectactivity.activity_liked" id="activity_liked" class="form-control" placeholder="Activity Liked" required>
+          <div ng-messages="vm.form.socialobjectactivityForm.activity_liked.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Activity Liked is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="activity_shared">Activity Shared</label>
+          <input name="activity_shared" type="text" ng-model="vm.socialobjectactivity.activity_shared" id="activity_shared" class="form-control" placeholder="Activity Shared" required>
+          <div ng-messages="vm.form.socialobjectactivityForm.activity_shared.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Activity Shared is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="activity_comment">Activity Comment</label>
+          <input name="activity_comment" type="text" ng-model="vm.socialobjectactivity.activity_comment" id="activity_comment" class="form-control" placeholder="Activity Comment" required>
+          <div ng-messages="vm.form.socialobjectactivityForm.activity_comment.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Activity Comment is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.socialobjectactivity._id ? 'Update' : 'Create'}}</button>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">Arguments</h3>
+      </div>
+      <div class="card-body">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th style="width: 50%;">Name</th>
+              <th>Topic</th>
+              <th>Created</th>
+              <th>User</th>
+              <th style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, variable) in vm.pagedItems">
+              <td ui-sref="languagevariables.view({ languagevariableId: variable._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td ui-sref="languagevariables.view({ languagevariableId: variable._id })"><span ng-bind="variable.name"></span></td>
+              <td ui-sref="languagevariables.view({ languagevariableId: variable._id })"><span ng-bind="variable.topic.topic_name"></span></td>
+              <td ui-sref="languagevariables.view({ languagevariableId: variable._id })"><span ng-bind="variable.created | date:'mediumDate'"></span></td>
+              <td><span ng-if="variable.user" ng-bind="languagevariableId.user.displayName"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="languagevariables.view({ languagevariableId: variable._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="languagevariables.edit({ languagevariableId: variable._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a class="btn btn-danger" ng-click="vm.remove(variable._id)" style="color:white;">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix">
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+        <!--<div class="list-group">
+    <a ng-repeat="languagevariable in vm.languagevariables"
+       ui-sref="languagevariables.view({ languagevariableId: languagevariable._id })"
+       class="list-group-item">
+      <small class="list-group-item-text">
+        Posted on
+        <span ng-bind="languagevariable.created | date:'mediumDate'"></span>
+        by
+        <span ng-if="languagevariable.user" ng-bind="languagevariable.user.displayName"></span>
+        <span ng-if="!languagevariable.user">Deleted User</span>
+      </small>
+      <h4 class="list-group-item-heading" ng-bind="languagevariable.name"></h4>
+    </a>
+  </div>
+  <div class="alert alert-warning text-center" ng-if="vm.languagevariables.$resolved && !vm.languagevariables.length">
+    No Languagevariables yet, why don't you <a ui-sref="languagevariables.create">create one</a>?
+  </div>-->
+      </div>
+    </div>
+  </div>
+</div>

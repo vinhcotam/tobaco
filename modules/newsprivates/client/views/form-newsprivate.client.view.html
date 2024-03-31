@@ -1,0 +1,102 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h4>{{vm.newsprivate._id ? 'Edit Newsprivate' : "Upload Key-Informant's News"}}</h4>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="col-md-12">
+            <form name="vm.form.newsprivateForm" class="form-horizontal" ng-submit="vm.save(vm.form.newsprivateForm.$valid, picFile)" enctype="multipart/form-data" method="POST">
+              <div class="row">
+                <div class="col-md-8">
+                  <fieldset>
+                    <div class="form-group" show-errors>
+                      <label class="control-label" for="targeted_issue">Targeted issue monitoring</label>
+                      <input name="targeted_issue" type="text" ng-model="vm.newsprivate.targeted_issue" id="name" class="form-control" placeholder="Targeted issue monitoring" required>
+                      <div ng-messages="vm.form.newsprivateForm.targeted_issue.$error" role="alert">
+                        <p class="help-block error-text" ng-message="required">Targeted issue monitoring is required.</p>
+                      </div>
+                    </div>
+                    <div class="form-group" show-errors>
+                      <label class="control-label" for="topic">Topic</label>
+                      <select class="form-control" name="topic" id="topic" ng-model="vm.newsprivate.topic" required>
+                        <option ng-repeat="item in vm.topics" value="{{item.topic._id}}" selected="{{item.topic._id == vm.newsprivate.topic._id}}">
+                          {{item.topic.topic_name}}
+                        </option>
+                      </select>
+                      <div ng-messages="vm.form.newsprivateForm.topic.$error" role="alert">
+                        <p class="help-block error-text" ng-message="required">Topic is required.</p>
+                      </div>
+                    </div>
+                    <div class="form-group" show-errors>
+                      <label class="control-label" for="taxonomy">Taxonomy of TI Tactic</label>
+                      <select class="form-control" name="taxonomy" id="taxonomy" ng-model="vm.newsprivate.taxonomy" required>
+                        <option ng-repeat="taxonomy in vm.taxonomies.children" value="{{taxonomy._id}}" selected="{{taxonomy._id == vm.newsprivate.taxonomy._id}}">
+                          {{taxonomy.taxonomy_name}}
+                        </option>
+                      </select>
+                      <div ng-messages="vm.form.newsprivateForm.taxonomy.$error" role="alert">
+                        <p class="help-block error-text" ng-message="required">Taxonomy is required.</p>
+                      </div>
+                    </div>
+                    <div class="form-group" show-errors>
+                      <label class="control-label" for="taxonomy" name="confidentiality">Confidentiality of information</label>
+                      <select class="form-control" ng-model="vm.newsprivate.confidentiality" ng-options="item.id as item.value for item in vm.configConfidentiality"></select>
+                    </div>
+                    <div class="form-group" show-errors>
+                      <label class="control-label" for="taxonomy">File</label>
+                      <div class="text-center form-group">
+                        <p ng-bind="picFile.name"></p>
+                        <p ng-if="!picFile.name">Please select a file</p>
+                        <button class="btn btn-default btn-file" name="btn_upload" ngf-select="(vm.fileSelected = true) && (vm.loading = false)" ng-model="picFile" accept="*/*" ngf-before-model-change="vm.fileError = null">Select File</button>
+                        <div ng-show="vm.fileError" class="text-danger">
+                          <p ng-bind="vm.fileError"></p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="form-group" show-errors>
+                      <label class="control-label" for="description">Description</label>
+                      <textarea name="description" type="text" ng-model="vm.newsprivate.description" id="description" class="form-control" placeholder="Description">
+                      </textarea>
+                    </div>
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-primary">{{vm.newsprivate._id ? 'Update' : 'Create'}}</button>
+                    </div>
+                    <div ng-show="vm.error" class="text-danger">
+                      <strong ng-bind="vm.error"></strong>
+                    </div>
+                  </fieldset>
+                </div>
+                <div class="col-md-4">
+                  <div class="card card-default">
+                    <div class="card-header">
+                      Key Informant
+                    </div>
+                    <div class="card-body">
+                      <div class="form-group" show-errors>
+                        <label class="control-label" for="keyinformant">Select Key Informant</label>
+                        <select class="form-control" name="keyinformant" id="keyinformant" ng-model="vm.newsprivate.keyinformant">
+                          <option ng-repeat="keyinformant in vm.keyinformants" value="{{keyinformant._id}}" selected="{{keyinformant._id == vm.newsprivate.keyinformant._id}}">
+                            {{keyinformant.keyinfor_name}}
+                          </option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <a class="btn btn-primary"
+                         ui-sref="keyinformants.edit({ keyinformantId: vm.newsprivate.keyinformant })">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+            </form>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</div>

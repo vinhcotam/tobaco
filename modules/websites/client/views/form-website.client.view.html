@@ -1,0 +1,94 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3>{{vm.website._id ? 'Edit Website' : 'New Website'}}</h3>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="col-md-12">
+            <form name="vm.form.websiteForm" class="form-horizontal" ng-submit="vm.save(vm.form.websiteForm.$valid)" novalidate>
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="website_name">Name</label>
+                  <input name="website_name" type="text" ng-model="vm.website.website_name" id="website_name" class="form-control" placeholder="Name" required>
+                  <div ng-messages="vm.form.websiteForm.website_name.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Website name is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="source_url">URL (full url)</label>
+                  <input name="source_url" type="text" ng-model="vm.website.source_url" id="source_url" class="form-control" placeholder="URL" required>
+                  <div ng-messages="vm.form.websiteForm.source_url.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">URL is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="source_address">Address (domain)</label>
+                  <input name="source_address" type="text" ng-model="vm.website.source_address" id="source_address" class="form-control" placeholder="Address" required>
+                  <div ng-messages="vm.form.websiteForm.source_address.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">URL is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="topic">Topic <span class="span_required">*</span></label>
+                  <select class="form-control selectpicker" name="topic" id="topic" ng-model="vm.website.topic._id" required multiple data-live-search="true">
+                    <option ng-repeat="item in vm.topics" value="{{item.topic._id}}" ng-selected="item.topic._id === vm.website.topic._id">
+                      {{item.topic.topic_name}}
+                    </option>
+                  </select>
+                  <div ng-messages="vm.form.websiteForm.topic.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Topic is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="source_type">Type</label>
+                  <input name="source_type" type="text" ng-model="vm.website.source_type" id="source_type" class="form-control" placeholder="Type">
+                  <div ng-messages="vm.form.websiteForm.source_type.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Type is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="source_rating">Rating</label>
+                  <input name="source_rating" type="number" ng-model="vm.website.source_rating" id="source_rating" class="form-control" placeholder="Rating">
+                  <div ng-messages="vm.form.websiteForm.source_rating.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Rating is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="source_profile">Profile</label>
+                  <input name="source_profile" type="text" ng-model="vm.website.source_profile" id="source_profile" class="form-control" placeholder="Profile">
+                  <div ng-messages="vm.form.websiteForm.source_profile.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Profile is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="default_language">Default Language</label>
+                  <input name="default_language" type="text" ng-model="vm.website.default_language" id="default_language" class="form-control" placeholder="Default Language">
+                  <div ng-messages="vm.form.websiteForm.default_language.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Default Language is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="default_language">Page Search</label>
+                  <input name="default_language" type="text" ng-model="vm.website.page_search" id="default_language" class="form-control" placeholder="Page search (URL)">
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="description">Description</label>
+                  <textarea name="description" type="text" ng-model="vm.website.description" id="description" class="form-control" placeholder="URL"></textarea>
+                </div>
+
+                <div class="form-group">
+                  <button type="submit" class="btn btn-default">{{vm.website._id ? 'Update' : 'Create'}}</button>
+                </div>
+                <div ng-show="vm.error" class="text-danger">
+                  <strong ng-bind="vm.error"></strong>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

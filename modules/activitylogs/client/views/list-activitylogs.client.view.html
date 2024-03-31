@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">Activity logs</h3>
+        <div class="card-tools">
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-default">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Comments</th>
+              <th>Created</th>
+              <!--<th>User</th>-->
+              <th style="width: 170px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, activitylog) in vm.pagedItems">
+              <td ui-sref="activitylogs.view({ activitylogId: activitylog._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <!--<td ui-sref="activitylogs.view({ activitylogId: activitylog._id })"><span ng-bind="activitylog.log_type"></span></td>-->
+              <td ui-sref="activitylogs.view({ activitylogId: activitylog._id })"><span ng-bind="activitylog.logcontent"></span></td>
+              <td ui-sref="activitylogs.view({ activitylogId: activitylog._id })"><span ng-bind="activitylog.created | date:'mediumDate'"></span></td>
+              <!--<td ng-if="activitylog.user"><span ng-bind="activitylog.user.displayName"></span></td>-->
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="activitylogs.view({ activitylogId: activitylog._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="activitylogs.edit({ activitylogId: activitylog._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a class="btn btn-danger" ng-click="vm.remove(activitylog._id)">
+                    <i class="fas fa-trash" style="color: white;"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix">
+          <b style="color: blue;">Total: {{vm.filterLength}} (rows)</b>
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

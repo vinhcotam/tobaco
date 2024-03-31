@@ -1,0 +1,65 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">Webcategories</h3>
+        <div class="card-tools">
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-default">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Description</th>
+              <th>Language</th>
+              <th>User Name</th>
+              <th>Source Cate</th>
+              <th>Created</th>
+              <th>User</th>
+              <th style="width: 100px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, webcategory) in vm.pagedItems">
+              <td ui-sref="webcategories.view({ webcategoryId: webcategory._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td><span ng-bind="webcategory.description"></span></td>
+              <td><span ng-bind="webcategory.language"></span></td>
+              <td><span ng-bind="webcategory.user_name"></span></td>
+              <td><span ng-bind="webcategory.source_cate"></span></td>
+              <td><span ng-bind="webcategory.created | date:'mediumDate'"></span></td>
+              <td ng-if="webcategory.user"><span ng-bind="webcategory.user.displayName"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="webcategories.view({ webcategoryId: webcategory._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="webcategories.edit({ webcategoryId: webcategory._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a class="btn btn-danger" ng-click="vm.remove(webcategory._id)">
+                    <i class="fas fa-trash" style="color:white"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix">
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

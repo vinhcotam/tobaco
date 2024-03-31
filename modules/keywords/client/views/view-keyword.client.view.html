@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 ng-bind="vm.keyword.keyword_name"></h3>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="pull-right"
+               ng-show="vm.keyword.isCurrentUserOwner">
+            <a class="btn btn-primary"
+               ui-sref="keywords.edit({ keywordId: vm.keyword._id })">
+              <i class="fas fa-edit"></i>
+            </a>
+            <a class="btn btn-danger" ng-click="vm.remove()">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+          <div class="row">
+
+          </div>
+          <small>
+            <em class="text-muted">
+              Created on
+              <span ng-bind="vm.keyword.created | date:'mediumDate'"></span>
+              by
+              <span ng-if="vm.keyword.user"
+                    ng-bind="vm.keyword.user.displayName"></span>
+              <span ng-if="!vm.keyword.user">Deleted User</span>
+            </em>
+          </small>
+          <p class="lead" ng-bind="vm.keyword.content"></p>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+      

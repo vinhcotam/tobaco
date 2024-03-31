@@ -1,0 +1,290 @@
+.undecorated-link:hover {
+	text-decoration: none;
+}
+
+[ng\:cloak],
+[ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+	display: none !important;
+}
+
+.header-profile-image {
+	border-radius: 50%;
+	height: 28px;
+	margin-right: 5px;
+	opacity: 0.8;
+	width: 28px;
+}
+
+.open .header-profile-image,
+a:hover .header-profile-image {
+	opacity: 1;
+}
+
+.user-header-dropdown-toggle {
+	padding-bottom: 11px !important;
+	padding-top: 11px !important;
+}
+
+.user-primary-account {
+	font-size: 30;
+	position: absolute;
+	right: 10;
+	top: 10;
+}
+
+.error-text {
+	display: none;
+}
+
+.has-error .help-block.error-text {
+	display: block;
+}
+
+.has-error .help-inline.error-text {
+	display: inline;
+}
+
+ul.pagination {
+	/*border: solid 1px #CCCCCC;*/
+	border-radius: 5px;
+}
+
+ul.pagination li.pagination-page {
+	border-bottom: solid 1px #CCCCCC;
+	border-right: solid 1px #CCCCCC;
+	border-top: solid 1px #CCCCCC;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+
+li.pagination-page.ng-scope.active {
+	background-color: #28a745;
+}
+
+li.pagination-page.ng-scope a {
+	color: #999;
+}
+
+
+li.pagination-page.ng-scope.active a {
+	color: #FFF;
+	font-weight: bold;
+}
+
+ul.pagination li.pagination-prev {
+	border-bottom: solid 1px #CCCCCC;
+	border-right: solid 1px #CCCCCC;
+	border-top: solid 1px #CCCCCC;
+	padding: 10;
+}
+
+ul.pagination li.pagination-prev a {
+	color: #F90;
+}
+
+ul.pagination li.pagination-next {
+	border-bottom: solid 1px #CCCCCC;
+	border-right: solid 1px #CCCCCC;
+	border-top: solid 1px #CCCCCC;
+	padding: 10;
+}
+
+ul.pagination li.pagination-next a {
+	color: #F90;
+}
+
+ul.pagination li.pagination-first {
+	border-bottom: solid 1px #CCCCCC;
+	border-left: solid 1px #CCCCCC;
+	border-radius: 5px 0 0 5px;
+	border-right: solid 1px #CCCCCC;
+	border-top: solid 1px #CCCCCC;
+	padding: 10;
+}
+
+ul.pagination li.pagination-first a {
+	color: #F90;
+}
+
+
+ul.pagination li.pagination-last {
+	border-bottom: solid 1px #CCCCCC;
+	border-radius: 0 5px 5px 0;
+	border-right: solid 1px #CCCCCC;
+	border-top: solid 1px #CCCCCC;
+	padding: 10;
+}
+
+ul.pagination li.pagination-last a {
+	color: #F90;
+}
+
+ul.pagination li {
+	padding: 10;
+}
+
+.error-text {
+	color: red;
+}
+
+div.has-error input {
+	border: solid 1px red;
+}
+
+div.has-error select {
+	border: solid 1px red;
+}
+
+div.form-group .span_required {
+	color: red;
+	font-weight: bold;
+}
+
+
+div.filter-new-groups {
+	margin: 20;
+}
+
+div.filter-new-groups ul {
+	background-color: #333333;
+	list-style: none;
+	overflow: hidden;
+	padding: 0;
+
+}
+
+div.filter-new-groups ul li {
+	float: left;
+}
+
+div.filter-new-groups ul li a {
+	color: white;
+	display: block;
+	padding: 16px;
+	text-align: center;
+	text-decoration: none;
+}
+
+div.filter-new-groups ul li a:hover {
+	background-color: #111111;
+	cursor: pointer;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+div.filter-new-groups ul li.active a {
+	background-color: #111111;
+	cursor: pointer;
+	font-weight: bold;
+	text-decoration: underline;
+
+}
+
+div.filter-new-groups-detail {
+    display: flex;
+    margin-left: 40;
+}
+
+div.filter-new-groups-detail .container {
+    cursor: pointer;
+    display: block;
+    font-weight: normal !important;
+    margin-bottom: 12px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 35px;
+    position: relative;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    width: 25%;
+}
+
+
+div.filter-new-groups-detail span {
+    font-weight: bold;
+    margin-right: 16px;
+    width: 18%;
+}
+
+
+
+/* Hide the browser's default radio button */
+div.filter-new-groups-detail .container input {
+	cursor: pointer;
+	opacity: 0;
+	position: absolute;
+}
+
+/* Create a custom radio button */
+div.filter-new-groups-detail .checkmark {
+	background-color: #eee;
+	border-radius: 50%;
+	height: 15px;
+	left: 0;
+	position: absolute;
+	top: 5px;
+	width: 15px;
+
+}
+
+/* On mouse-over, add a grey background color */
+div.filter-new-groups-detail .container:hover input~.checkmark {
+	background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+div.filter-new-groups-detail .container input:checked~.checkmark {
+	background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+div.filter-new-groups-detail .checkmark:after {
+	content: "";
+	display: none;
+	position: absolute;
+}
+
+/* Show the indicator (dot/circle) when checked */
+div.filter-new-groups-detail .container input:checked~.checkmark:after {
+	display: block;
+}
+
+/* Style the indicator (dot/circle) */
+div.filter-new-groups-detail .container .checkmark:after {
+	background: white;
+	border-radius: 50%;
+	height: 4px;
+	left: 5px;
+	top: 5px;
+	width: 4px;
+
+}
+
+div.hidden {
+	display: none !important;
+}
+
+button.hidden {
+	display: none !important;
+}
+
+.datepicker {
+	background-color: #fff;
+	color: #333;
+}
+
+.dashboard a {
+	color: black;
+	font-size: 1.1rem;
+}
+
+.dashboard a:hover {
+	color: blue !important;
+	text-decoration: underline !important;
+}

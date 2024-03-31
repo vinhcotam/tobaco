@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html lang="en" ng-strict-di>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+  <title page-title></title>
+  <meta name="description" content="{{description}}">
+  <meta name="fragment" content="!">
+
+  <!-- Apple META -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- Facebook META -->
+  <meta property="fb:app_id" content="{{facebookAppId}}">
+  <meta property="og:site_name" content="{{title}}">
+  <meta property="og:title" content="{{title}}">
+  <meta property="og:description" content="{{description}}">
+  <meta property="og:url" content="{{url}}">
+  <meta property="og:image" content="{{logo}}">
+  <meta property="og:type" content="website">
+
+  <!-- Twitter META -->
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="{{twitterUsername}}">
+  <meta name="twitter:title" content="{{title}}">
+  <meta name="twitter:description" content="{{description}}">
+  <meta name="twitter:image" content="{{logo}}">
+  {{#iff user '==' 'null' }}
+    <!-- Custom fonts for this template-->
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <script src="https://kit.fontawesome.com/c110bfcb2d.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/lib/angular-ui-notification/dist/angular-ui-notification.css">
+    <!--<script type="text/javascript" src="/lib/angular-ui-notification/dist/angular-ui-notification.js"></script>-->
+  {{/iff}}
+  {{#iff user '!=' 'null' }}
+  <!-- Fav Icon -->
+  <link href="/{{favicon}}" rel="shortcut icon" type="image/x-icon">
+
+  <!-- Manifest -->
+  <link href="/manifest.json" rel="manifest">
+  <!--<link href="https://unpkg.com/label-studio@0.8.0/build/static/css/main.css" rel="stylesheet">-->
+  <!--<link href="https://unpkg.com/label-studio@0.9.1/build/static/css/main.css" rel="stylesheet">-->
+  <link href="/lib/label-studio-0.9.1/build/static/css/main.css" rel="stylesheet">
+  <!-- Application CSS Files -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Ionicons -->
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+  {{#each cssFiles}}
+  <link rel="stylesheet" href="/{{this}}">
+  {{/each}}
+  <script src="https://cssscript.com/demo/visualize-hierarchical-tree-d3-mitch/dist/js/d3-mitch-tree.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cssscript.com/demo/visualize-hierarchical-tree-d3-mitch/dist/css/d3-mitch-tree.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cssscript.com/demo/visualize-hierarchical-tree-d3-mitch/dist/css/d3-mitch-tree-theme-default.min.css">
+  <!--<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">-->
+  <link rel="stylesheet" type="text/css" href="/lib/bootstrap-duallistbox/src/bootstrap-duallistbox.css">
+  {{/iff}}
+</head>
+<!--<body class="hold-transition
+      {{#iff user '==' 'null' }} login-page {{/iff}}
+      {{#iff user '!=' 'null' }} sidebar-mini layout-fixed" {{/iff}}>-->
+<body class="hold-transition
+      {{#iff user '==' 'null' }} bg-login {{/iff}}
+      {{#iff user '!=' 'null' }} sidebar-mini layout-fixed" {{/iff}}>
+  {{#iff user '==' 'null' }}
+  <div class="container">
+    {{{block "content"}}}
+  </div>
+  <!--<div class="login-box">-->
+  <!-- /.login-logo -->
+  <!--<div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a href="../../index2.html" class="h1">Tobaco Controntrol System</a>
+    </div>
+    <div class="card-body">
+      {{{block "content"}}}
+    </div>-->
+  <!-- /.card-body -->
+  <!--</div>-->
+  <!-- /.card -->
+  <!--</div>-->
+  {{/iff}}
+
+  {{#iff user '!=' 'null' }}
+  <div class="wrapper">
+    <nav ng-include="'/modules/core/client/views/nav.client.view.html'" class="main-header navbar navbar-expand navbar-white navbar-light"></nav>
+    <aside ng-include="'/modules/core/client/views/slidebar.client.view.html'" class="main-sidebar sidebar-dark-primary elevation-4"></aside>
+    <div class="content-wrapper">
+      <div ng-include="'/modules/core/client/views/breadcrumb.client.view.html'" class="content-header"></div>
+      {{{block "content"}}}
+    </div>
+    <footer ng-include="'/modules/core/client/views/footer.client.view.html'" class="main-footer"></footer>
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+  </div>
+  {{/iff}}
+  <!-- /.control-sidebar -->
+  <noscript>
+    <style>
+      [ng\:cloak], [ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+        display: block !important;
+      }
+    </style>
+    <div class="alert alert-warning">
+      <strong>This page requires JavaScript.</strong></s Please enable it in your browser.
+    </div>
+  </noscript>
+
+  <!--Embedding The User Object-->
+  <script type="text/javascript">
+    var user = {{{ user }}};
+    var env = "{{ env }}";
+  </script>
+
+  <!--Load The Socket.io File-->
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/hammerjs@2.0.8"></script>
+  <!--Application JavaScript Files-->
+  {{#each jsFiles}}
+  <script type="text/javascript" src="/{{this}}"></script>
+  {{/each}}
+
+  <!--owasp config sync-->
+  <script type="text/javascript">
+    var sharedConfig = {{{ sharedConfig }}};
+    owaspPasswordStrengthTest.config(sharedConfig.owasp);
+  </script>
+
+  {{#if livereload}}
+  <!--Livereload script rendered -->
+  <!--<script type="text/javascript" src="{{host}}:35729/livereload.js"></script>-->
+  {{/if}}
+  <!--<script src="https://unpkg.com/label-studio@0.8.0/build/static/js/main.js"></script>-->
+  <!--<script src="https://unpkg.com/label-studio@0.9.1/build/static/js/main.js"></script>-->
+  <script src="/lib/label-studio-0.9.1/build/static/js/main.js"></script>
+  <script src="/lib/bootstrap-duallistbox/src/jquery.bootstrap-duallistbox.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-zoom/0.7.7/chartjs-plugin-zoom.min.js"></script>
+  <!--<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>-->
+</body>
+
+</html>

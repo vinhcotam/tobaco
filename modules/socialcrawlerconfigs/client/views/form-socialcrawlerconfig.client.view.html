@@ -1,0 +1,81 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+    <div class="card-header">
+      <h3>{{vm.socialcrawlerconfig._id ? 'Edit Socialcrawlerconfig' : 'New Socialcrawlerconfig'}}</h3>
+    </div>
+    <div class="card-body">
+  <section>
+  <div class="col-md-12">
+    <form name="vm.form.socialcrawlerconfigForm" class="form-horizontal" ng-submit="vm.save(vm.form.socialcrawlerconfigForm.$valid)" novalidate>
+      <fieldset>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="topic">Topic</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <select class="form-control" name="topic" id="topic"
+                  ng-model="vm.socialcrawlerconfig.topic">
+                <option ng-repeat="item in vm.topics" value="{{item.topic._id}}" ng-selected="item.topic._id === vm.socialcrawlerconfig.topic._id">
+                  {{item.topic.topic_name}}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group" show-errors>
+          <label class="control-label" for="user_name">Name</label>
+          <input name="user_name" type="text" ng-model="vm.socialcrawlerconfig.socialconfig_name" id="socialconfig_name" class="form-control" placeholder="User Name" required>
+          <div ng-messages="vm.form.socialcrawlerconfigForm.socialconfig_name.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Name is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="user_login">User Login</label>
+          <input name="user_login" type="text" ng-model="vm.socialcrawlerconfig.user_login" id="user_login" class="form-control" placeholder="User Login">
+          <div ng-messages="vm.form.socialcrawlerconfigForm.user_login.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">User Login is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="password_login">Password Login</label>
+          <input name="password_login" type="text" ng-model="vm.socialcrawlerconfig.password_login" id="password_login" class="form-control" placeholder="Password Login">
+          <div ng-messages="vm.form.socialcrawlerconfigForm.password_login.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Password Login is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="subject_url">Subject URL</label>
+          <input name="subject_url" type="text" ng-model="vm.socialcrawlerconfig.subject_url" id="subject_url" class="form-control" placeholder="Subject URL">
+          <div ng-messages="vm.form.socialcrawlerconfigForm.subject_url.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Subject URL is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="description">Description</label>
+          <input name="description" type="text" ng-model="vm.socialcrawlerconfig.description" id="description" class="form-control" placeholder="Description">
+          <div ng-messages="vm.form.socialcrawlerconfigForm.description.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Description is required.</p>
+          </div>
+        </div>
+        <div class="form-group" show-errors>
+          <label class="control-label" for="socialweb_url">Socialweb URL</label>
+          <input name="socialweb_url" type="text" ng-model="vm.socialcrawlerconfig.socialweb_url" id="socialweb_url" class="form-control" placeholder="Socialweb URL">
+          <div ng-messages="vm.form.socialcrawlerconfigForm.socialweb_url.$error" role="alert">
+            <p class="help-block error-text" ng-message="required">Socialweb URL is required.</p>
+          </div>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-default">{{vm.socialcrawlerconfig._id ? 'Update' : 'Create'}}</button>
+        </div>
+        <div ng-show="vm.error" class="text-danger">
+          <strong ng-bind="vm.error"></strong>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</section>
+      </div>
+    </div>
+  </div>
+</div>

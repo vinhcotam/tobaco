@@ -1,0 +1,90 @@
+﻿<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 ng-bind="vm.newsdaily.news_title"></h3>
+      </div>
+      <div class="card-body">
+        <p ng-bind="vm.newsdaily.news_summary"></p>
+      </div>
+    </div>
+    <div class="card card-info">
+      <div class="card-header">
+        <h2 class="card-title">Webview</h2>
+        <div class="card-tools">
+
+          <button class="btn btn-default"
+            ui-sref="newsdailies.labeling({ newsdailyId: vm.newsdaily._id })">
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <iframe id="inlineFrameExample"
+                title="Inline Frame Example"
+                width="100%"
+                height="500"
+                ng-src="{{trustSrc(vm.newsdaily.news_url)}}">
+        </iframe>
+        <div class="col-md-12">
+          <div ng-repeat="group in vm.newsgroups"  class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" value="{{group._id}}" ng-model="vm.newsdaily.news_group">
+            <label class="form-check-label">
+              {{group.name}}
+            </label>
+          </div>
+
+          <!--<div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="1">
+            <label class="form-check-label" for="flexRadioDefault1">
+              Ủng hộ ngành công nghiệp thuốc lá
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="2">
+            <label class="form-check-label" for="flexRadioDefault2">
+              Ủng hộ ngành y tế công cộng
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value="3">
+            <label class="form-check-label" for="flexRadioDefault3">
+              Không rõ
+            </label>
+          </div>-->
+
+          <br />
+          <button id="btn_submit_group" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        <!--<section>
+          <div class="page-header">
+            <h1 ng-bind="vm.newsdaily.name"></h1>
+          </div>
+          <div class="pull-right"
+               ng-show="vm.newsdaily.isCurrentUserOwner">
+            <a class="btn btn-primary"
+               ui-sref="newsdailies.edit({ newsdailyId: vm.newsdaily._id })">
+              <i class="glyphicon glyphicon-edit"></i>
+            </a>
+            <a class="btn btn-primary" ng-click="vm.remove()">
+              <i class="glyphicon glyphicon-trash"></i>
+            </a>
+          </div>
+          <small>
+            <em class="text-muted">
+              Posted on
+              <span ng-bind="vm.newsdaily.created | date:'mediumDate'"></span>
+              by
+              <span ng-if="vm.newsdaily.user"
+                    ng-bind="vm.newsdaily.user.displayName"></span>
+              <span ng-if="!vm.newsdaily.user">Deleted User</span>
+            </em>
+          </small>
+          <p class="lead" ng-bind="vm.newsdaily.content"></p>
+        </section>
+        -->

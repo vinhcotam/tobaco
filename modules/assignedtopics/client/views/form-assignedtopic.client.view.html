@@ -1,0 +1,60 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h2>{{vm.assignedtopic._id ? 'Edit Assignedtopic' : 'New Assignedtopic'}}</h2>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="col-md-12">
+            <form name="vm.form.assignedtopicForm" class="form-horizontal" ng-submit="vm.save(vm.form.assignedtopicForm.$valid)" novalidate>
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="topic">Topic</label>
+                  <select class="form-control" name="topic" id="topic" ng-model="vm.assignedtopic.topic" ng-disabled="vm.isAdmin != true">
+                    <option ng-repeat="topic in vm.topics" value="{{topic._id}}" selected="{{topic._id == vm.assignedtopic.topic._id}}">
+                      {{topic.topic_name}}
+                    </option>
+                  </select>
+                </div>
+              </fieldset>
+
+              <!--<fieldset ng-if="vm.isManager">-->
+              <fieldset ng-if="vm.isAdmin">
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="assgned_user">Assign to</label>
+                  <select class="form-control" name="assgned_user" id="assgned_user" ng-model="vm.assignedtopic.assigned_user">
+                    <option ng-repeat="user in vm.ls_users" ng-value="{{user._id}}" ng-selected = "{{user._id == vm.assignedtopic.assigned_user._id}}">
+                      {{user.displayName}}
+                    </option>
+                  </select>
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="working_status">Working</label>
+                  <select name="working_status" ng-model="vm.assignedtopic.working_status" id="working_status" class="form-control">
+                    <option value="1" ng-selected="vm.assignedtopic.working_status==1">Actived</option>
+                    <option value="0" ng-selected="vm.assignedtopic.working_status==0">InActive</option>
+                  </select>
+                  <div ng-messages="vm.form.assignedtopicForm.working_status.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Working status is required.</p>
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset>
+                  <div class="form-group">
+                    <button type="submit" class="btn btn-default">{{vm.assignedtopic._id ? 'Update' : 'Create'}}</button>
+                  </div>
+                  <div ng-show="vm.error" class="text-danger">
+                    <strong ng-bind="vm.error"></strong>
+                  </div>
+              </fieldset>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h3 class="card-title">Monitoringobjects</h3>
+        <div class="card-tools">
+          <div class="input-group input-group-sm" style="width: 150px;">
+            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+
+            <div class="input-group-append">
+              <button type="submit" class="btn btn-default">
+                <i class="fas fa-search"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body table-responsive p-0">
+        <table class="table table-hover text-wrap">
+          <thead>
+            <tr>
+              <th style="width: 10px">#</th>
+              <th>Object Name</th>
+              <th>Object URL</th>
+              <th>Object Type</th>
+              <th>Location</th>
+              <th>Image URL</th>
+              <th>Full Name</th>
+              <th>Condition Filter</th>
+              <th>Created</th>
+              <th ng-if="vm.isAdmin">User</th>
+              <th style="width: 170px">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="(index, monitoringobject) in vm.pagedItems">
+              <td ui-sref="monitoringobjects.view({ monitoringobjectId: monitoringobject._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td><span ng-bind="monitoringobject.object_name"></span></td>
+              <td><span ng-bind="monitoringobject.object_url"></span></td>
+              <td><span ng-bind="monitoringobject.object_type"></span></td>
+              <td><span ng-bind="monitoringobject.location"></span></td>
+              <td><span ng-bind="monitoringobject.image_url"></span></td>
+              <td><span ng-bind="monitoringobject.full_name"></span></td>
+              <td><span ng-bind="monitoringobject.condition_filter"></span></td>
+              <td><span ng-bind="monitoringobject.created | date:'mediumDate'"></span></td>
+              <td ng-if="monitoringobject.user && vm.isAdmin"><span ng-bind="monitoringobject.user.displayName"></span></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <a class="btn btn-primary"
+                     ui-sref="monitoringobjects.view({ monitoringobjectId: monitoringobject._id })">
+                    <i class="fas fa-eye"></i>
+                  </a>
+                  <a class="btn btn-primary"
+                     ui-sref="monitoringobjects.edit({ monitoringobjectId: monitoringobject._id })">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                  <a class="btn btn-danger" ng-click="vm.remove(monitoringobject._id)" style="color:white;">
+                    <i class="fas fa-trash" style="color:white"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="card-footer clearfix">
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

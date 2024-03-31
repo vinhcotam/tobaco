@@ -1,0 +1,62 @@
+<div class="row">
+    <div class="col-md-12">
+      <div class="card card-info">
+        <div class="card-header">
+          <h3 class="card-title">Sentiments</h3>
+          <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+              <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+  
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-default">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body table-responsive p-0">
+          <table class="table table-hover text-wrap">
+            <thead>
+              <tr>
+                <th style="width: 10px">#</th>
+                <th style="width: 50%;">Name</th>
+                <th>Description</th>
+                <th>User</th>
+                <th>Created</th>
+                <th style="width: 100px">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="(index, sentiment) in vm.pagedItems">
+                <td ui-sref="sentiment.view({ sentimentId: sentiment._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+                <td ui-sref="sentiment.view({ sentimentId: sentiment._id })"><span ng-bind="sentiment.sentiment_name"></span></td>
+                <td ui-sref="sentiment.view({ sentimentId: sentiment._id })"><span ng-bind="sentiment.topic.topic_name"></span></td>
+                <td ui-sref="sentiment.view({ sentimentId: sentiment._id })"><span ng-bind="sentiment.created | date:'mediumDate'"></span></td>
+                <td><span ng-if="sentiment.user" ng-bind="sentiment.user.displayName"></span></td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <a class="btn btn-primary"
+                       ui-sref="sentiments.treeview({ sentimentId: sentiment._id })">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                    <a class="btn btn-primary"
+                       ui-sref="sentiments.edit({ sentimentId: sentiment._id })">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a class="btn btn-primary" ng-click="vm.remove(sentiment._id)">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="card-footer clearfix">
+            <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

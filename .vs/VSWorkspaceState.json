@@ -1,0 +1,17 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\modules",
+    "\\modules\\assignedtopics\\client\\controllers",
+    "\\modules\\assignedtopics\\client\\views",
+    "\\modules\\assignedtopics\\server",
+    "\\modules\\monitoringtypes\\client",
+    "\\modules\\monitoringtypes\\client\\views",
+    "\\modules\\newsgroups\\client",
+    "\\modules\\newsgroups\\client\\views",
+    "\\modules\\socialcrawlerconfigs\\client",
+    "\\modules\\socialcrawlerconfigs\\client\\config"
+  ],
+  "SelectedNode": "\\modules\\articles",
+  "PreviewInSolutionExplorer": false
+}

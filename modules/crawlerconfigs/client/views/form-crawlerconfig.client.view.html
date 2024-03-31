@@ -1,0 +1,94 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h2>{{vm.crawlerconfig._id ? 'Edit Crawlerconfig' : 'New Crawlerconfig'}}</h2>
+      </div>
+      <div class="card-body">
+        <section>
+          <div class="col-md-12">
+            <form name="vm.form.crawlerconfigForm" class="form-horizontal" ng-submit="vm.save(vm.form.crawlerconfigForm.$valid)" novalidate>
+              <fieldset>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="config_name">Name</label>
+                  <input name="config_name" type="text" ng-model="vm.crawlerconfig.config_name" id="name" class="form-control" placeholder="Name" required>
+                  <div ng-messages="vm.form.crawlerconfigForm.config_name.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Crawlerconfig name is required.</p>
+                  </div>
+                </div>
+                <div class="form-group" show-errors>
+                  <label class="control-label" for="topic">Topic</label>
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <select class="form-control" name="topic" id="topic"
+                              ng-model="vm.crawlerconfig.topic"
+                              ng-options="item._id as item.topic_name for item in vm.topics">
+                        <!--<option ng-repeat="topic in vm.topics" value="{{topic._id}}" [selected]="topic._id == vm.keyword.topic._id">
+            {{topic.topic_name}}
+          </option>-->
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <!--<select name="testselect" ng-model="vm.crawlerconfig.testselect" clalss="form-control">
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </select>-->
+                <div class="form-group">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label id="phongthi_label">Website</label>
+                      <select id="website" name="website" class="duallistbox" multiple="multiple">
+                        <option ng-repeat="website in vm.websites" value="{{website._id}}">
+                          {{website.website_name}}
+                        </option>
+                      </select>
+                    </div>
+                    <!-- /.form-group -->
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label id="phongthi_label">Keyword</label>
+                      <select id="keyword" name="keyword" class="duallistbox" multiple="multiple">
+                        <option ng-repeat="keyword in vm.keywords" value="{{keyword._id}}">
+                          {{keyword.keyword_name}}
+                        </option>
+                      </select>
+                    </div>
+                    <!-- /.form-group -->
+                  </div>
+                </div>
+                <div class="form-group">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <div class="form-group" show-errors>
+                        <label class="control-label" for="last_run_date">Posted From</label>
+                        <input name="last_run_date" type="date" ng-model="vm.crawlerconfig.parameters.startdate" id="last_run_date" class="form-control" placeholder="start date">
+                      </div>
+                    </div>
+                    <div class="col-sm-6">
+                      <div class="form-group" show-errors>
+                        <label class="control-label" for="next_run_date">Posted To</label>
+                        <input name="next_run_date" type="date" ng-model="vm.crawlerconfig.parameters.todate" id="next_run_date" class="form-control" placeholder="to date">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="submit" class="btn btn-default">{{vm.crawlerconfig._id ? 'Update' : 'Create'}}</button>
+                </div>
+                <div ng-show="vm.error" class="text-danger">
+                  <strong ng-bind="vm.error"></strong>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+        
