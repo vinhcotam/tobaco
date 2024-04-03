@@ -4,7 +4,7 @@
   
     angular
       .module('sentiments')
-      .factory('SentimentsService', LanguagevariablesService);
+      .factory('SentimentsService', SentimentsService);
   
     SentimentsService.$inject = ['$resource'];
   
@@ -20,12 +20,6 @@
           url: '/api/sentiments/numberrow',
           isArray: true
         }
-        // ,
-        // getbyTopic: {
-        //   method: 'GET',
-        //   url: '/api/languagevariables/getbytopic',
-        //   isArray: true
-        // }
       });
     }
   }());

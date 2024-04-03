@@ -15,7 +15,7 @@ var path = require('path'),
 exports.create = function(req, res) {
   var languagevariable = new Languagevariable(req.body);
   languagevariable.user = req.user;
-
+  console.log(languagevariable)
   languagevariable.save()
     .then((languagevariable) => {
       res.jsonp(languagevariable);

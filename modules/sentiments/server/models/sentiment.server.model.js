@@ -7,32 +7,29 @@ var mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 /**
- * Languagevariable Schema
+ * Sentiment Schema
  */
-var LanguagevariableSchema = new Schema({
+var SentimentSchema = new Schema({
   name: {
     type: String,
     default: '',
-    required: 'Please fill Languagevariable name',
+    required: 'Please fill Sentiment name',
     trim: true
   },
-  value: {
+  description: {
     type: String,
     default: '',
     trim: true
   },
-  topic: {
+  user: {
     type: Schema.ObjectId,
-    ref: 'Topic'
+    ref: 'User'
   },
   created: {
     type: Date,
     default: Date.now
   },
-  user: {
-    type: Schema.ObjectId,
-    ref: 'User'
-  }
+  
 });
-console.log(LanguagevariableSchema)
-mongoose.model('Languagevariable', LanguagevariableSchema);
+
+mongoose.model('Sentiment', SentimentSchema);
