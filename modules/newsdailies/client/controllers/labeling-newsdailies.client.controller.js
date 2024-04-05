@@ -15,7 +15,7 @@
       window.location.href = '/authentication/signin';
     }
     LanguagevariablesService.getbyTopic({ topic: newsdaily.topic._id }).$promise.then(function (variables) {
-      vm.variables = variables;    
+      vm.variables = variables;
     });
 
     LabelingbylabelstudiosService.query({ newsdaily: newsdaily._id }).$promise.then(function (labelingbylabelstudio) {
@@ -30,11 +30,17 @@
     vm.removedentries = [];//remove entries
     vm.labelingbylabelstudio = new LabelingbylabelstudiosService();
     vm.newsbytaxonomies = null;
+    // console.log("check id, ", newsdaily._id)
+
+    // $('#btn_view_cmt').click(function () {
+    //   $('#popup_cmt').modal('show')
+    // });
+
     //
     function BFS(tree) {
       let visited = [],
-      queue = [],
-      current = tree;
+        queue = [],
+        current = tree;
       current.level = 0;
       queue.push(current);
 
@@ -62,6 +68,9 @@
       return tree;
       //return visited;
     }
+
+
+
     //need check topic is null or undefined
     if (typeof newsdaily.topic != 'undefined') {
       TaxonomiesService.query({ topic: newsdaily.topic._id }).$promise.then(function (taxonimies) {
@@ -74,16 +83,24 @@
             //choice += OBJtoXML(BFS(tree));
             var choice = `<View>
             <Labels name="ner" toName="text">`;
+            // var choice = `<View>
+            // <Choices name="customButton" toName="text" choice="single" showInLine="true">
+            //   <Choice value="Custom Button" />
+            // </Choices>
+            // <Labels name="ner" toName="text">`;
             vm.variables.forEach(function (variable) {
               choice += '<Label value="' + variable._id + '">' + variable.name + '</Label>';
             });
             choice += `</Labels>
             <Text name="text" value="$text"></Text>`;
+
             choice += `<Taxonomy name="taxonomy" toName="text">`;
             choice += OBJtoXML(tree);//BFS(tree));
             choice += `</Taxonomy>`;
+
             choice += '</View>';
-            //console.log(choice);
+            console.log("---------------------")
+            console.log(choice);
             var labelStudio = new LabelStudio('label-studio', {
               config: choice,
               interfaces: [
@@ -122,7 +139,7 @@
                     if (typeof completion !== 'object') {
                       completion = JSON.parse(completion);
                     }
-                  }catch (err) {
+                  } catch (err) {
                     alert('Error load data from server!')
                   }
                   //*end code*/
@@ -136,7 +153,7 @@
                     console.log(LS);
                     delete completion.area;
                   }
-                  
+
                 }
               },
               onSubmitCompletion: function (ls, completion) {
@@ -149,7 +166,7 @@
                   }, function (err) {
                     Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>Labeling Not Updated!' });
                   });
-                  
+
                 } else {
                   vm.labelingbylabelstudio.$save(function (res) {
                     //save success
@@ -264,7 +281,7 @@
                                                 }, function (err) {
                                                   Notification.success({ message: '<i class="fa fa- bug" style="color: white;"></i>News by Taxonomy Not Saved!' });
                                                 });
-                                                
+
                                               } else {
                                                 //remove taxonomy in array if exist
                                                 var index = newsbytaxonomies.indexOf(taxonomyObject);
@@ -344,9 +361,9 @@
                             temp.labelingtool = vm.labelingbylabelstudio._id;
                             temp.newsdaily = newsdaily._id;
                             temp.keylabelstudio = key;
-                            temp.start  = value.start;
-                            temp.end  = value.end;
-                            temp.text  = value.text;
+                            temp.start = value.start;
+                            temp.end = value.end;
+                            temp.text = value.text;
                             temp.user = vm.labelingbylabelstudio.user;
                             if (value.results.length > 0) {
                               for (var i = 0; i < value.results.length; i++) {
@@ -424,7 +441,7 @@
                                                   }, function (err) {
                                                     Notification.error({ message: '<i class="fa fa-bug" style="color: white;"></i> News by Taxonomy not deleted!' });
                                                   });
-                                                  
+
                                                 }
                                               }
                                             }
@@ -443,7 +460,7 @@
                                     }, function (err) {
                                       Notification.error({ message: '<i class="fa fa-bug" style="color: white;"></i> News by Taxonomy not deleted!' });
                                     });
-                                    
+
                                   }
                                 }
                               });
@@ -460,14 +477,14 @@
                   }, function (err) {
                     Notification.error({ message: '<i class="fa fa-check" style="color: white;"></i>Label-Studio Not Updated!' });
                   });
-                  
+
                 } else {
                   vm.labelingbylabelstudio.$save(function (res) {
                     Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i> Labeling Saved!' });
                   }, function (err) {
                     Notification.error({ message: '<i class="fa fa-bug" style="color: white;"></i> Labeling Saved!' });
                   });
-                  
+
                 }
               },
               onDeleteCompletion: function (ls, completion) {
@@ -477,7 +494,7 @@
                 }, function (err) {
                   Notification.error({ message: '<i class="fa fa-bug" style="color: white;"></i> Labeling Not Deleted!' });
                 });
-                
+
                 //remove label
                 LabelingbytaxonomiesService.checkingEditOrRemove({
                   typefetch: 'removedlist',

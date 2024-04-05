@@ -3,12 +3,33 @@
     <div class="card card-info">
       <div class="card-header">
         <h3 class="float-left">Labeling</h3>
-        <button class="btn btn-primary float-right">Button</button>
-        <div class="clearfix"></div> <!-- Sử dụng clearfix để xử lý clear float -->
+
+        <div class="clearfix"></div>
       </div>
       <div class="card-body">
+        <div class="button-label" style="padding-bottom: 15px;">
+          <button class="btn btn-warning text-white">Auto Labeling</button>
+          <button class="btn btn-success">Confirm Labeling</button>
+          <button class="btn btn-primary float-right btn_view_cmt" id="btn_view_cmt"
+            style="background-color: #17a2b8;">View Comments</button>
+        </div>
         <div id="label-studio"></div>
       </div>
     </div>
   </div>
 </div>
+
+
+<!-- <div id="popup_cmt" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+  style="position: fixed; top: 0; left: 50%; width: 50%; height: 100%; background-color: white; overflow-y: auto;">
+  <div class="modal-dialog" role="document" style="width: 100%; height: 100%; margin: 0;">
+    <div class="modal-content" style="height: 100%; overflow-y: auto;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="myModalLabel">Comments</h5>
+      </div>
+      <div class="modal-body">
+        <p>Popup content goes here.</p>
+      </div>
+    </div>
+  </div>
+</div> -->
