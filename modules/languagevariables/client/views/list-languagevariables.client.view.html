@@ -22,7 +22,7 @@
               <td ui-sref="languagevariables.view({ languagevariableId: variable._id })"><span ng-bind="variable.name"></span></td>
               <td ui-sref="languagevariables.view({ languagevariableId: variable._id })"><span ng-bind="variable.topic.topic_name"></span></td>
               <td ui-sref="languagevariables.view({ languagevariableId: variable._id })"><span ng-bind="variable.created | date:'mediumDate'"></span></td>
-              <td><span ng-if="variable.user" ng-bind="languagevariableId.user.displayName"></span></td>
+              <td><span ng-if="variable.user" ng-bind="variable.user.displayName"></span></td>
               <td>
                 <div class="btn-group btn-group-sm">
                   <a class="btn btn-primary"

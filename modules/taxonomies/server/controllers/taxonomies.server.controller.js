@@ -100,11 +100,11 @@ exports.tree = function (req, res) {
     .then((taxonomy) => {
 
       //=====================================================================================>note at here when ugrade to v2
-      //taxonomy.getArrayTree({
+      // taxonomy.getArrayTree({
       //  sort: {
       //    taxonomy_name: 1
       //  }
-      //})
+      // })
       //  .then((tree) => {
       //    res.jsonp(tree[0]);
       //  })
