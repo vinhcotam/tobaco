@@ -281,6 +281,7 @@ exports.list = function (req, res) {
   if (req.query.typeget != undefined) {
     Newsdaily.find()
       .then((news) => {
+        console.log("aaaaa", news)
         res.jsonp(news);
       })
       .catch((err) => {
