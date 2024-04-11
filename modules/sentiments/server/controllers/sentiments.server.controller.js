@@ -126,7 +126,7 @@ exports.count = function (req, res) {
         condition.$or = orcondition;
     }
 
-    Sentiment.count(condition)
+    Sentiment.countDocuments(condition)
         .then((number) => {
             res.jsonp([number]);
         })

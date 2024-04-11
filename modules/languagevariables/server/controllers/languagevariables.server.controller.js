@@ -125,7 +125,7 @@ exports.count = function (req, res) {
     condition.$or = orcondition;
   }
 
-  Languagevariable.count(condition)
+  Languagevariable.countDocuments(condition)
     .then((number) => {
       res.jsonp([number]);
     })

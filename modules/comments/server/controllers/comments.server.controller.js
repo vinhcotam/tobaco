@@ -103,21 +103,7 @@ exports.count = function (req, res) {
             isRole = 2;
         }
     });
-    // if (isRole == 1 || isRole == 2) {
-    //     let topicIds = [];
-    //     req.user.topics.forEach(function (element, index) {
-    //         if (element.working_status == 1) {
-    //             topicIds.push(element.topic._id);
-    //         }
-    //     });
-    //     condition = { "topic": { "$in": topicIds } };
-    // }
-
-
-    // if (typeof req.query.topic != "undefined") {
-    //     condition.topic = req.query.topic;
-    // }
-
+    
     //create search by or operator in mongodb
     var orcondition = [];
     if (req.query.search != undefined) {
@@ -125,7 +111,7 @@ exports.count = function (req, res) {
         condition.$or = orcondition;
     }
 
-    Comment.count(condition)
+    Comment.countDocuments(condition)
         .then((number) => {
             res.jsonp([number]);
         })
@@ -156,38 +142,51 @@ exports.list = function (req, res) {
             isRole = 2;
         }
     });
-    // if (isRole == 1 || isRole == 2) {
-    //     let topicIds = [];
-    //     req.user.topics.forEach(function (element, index) {
-    //         if (element.working_status == 1) {
-    //             topicIds.push(element.topic._id);
-    //         }
-    //     });
-    //     condition = { "topic": { "$in": topicIds } };
-    // }
 
     if (req.query.currentPage != undefined) {
-        currentPage = req.query.currentPage;
+        currentPage = parseInt(req.query.currentPage, 10);
+
+        if (isNaN(currentPage) || currentPage < 1) {
+            currentPage = 1;
+        }
     }
 
-    // if (typeof req.query.topic != "undefined") {
-    //     condition.topic = req.query.topic;
-    // }
-
-    //create search by or operator in mongodb
+    // Create search by or operator in MongoDB
     var orcondition = [];
     if (req.query.search != undefined) {
         orcondition.push({ "name": { $regex: new RegExp(req.query.search) } });
         condition.$or = orcondition;
     }
 
-    Comment.find(condition)
-        //.sort('-created')
-        .populate('user', 'displayName')
-        // .populate('topic', '_id, topic_name')
-        .skip(10 * (currentPage - 1)).limit(10)
-        .then((comments) => {
-            res.jsonp(comments);
+    var limitCount = 10;
+    var skipCount = limitCount * (currentPage - 1);
+
+    // Get the total count of comments
+    Comment.countDocuments(condition)
+        .then((totalCount) => {
+            // Calculate the number of pages
+            var totalPages = Math.ceil(totalCount / limitCount);
+            console.log("total", totalPages);
+
+            Comment.find(condition)
+                // .sort('-created')
+                .populate('user', 'displayName')
+                // .populate('topic', '_id, topic_name')
+                .skip(skipCount)
+                .limit(limitCount)
+                .then((comments) => {
+                    res.set('X-Total-Count', totalCount);
+                    res.set('X-Current-Page', currentPage);
+                    res.set('X-Total-Pages', totalPages);
+                    res.jsonp(comments);
+                })
+                .catch((err) => {
+                    if (err) {
+                        return res.status(400).send({
+                            message: errorHandler.getErrorMessage(err)
+                        });
+                    }
+                });
         })
         .catch((err) => {
             if (err) {
@@ -196,8 +195,8 @@ exports.list = function (req, res) {
                 });
             }
         });
-
 };
+
 
 
 /**

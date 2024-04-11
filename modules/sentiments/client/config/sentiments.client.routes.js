@@ -61,6 +61,7 @@
           pageTitle: 'Sentiment {{ sentimentResolve.name }}'
         }
       });
+
   }
 
   getSentiment.$inject = ['$stateParams', 'SentimentsService'];
