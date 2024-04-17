@@ -23,6 +23,18 @@
           pageTitle: 'Comments List'
         }
       })
+      .state('comments.listByNewsId', {
+        url: '/:newsId',
+        templateUrl: '/modules/comments/client/views/list-comments.client.view.html',
+        controller: 'CommentsListController',
+        controllerAs: 'vm',
+        params: {
+          newsId: null
+        },
+        data: {
+          pageTitle: 'Comments List'
+        }
+      })
       .state('comments.view', {
         url: '/:commentId',
         templateUrl: '/modules/comments/client/views/view-comments.client.view.html',

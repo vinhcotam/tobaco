@@ -103,7 +103,7 @@ exports.count = function (req, res) {
             isRole = 2;
         }
     });
-    
+
     //create search by or operator in mongodb
     var orcondition = [];
     if (req.query.search != undefined) {
@@ -160,7 +160,14 @@ exports.list = function (req, res) {
 
     var limitCount = 10;
     var skipCount = limitCount * (currentPage - 1);
-
+    var newsId = req.query.newsId;
+    console.log("checkID,", newsId)
+    if (newsId !== undefined) {
+        condition.news_id = newsId;
+        console.log("zô")
+    }else{
+        console.log("zôo")
+    }
     // Get the total count of comments
     Comment.countDocuments(condition)
         .then((totalCount) => {

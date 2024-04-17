@@ -121,7 +121,7 @@ exports.count = function (req, res) {
     orcondition.push({ "content": { $regex: new RegExp(req.query.search) } });
   }
 
-  var c_soc = Socialobjectactivity.count(condition)
+  var c_soc = Socialobjectactivity.countDocuments(condition)
   if (orcondition.length > 0) {
     c_soc.or(orcondition);
   }

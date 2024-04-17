@@ -26,7 +26,11 @@
         vm.labelingbylabelstudio = new LabelingbylabelstudiosService();
       }
     });
-
+    //redirect
+    vm.goToCommentsList = function (newsdailyId) {
+      console.log("abcd", newsdaily._id)
+      $state.go('comments.listByNewsId', { newsId: newsdaily._id });
+    };
     vm.removedentries = [];//remove entries
     vm.labelingbylabelstudio = new LabelingbylabelstudiosService();
     vm.newsbytaxonomies = null;
