@@ -50,7 +50,7 @@
         }
       })
       .state('comments.view', {
-        url: '/:commentId',
+        url: 'view/:commentId',
         templateUrl: '/modules/comments/client/views/view-comments.client.view.html',
         controller: 'CommentsController',
         controllerAs: 'vm',

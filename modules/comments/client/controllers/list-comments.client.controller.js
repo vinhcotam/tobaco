@@ -17,6 +17,7 @@
     var newsTitle = $stateParams.newsTitle
     var newsSummary = $stateParams.newsSummary
     console.log("Aa", newsTitle)
+    vm.newsId= newsId
     vm.newsTitle = newsTitle
     vm.newsSummary = newsSummary
     vm.buildPager = buildPager;
