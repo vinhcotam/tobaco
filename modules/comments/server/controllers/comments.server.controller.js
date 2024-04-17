@@ -92,7 +92,10 @@ exports.delete = function (req, res) {
  */
 exports.count = function (req, res) {
     var condition = {};
-
+    var newsId = req.query.newsId;
+    if (newsId !== undefined) {
+        condition.news_id = newsId;
+    }
     var roles = req.user.roles;
     var isRole = -1;
     roles.forEach(function (element, index) {
@@ -184,6 +187,7 @@ exports.list = function (req, res) {
         .then((totalCount) => {
             // Calculate the number of pages
             var totalPages = Math.ceil(totalCount / limitCount);
+            console.log("toaas", totalPages)
             Comment.find(condition)
                 .populate('user', 'displayName')
                 .skip(skipCount)

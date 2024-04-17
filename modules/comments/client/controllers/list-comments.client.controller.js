@@ -22,11 +22,11 @@
     vm.buildPager = buildPager;
     vm.figureOutItemsToDisplay = figureOutItemsToDisplay;
     vm.pageChanged = pageChanged;
-    // vm.remove = remove;
     vm.buildPager();
     var promise = CommentsService.getTotal().$promise;
     promise.then(function (number) {
       vm.filterLength = number[0];
+      vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
     });
     if (typeof newsId !== 'undefined') {
       promise = CommentsService.getTotal({ newsId: newsId }).$promise;
@@ -52,8 +52,8 @@
         params.search = vm.search;
         CommentsService.getTotal(params).$promise.then(function (number) {
           vm.filterLength = number[0];
+          vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
         });
-
       }
       if (angular.isDefined(newsId)) {
         params.newsId = newsId;
@@ -61,7 +61,6 @@
       CommentsService.query(params, function (data) {
         vm.filteredItems = data;
         vm.pagedItems = data;
-        console.log("dataaa", data[0])
       });
     }
 
@@ -69,14 +68,5 @@
       vm.figureOutItemsToDisplay();
     }
 
-    //
-    function remove(id) {
-      if ($window.confirm('Are you sure you want to delete?')) {
-        var comment = CommentsService.delete({
-          commentId: id
-        });
-        window.location.reload();
-      }
-    }
   }
 }());

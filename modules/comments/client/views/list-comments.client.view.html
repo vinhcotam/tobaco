@@ -62,12 +62,15 @@
                         </tr>
                     </tbody>
                 </table>
-                <div class="card-footer clearfix">
+                <!-- <div class="card-footer clearfix">
                     <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage"
                         total-items="vm.filterLength" ng-model="vm.currentPage"
                         ng-change="vm.pageChanged()"></uib-pagination>
-                </div>
+                </div> -->
+                <div class="card-footer clearfix">
+                    <!-- <b style="color: blue;">Total: {{vm.filterLength}} (rows)</b> -->
+                    <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+                  </div>
             </div>
         </div>
     </div>
-</div>
