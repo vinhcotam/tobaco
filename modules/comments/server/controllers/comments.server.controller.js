@@ -6,6 +6,7 @@
 var path = require('path'),
     mongoose = require('mongoose'),
     Comment = mongoose.model('Comment'),
+    Newsdaily = mongoose.model('Newsdaily'),
     errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
     _ = require('lodash');
 
@@ -161,31 +162,35 @@ exports.list = function (req, res) {
     var limitCount = 10;
     var skipCount = limitCount * (currentPage - 1);
     var newsId = req.query.newsId;
-    console.log("checkID,", newsId)
+    var newsTitle = ""
+    var newsSummary = ""
     if (newsId !== undefined) {
         condition.news_id = newsId;
-        console.log("zô")
-    }else{
-        console.log("zôo")
+        Newsdaily.findOne({ _id: newsId })
+            .then((news) => {
+                console.log("checkscas", news.news_title)
+                console.log("checkscas", news.news_summary)
+                // res.jsonp({ newsTitle: news.news_title });
+                newsTitle = news.news_title;
+                newsSummary = news.news_summary;
+                next();
+            })
+            .catch((err) => {
+            });
+
     }
     // Get the total count of comments
     Comment.countDocuments(condition)
         .then((totalCount) => {
             // Calculate the number of pages
             var totalPages = Math.ceil(totalCount / limitCount);
-            console.log("total", totalPages);
-
             Comment.find(condition)
-                // .sort('-created')
                 .populate('user', 'displayName')
-                // .populate('topic', '_id, topic_name')
                 .skip(skipCount)
                 .limit(limitCount)
                 .then((comments) => {
-                    res.set('X-Total-Count', totalCount);
-                    res.set('X-Current-Page', currentPage);
-                    res.set('X-Total-Pages', totalPages);
                     res.jsonp(comments);
+                    // res.jsonp({ comments: comments, newsTitle: newsTitle,newsSummary: newsSummary})
                 })
                 .catch((err) => {
                     if (err) {

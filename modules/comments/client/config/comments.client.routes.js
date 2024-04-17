@@ -29,10 +29,24 @@
         controller: 'CommentsListController',
         controllerAs: 'vm',
         params: {
-          newsId: null
+          newsId: null,
+          newsTitle: null,
+          newsSummary: null
         },
         data: {
           pageTitle: 'Comments List'
+        }
+      })
+      .state('comments.labeling', {
+        url: '/comments/:newsId/labeling',
+        templateUrl: '/modules/comments/client/views/labeling-comments.client.view.html',
+        controller: 'LabelingcommentsController',
+        controllerAs: 'vm',
+        resolve: {
+          commentResolve: getComment
+        },
+        data: {
+          pageTitle: 'Labeling comments'
         }
       })
       .state('comments.view', {

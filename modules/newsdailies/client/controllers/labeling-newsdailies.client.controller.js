@@ -28,8 +28,16 @@
     });
     //redirect
     vm.goToCommentsList = function (newsdailyId) {
-      console.log("abcd", newsdaily._id)
-      $state.go('comments.listByNewsId', { newsId: newsdaily._id });
+      console.log("abcd", newsdaily._id);
+      console.log("abcd", newsdaily.news_title);
+      
+      var params = {
+        newsId: newsdaily._id,
+        newsTitle: newsdaily.news_title,
+        newsSummary: newsdaily.news_summary
+      };
+      console.log("abcd", params);
+      $state.go('comments.listByNewsId', params);
     };
     vm.removedentries = [];//remove entries
     vm.labelingbylabelstudio = new LabelingbylabelstudiosService();

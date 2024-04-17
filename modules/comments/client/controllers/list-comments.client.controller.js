@@ -14,6 +14,11 @@
       window.location.href = '/authentication/signin';
     }
     var newsId = $stateParams.newsId;
+    var newsTitle = $stateParams.newsTitle
+    var newsSummary = $stateParams.newsSummary
+    console.log("Aa", newsTitle)
+    vm.newsTitle = newsTitle
+    vm.newsSummary = newsSummary
     vm.buildPager = buildPager;
     vm.figureOutItemsToDisplay = figureOutItemsToDisplay;
     vm.pageChanged = pageChanged;
@@ -29,10 +34,8 @@
 
     promise.then(function (number) {
       vm.filterLength = number[0];
-      var totalPages = $window.parseInt($window.localStorage.getItem('X-Total-Pages'));
-      var currentPage = $window.parseInt($window.localStorage.getItem('X-Current-Page'));
-      console.log("totallll", totalPages)
     });
+
     function buildPager() {
       vm.pagedItems = [];
       vm.itemsPerPage = 10;
@@ -58,6 +61,7 @@
       CommentsService.query(params, function (data) {
         vm.filteredItems = data;
         vm.pagedItems = data;
+        console.log("dataaa", data[0])
       });
     }
 
