@@ -23,6 +23,15 @@
           pageTitle: 'Socialobjectactivities List'
         }
       })
+      .state('socialobjectactivities.wordcloud', {
+        url: '/wordcloud',
+        templateUrl: '/modules/socialobjectactivities/client/views/view-socialobjectactivity-world-cloud.client.view.html',
+        controller: 'WordCloudController',
+        controllerAs: 'vm',
+        data: {
+          pageTitle: 'Word Cloud'
+        }
+      })
       .state('socialobjectactivities.create', {
         url: '/create',
         templateUrl: '/modules/socialobjectactivities/client/views/form-socialobjectactivity.client.view.html',

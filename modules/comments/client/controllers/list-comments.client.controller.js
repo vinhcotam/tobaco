@@ -16,8 +16,8 @@
     var newsId = $stateParams.newsId;
     var newsTitle = $stateParams.newsTitle
     var newsSummary = $stateParams.newsSummary
-    console.log("Aa", newsTitle)
-    vm.newsId= newsId
+    vm.newsId = newsId
+    console.log("aaab", vm.newsId)
     vm.newsTitle = newsTitle
     vm.newsSummary = newsSummary
     vm.buildPager = buildPager;
@@ -32,11 +32,21 @@
     if (typeof newsId !== 'undefined') {
       promise = CommentsService.getTotal({ newsId: newsId }).$promise;
     }
-
     promise.then(function (number) {
       vm.filterLength = number[0];
     });
+    // vm.goToLabeling = function (newsId) {
 
+    //   $state.go('comments.labeling', { news_id: newsId });
+
+    // };
+    // var reportLink = document.getElementById('report-link');
+    // reportLink.addEventListener('click', function (event) {
+    //   event.preventDefault();
+    //   $state.go('comments.labeling', { news_id: newsId });
+
+    //   // window.location.href = destinationURL;
+    // });
     function buildPager() {
       vm.pagedItems = [];
       vm.itemsPerPage = 10;

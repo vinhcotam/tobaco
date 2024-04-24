@@ -9,8 +9,8 @@
   CommentsService.$inject = ['$resource'];
 
   function CommentsService($resource) {
-    return $resource('/api/comments/:commentId', {
-      commentId: '@_id'
+    var Comment = $resource('/api/comments/:commentId', {
+      newsdailyId: '@_id'
     }, {
       update: {
         method: 'PUT'
@@ -21,5 +21,13 @@
         isArray: true
       }
     });
+    angular.extend(Comment.prototype, {
+      createOrUpdate: function () {
+        var comment = this;
+        return createOrUpdate(comment);
+      }
+    });
+
+    return Comment;
   }
 }());

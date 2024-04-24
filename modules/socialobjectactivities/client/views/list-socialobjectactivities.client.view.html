@@ -3,9 +3,14 @@
     <div class="card card-info">
       <div class="card-header">
         <h3 class="card-title">Socialobjectactivities</h3>
-        <!-- <div class="card-tools">
-          <div class="input-group input-group-sm" style="width: 150px;">
-            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+        <div class="card-tools" style="display: flex; align-items: center;">
+          <button type="submit" class="btn btn-success" style="margin-right: 10px;" ui-sref="socialobjectactivities.wordcloud()"
+            data-toggle="modal" data-target="#imageModal">
+            Analysis
+          </button>
+          <div class="input-group input-group-sm">
+            <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search"
+              placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
 
             <div class="input-group-append">
               <button type="submit" class="btn btn-default">
@@ -13,22 +18,7 @@
               </button>
             </div>
           </div>
-        </div> -->
-        <div class="card-tools" style="display: flex; align-items: center;">
-                    <button type="submit" class="btn btn-success" style="margin-right: 10px;">
-                        Analysis
-                    </button>
-                    <div class="input-group input-group-sm">
-                        <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search"
-                            placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
-            
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-default">
-                                <i class="fas fa-search"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+        </div>
       </div>
       <div class="card-body table-responsive p-0">
         <table class="table table-hover text-wrap">
@@ -50,13 +40,16 @@
           </thead>
           <tbody>
             <tr ng-repeat="(index, socialobjectactivity) in vm.pagedItems">
-              <td ui-sref="socialobjectactivities.view({ socialobjectactivityId: socialobjectactivity._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+              <td ui-sref="socialobjectactivities.view({ socialobjectactivityId: socialobjectactivity._id })"><span
+                  ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
               <td><span ng-bind="socialobjectactivity.activity_date | date:'mediumDate'"></span></td>
               <!--<td><span ng-bind="socialobjectactivity.subject_name"></span></td>-->
               <td><span ng-bind="socialobjectactivity.content"></span></td>
               <td><span ng-bind="socialobjectactivity.activity_code"></span></td>
               <!--<td ui-sref="socialobjectactivities.view({ socialobjectactivityId: socialobjectactivity._id })"><span ng-bind="socialobjectactivity.content_vi"></span></td>-->
-              <td><span ng-bind="socialobjectactivity.activity_liked + socialobjectactivity.activity_love + socialobjectactivity.activity_haha + socialobjectactivity.activity_sad + socialobjectactivity.activity_angry + socialobjectactivity.activity_wow"></span></td>
+              <td><span
+                  ng-bind="socialobjectactivity.activity_liked + socialobjectactivity.activity_love + socialobjectactivity.activity_haha + socialobjectactivity.activity_sad + socialobjectactivity.activity_angry + socialobjectactivity.activity_wow"></span>
+              </td>
               <td><span ng-bind="socialobjectactivity.activity_shares"></span></td>
               <td><span ng-bind="socialobjectactivity.activity_comment"></span></td>
               <td><span ng-bind="socialobjectactivity.created | date:'mediumDate'"></span></td>
@@ -64,11 +57,11 @@
               <td>
                 <div class="btn-group btn-group-sm">
                   <a class="btn btn-primary"
-                     ui-sref="socialobjectactivities.view({ socialobjectactivityId: socialobjectactivity._id })">
+                    ui-sref="socialobjectactivities.view({ socialobjectactivityId: socialobjectactivity._id })">
                     <i class="fas fa-eye"></i>
                   </a>
                   <a class="btn btn-primary"
-                     ui-sref="socialobjectactivities.edit({ socialobjectactivityId: socialobjectactivity._id })">
+                    ui-sref="socialobjectactivities.edit({ socialobjectactivityId: socialobjectactivity._id })">
                     <i class="fas fa-edit"></i>
                   </a>
                   <a style="color:white;" class="btn btn-danger" ng-click="vm.remove(socialobjectactivity._id)">
@@ -81,9 +74,11 @@
         </table>
         <div class="card-footer clearfix">
           <b style="color: blue;">Total: {{vm.filterLength}} (rows)</b>
-          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+          <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage"
+            total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
         </div>
       </div>
     </div>
   </div>
 </div>
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

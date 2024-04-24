@@ -5,9 +5,9 @@
     .module('socialobjectactivities')
     .controller('SocialobjectactivitiesListController', SocialobjectactivitiesListController);
 
-  SocialobjectactivitiesListController.$inject = ['$scope','$filter','$state','$window','Authentication','SocialobjectactivitiesService'];
+  SocialobjectactivitiesListController.$inject = ['$scope', '$filter', '$state', '$window', 'Authentication', 'SocialobjectactivitiesService', '$http'];
 
-  function SocialobjectactivitiesListController($scope, $filter, $state, $window, Authentication, SocialobjectactivitiesService) {
+  function SocialobjectactivitiesListController($scope, $filter, $state, $window, Authentication, SocialobjectactivitiesService, $http) {
     var vm = this;
     vm.authentication = Authentication;
     if (vm.authentication.user == null) {
@@ -27,7 +27,17 @@
     SocialobjectactivitiesService.getTotal().$promise.then(function (number) {
       vm.filterLength = number[0];
     });
-  
+    $('#datetimefilter').daterangepicker({
+      opens: 'left'
+    }, function (start, end, label) {
+        vm.startfilterdate = start.format('YYYY-MM-DD');
+        vm.endfilterdate = end.format('YYYY-MM-DD');
+        console.log(vm.startfilterdate)
+        console.log(vm.endfilterdate)
+
+       figureOutItemsToDisplay();
+    });
+
     function buildPager() {
       vm.pagedItems = [];
       vm.itemsPerPage = 10;
@@ -47,7 +57,7 @@
         });
 
       }
-      
+
       SocialobjectactivitiesService.query(params, function (data) {
         //vm.filterLength = data[0].count;
         vm.filteredItems = data[0].data;

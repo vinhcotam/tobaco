@@ -1,0 +1,52 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">Worcs Cloud</h3>
+                <div class="card-tools" style="display: flex; align-items: center;">
+
+                </div>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <div class="choose_container" style="display: flex; padding-top: 2%; padding-left: 2%;">
+                    <label for="week" style="margin-right: 10px;">Week</label>
+                    <input type="radio" id="week" name="chooseType" value="week" style="margin-right: 10px;">
+                    <label for="month" style="margin-right: 10px;">Month</label>
+                    <input type="radio" id="month" name="chooseType" value="month" style="margin-right: 10px;">
+                </div>
+                <div class="date_container" style="display: flex; justify-content: space-between; padding-top: 2%;">
+                    <label for="datetimefilter"
+                        style="align-self: center; margin-right: 2%; margin-left: 2%;">Date</label>
+                    <input id="datetimefilter" type="text" style="margin-right: 50% !important; margin: 2%;"
+                        class="form-control" ng-model="vm.filterbydate" ng-change="vm.figureOutItemsToDisplay()"
+                        maxlength="10">
+                    <button type="submit" class="btn btn-success" style="margin: 2%;" ng-click="vm.analysisSocial()">
+                        Analysis
+                    </button>
+                </div>
+
+            </div>
+            
+        </div>
+        <div id="demo" class="carousel slide" data-ride="carousel">
+            aaaa
+            <ul class="carousel-indicators">
+                <li data-target="#demo" data-slide-to="0" class="active"></li>
+                <li data-target="#demo" data-slide-to="1"></li>
+                <li data-target="#demo" data-slide-to="2"></li>
+            </ul>
+            <div class="carousel-inner" id="imageWrapper">
+            </div>
+            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#demo" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </a>
+        </div>
+    </div>
+
+</div>
+
+
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

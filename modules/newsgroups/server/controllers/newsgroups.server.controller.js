@@ -123,7 +123,7 @@ exports.count = function (req, res) {
     orcondition.push({ "name": { $regex: new RegExp(req.query.search) } });
     condition.$or = orcondition;
   }
-  Newsgroup.count(condition)
+  Newsgroup.countDocuments(condition)
     .then((number) => {
       res.jsonp([number]);
     })
