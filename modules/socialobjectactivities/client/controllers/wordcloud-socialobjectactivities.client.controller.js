@@ -112,31 +112,66 @@
                 if (imageWrapper) {
                     imageWrapper.innerHTML = '';
 
-                    base64DataArray.forEach(function (base64Data) {
+                    base64DataArray.forEach(function (base64Data, index) {
                         var image = new Image();
                         image.onload = function () {
                             var slide = document.createElement('div');
                             slide.classList.add('carousel-item');
-                            var maxWidth = 500;
-                            var maxHeight = 300;
-
+                            if (index === 0) {
+                                slide.classList.add('active');
+                            }
+                            var maxWidth = 720;
+                            var maxHeight = 1920;
                             var width = image.width;
                             var height = image.height;
-
-                            if (width > maxWidth || height > maxHeight) {
-                                var scaleFactor = Math.min(maxWidth / width, maxHeight / height);
-                                width = width * scaleFactor;
-                                height = height * scaleFactor;
+                            var aspectRatio = width / height;
+                            if (width > maxWidth) {
+                                width = maxWidth;
+                                height = width / aspectRatio;
                             }
-                            image.width = width;
-                            image.height = height;
-                            slide.appendChild(image);
+                            if (height > maxHeight) {
+                                height = maxHeight;
+                                width = height * aspectRatio;
+                            }
+
+                            var imgElement = document.createElement('img');
+                            imgElement.src = image.src;
+                            imgElement.classList.add('d-block');
+                            imgElement.classList.add('mx-auto');
+                            imgElement.width = width;
+                            imgElement.height = height;
+                            slide.appendChild(imgElement);
                             imageWrapper.appendChild(slide);
+                        };
+                        image.onerror = function () {
+                            console.error('Error loading image:', image.src);
                         };
                         image.src = 'data:image/png;base64,' + base64Data;
                     });
+
+                    var mySwiper = new Swiper('.swiper-container', {
+                        loop: true,
+                        speed: 500,
+                        autoplay: {
+                            delay: 3000,
+                            disableOnInteraction: false
+                        },
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                        pagination: {
+                            el: '.swiper-pagination',
+                            clickable: true,
+                        },
+                    });
+                } else {
+                    console.error('Image wrapper not found.');
                 }
             }
+
+
+
         };
 
 
