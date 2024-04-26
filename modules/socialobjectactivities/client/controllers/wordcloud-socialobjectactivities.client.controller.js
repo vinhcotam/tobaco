@@ -39,74 +39,46 @@
 
             figureOutItemsToDisplay();
         });
+        vm.typeFilter = 'week'
+        $('.choose_container input[value="week"]').prop('checked', true);
+        $('.choose_container input[type="radio"]').change(function () {
+            var selectedValue = $(this).val();
+            vm.typeFilter = selectedValue
+            console.log("aaa: ", vm.typeFilter)
+            // Thực hiện các thao tác khác dựa trên giá trị đã chọn
+        });
+        vm.isDateEmpty = false;
+        vm.checkDateEmpty = function () {
+            if (!vm.filterbydate) {
+                vm.isDateEmpty = true;
+            } else {
+                vm.isDateEmpty = false;
+            }
+        };
+        //get image from api
         vm.analysisSocial = function () {
-            $http.post('http://localhost:5000/wordscloud_v1?type=week&start_date=2022-09-01&end_date=2022-9-22')
+            vm.checkDateEmpty();
+            if (vm.isDateEmpty) {
+                console.log("zo")
+                document.getElementById("error-container").style.display = "block";
+                return;
+            }
+            var apiUrl = 'http://localhost:5000/wordscloud_v1';
+            var type = encodeURIComponent(vm.typeFilter);
+            var startDate = encodeURIComponent(vm.startfilterdate);
+            var endDate = encodeURIComponent(vm.endfilterdate);
+
+            var url = apiUrl + '?type=' + type + '&start_date=' + startDate + '&end_date=' + endDate;
+            $http.post(url)
                 .then(function (response) {
                     console.log(response.data);
                     var base64DataArray = response.data.img_array;
-                    console.log("base64", base64DataArray);
                     displayImageSlider(base64DataArray);
                 })
                 .catch(function (error) {
                     console.error(error);
                 });
-
-            // function displayImageSlider(base64DataArray) {
-            //     var imageWrapper = document.getElementById('imageWrapper');
-            //     if (imageWrapper) {
-            //         imageWrapper.innerHTML = '';
-
-            //         base64DataArray.forEach(function (base64Data) {
-            //             var image = new Image();
-            //             image.onload = function () {
-            //                 var slide = document.createElement('div');
-            //                 slide.classList.add('swiper-slide');
-            //                 var maxWidth = 500;
-            //                 var maxHeight = 300;
-
-            //                 var width = image.width;
-            //                 var height = image.height;
-
-            //                 if (width > maxWidth || height > maxHeight) {
-            //                     var scaleFactor = Math.min(maxWidth / width, maxHeight / height);
-            //                     width = width * scaleFactor;
-            //                     height = height * scaleFactor;
-            //                 }
-            //                 image.width = width;
-            //                 image.height = height;
-            //                 slide.appendChild(image);
-            //                 imageWrapper.appendChild(slide);
-            //             };
-            //             image.src = 'data:image/png;base64,' + base64Data;
-            //         });
-            //         new Swiper('.swiper-container', {
-            //             spaceBetween: 0,
-            //             pagination: {
-            //                 el: '.swiper-pagination',
-            //             },
-            //         });
-            //     }
-            // }
-            // function displayImageSlider(imageUrls) {
-            //     var imageWrapper = document.getElementById('imageWrapper');
-
-
-            //     imageUrls.forEach(function (imageUrl, index) {
-            //         var slide = document.createElement('div');
-            //         slide.classList.add('carousel-item');
-            //         if (index === 0) {
-            //             slide.classList.add('active');
-            //         }
-
-            //         var image = document.createElement('img');
-            //         image.src = imageUrl;
-            //         image.classList.add('d-block', 'w-100');
-
-            //         slide.appendChild(image);
-            //         imageWrapper.appendChild(slide);
-            //     });
-
-            // }
+            // display image into slider
             function displayImageSlider(base64DataArray) {
                 var imageWrapper = document.getElementById('imageWrapper');
                 if (imageWrapper) {
@@ -120,6 +92,7 @@
                             if (index === 0) {
                                 slide.classList.add('active');
                             }
+                            //fix width, height of image
                             var maxWidth = 720;
                             var maxHeight = 1920;
                             var width = image.width;
@@ -175,13 +148,7 @@
         };
 
 
-        function displayImagePopup(imageBlob) {
-            var imageUrl = URL.createObjectURL(imageBlob);
-            var popupImage = document.getElementById('popupImage');
-            popupImage.src = imageUrl;
 
-            $('#imageModal').modal('show');
-        }
 
         function buildPager() {
             vm.pagedItems = [];
