@@ -19,6 +19,11 @@
         method: 'GET',
         url: '/api/comments/numberrow',
         isArray: true
+      },
+      getCommentsByNewsId: {
+        method: 'GET',
+        url: '/api/comments/numberrow',
+        isArray: true
       }
     });
     angular.extend(Comment.prototype, {

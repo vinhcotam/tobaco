@@ -31,22 +31,16 @@
     });
     if (typeof newsId !== 'undefined') {
       promise = CommentsService.getTotal({ newsId: newsId }).$promise;
+      
     }
     promise.then(function (number) {
       vm.filterLength = number[0];
     });
-    // vm.goToLabeling = function (newsId) {
+    vm.goToLabel = function (newsId) {
+      console.log("print", vm.newsId)
+      $state.go('comments.labeling', { newsId: vm.newsId });
 
-    //   $state.go('comments.labeling', { news_id: newsId });
-
-    // };
-    // var reportLink = document.getElementById('report-link');
-    // reportLink.addEventListener('click', function (event) {
-    //   event.preventDefault();
-    //   $state.go('comments.labeling', { news_id: newsId });
-
-    //   // window.location.href = destinationURL;
-    // });
+    };
     function buildPager() {
       vm.pagedItems = [];
       vm.itemsPerPage = 10;
@@ -72,6 +66,9 @@
       CommentsService.query(params, function (data) {
         vm.filteredItems = data;
         vm.pagedItems = data;
+        console.log("abcdscas:::", params)
+
+        console.log("abcdscas:::", data)
       });
     }
 

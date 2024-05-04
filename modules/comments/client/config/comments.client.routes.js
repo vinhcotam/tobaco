@@ -38,12 +38,12 @@
         }
       })
       .state('comments.labeling', {
-        url: '/comments/:newsId/labeling',
+        url: '/:newsId/labeling',
         templateUrl: '/modules/comments/client/views/labeling-comments.client.view.html',
         controller: 'LabelingcommentsController',
         controllerAs: 'vm',
         resolve: {
-          commentResolve: getComment
+          commentResolve: getCommentV1
         },
         data: {
           pageTitle: 'Labeling comments'
@@ -64,6 +64,10 @@
   }
 
   getComment.$inject = ['$stateParams', 'CommentsService'];
+  getCommentV1.$inject = ['$stateParams', 'CommentsService'];
+  function getCommentV1($stateParams, CommentsService) {
+    return CommentsService.getCommentsByNewsId($stateParams.newsId);
+  }
 
   function getComment($stateParams, CommentsService) {
     return CommentsService.get({

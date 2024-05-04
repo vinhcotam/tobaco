@@ -4,7 +4,9 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+  materializedPlugin = require('mongoose-materialized'),
   Schema = mongoose.Schema;
+
 
 /**
  * Languagevariable Schema
@@ -36,5 +38,6 @@ var CommentSchema = new Schema({
     default: Date.now
   }
 });
-console.log(CommentSchema)
+CommentSchema.plugin(materializedPlugin);
+
 mongoose.model('Comment', CommentSchema);

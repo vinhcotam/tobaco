@@ -89,7 +89,9 @@
             taxonomyId: taxonomy._id
           }).$promise.then(function (tree) {
             vm.taxonimies = tree.children;
+            console.log("tree:", taxonomy)
             //choice += OBJtoXML(BFS(tree));
+
             var choice = `<View>
             <Labels name="ner" toName="text">`;
             // var choice = `<View>
@@ -103,9 +105,9 @@
             choice += `</Labels>
             <Text name="text" value="$text"></Text>`;
 
-            choice += `<Taxonomy name="taxonomy" toName="text">`;
-            choice += OBJtoXML(tree);//BFS(tree));
-            choice += `</Taxonomy>`;
+            // choice += `<Taxonomy name="taxonomy" toName="text">`;
+            // choice += OBJtoXML(tree);//BFS(tree));
+            // choice += `</Taxonomy>`;
 
             choice += '</View>';
             console.log("---------------------")
