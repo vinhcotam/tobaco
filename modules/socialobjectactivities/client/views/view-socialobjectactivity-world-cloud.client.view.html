@@ -24,6 +24,13 @@
                         Analysis
                     </button>
                 </div>
+                <div id="loading-container" style="display: none; text-align: center;">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <p>Loading...</p>
+                </div>
+                
                 <div style="margin-left: 2%;" id="error-container" ng-show="vm.isDateEmpty" class="error-text">Please
                     enter the date.</div>
                 <div id="demo" class="carousel slide" data-ride="carousel" style="margin-bottom: 1%;">

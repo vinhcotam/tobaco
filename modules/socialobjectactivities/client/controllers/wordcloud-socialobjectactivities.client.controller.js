@@ -34,8 +34,7 @@
         }, function (start, end, label) {
             vm.startfilterdate = start.format('YYYY-MM-DD');
             vm.endfilterdate = end.format('YYYY-MM-DD');
-            console.log(vm.startfilterdate)
-            console.log(vm.endfilterdate)
+            
 
             figureOutItemsToDisplay();
         });
@@ -49,17 +48,17 @@
         });
         vm.isDateEmpty = false;
         vm.checkDateEmpty = function () {
-            if (!vm.filterbydate) {
+            if (!vm.startfilterdate || !vm.endfilterdate) {
                 vm.isDateEmpty = true;
             } else {
                 vm.isDateEmpty = false;
             }
         };
+        
         //get image from api
         vm.analysisSocial = function () {
             vm.checkDateEmpty();
             if (vm.isDateEmpty) {
-                console.log("zo")
                 document.getElementById("error-container").style.display = "block";
                 return;
             }
@@ -67,6 +66,7 @@
             var type = encodeURIComponent(vm.typeFilter);
             var startDate = encodeURIComponent(vm.startfilterdate);
             var endDate = encodeURIComponent(vm.endfilterdate);
+            document.getElementById("loading-container").style.display = "block";
 
             var url = apiUrl + '?type=' + type + '&start_date=' + startDate + '&end_date=' + endDate;
             $http.post(url)
@@ -77,7 +77,11 @@
                 })
                 .catch(function (error) {
                     console.error(error);
+                })
+                .finally(function () {
+                    document.getElementById("loading-container").style.display = "none";
                 });
+
             // display image into slider
             function displayImageSlider(base64DataArray) {
                 var imageWrapper = document.getElementById('imageWrapper');

@@ -124,34 +124,27 @@
                     onSubmitCompletion: function (ls, completion) {
                         // vm.labelingbylabelstudio.newsdaily = newsdaily._id;
                         vm.labelingbylabelstudio.completion = JSON.stringify(completion.toJSON());
-                        console.log("texxxt:", vm.labelingbylabelstudio.completion)
                         var completionObject = JSON.parse(vm.labelingbylabelstudio.completion);
-                        console.log("texxxt:", completionObject.areas)
+                        console.log("list:", contentObject)
+                        var commentId = ""
                         for (const key in completionObject.areas) {
                             if (completionObject.areas.hasOwnProperty(key)) {
-                              const item = completionObject.areas[key];
-                              const text = item.text;
-                              console.log(text);
+                                const item = completionObject.areas[key];
+                                const text = item.text;
+                                for (const [key, elements] of Object.entries(contentObject)) {
+                                    if (typeof elements === 'string') {
+                                        if (elements.includes(text)) {
+                                            commentId = key
+                                            console.log('Text được tìm thấy trong phần tử có key:', key);
+                                        }
+                                    } else {
+                                        console.error(`Giá trị của phần tử ${key} không phải là chuỗi.`);
+                                    }
+                                }
+
+
                             }
-                          }
-                        // if (completionObject.areas) {
-                        //     for (var key in completionObject.areas) {
-                        //         if (completionObject.areas.hasOwnProperty(key)) {
-                        //             var area = completionObject.areas[key];
-
-                        //             if (area.results && area.results.length > 0) {
-                        //                 for (var i = 0; i < area.results.length; i++) {
-                        //                     var result = area.results[i];
-
-                        //                     if (result.value && result.value.text) {
-                        //                         var text = result.value.text;
-                        //                         console.log("Text:", text);
-                        //                     }
-                        //                 }
-                        //             }
-                        //         }
-                        //     }
-                        // }
+                        }
                         if (vm.labelingbylabelstudio._id) {
                             vm.labelingbylabelstudio.$update(function (res) {
                                 Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i>Labeling Updated!' });
@@ -172,17 +165,17 @@
                                         for (const [key, value] of Object.entries(areas)) {
                                             if (value.type != undefined) {
                                                 if (value.type == "textrange") {
-                                                    LabelingbytaxonomiesService.checkingEditOrRemove({
+                                                    LabelingbysentimentsService.checkingEditOrRemove({
                                                         typefetch: 'checking',
                                                         keylabelstudio: key,
                                                         labelingtool: vm.labelingbylabelstudio._id,
-                                                        newsdaily: newsdaily._id
-                                                    }).$promise.then(function (labelingbytaxonomy) {
+                                                        comment: commentId
+                                                    }).$promise.then(function (labelingbysentiment) {
                                                         var labelObject;
-                                                        if (labelingbytaxonomy.length > 0) {
-                                                            labelObject = labelingbytaxonomy[0];
+                                                        if (labelingbysentiment.length > 0) {
+                                                            labelObject = labelingbysentiment[0];
                                                         } else {
-                                                            labelObject = new LabelingbytaxonomiesService();
+                                                            labelObject = new LabelingbysentimentsService();
                                                         }
 
                                                         labelObject.start = value.start;
@@ -190,7 +183,7 @@
                                                         labelObject.text = value.text;
                                                         labelObject.keylabelstudio = key;
                                                         labelObject.labelingtool = vm.labelingbylabelstudio._id;
-                                                        labelObject.newsdaily = newsdaily._id;
+                                                        labelObject.comment = commentId;
 
                                                         if (value.results.length > 0) {
                                                             for (var i = 0; i < value.results.length; i++) {
@@ -199,7 +192,7 @@
                                                                     if (labels.length > 0) {
                                                                         for (var j = 0; j < labels.length; j++) {
                                                                             var idvariable = vm.variables.find(v => v.name == labels[j])._id;
-                                                                            labelObject.languagevariables = idvariable;
+                                                                            labelObject.sentiments = idvariable;
                                                                         }
                                                                     }
                                                                 }
@@ -328,7 +321,7 @@
                             vm.labelingbylabelstudio.$update(function (res) {//save scuccess
                                 Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i>Label-Studio Updated!' });
                                 if (vm.removedentries.length > 0) {
-                                    LabelingbytaxonomiesService.removeMany({
+                                    LabelingbysentimentsService.removeMany({
                                         removeKey: vm.removedentries,
                                         labelingtool: vm.labelingbylabelstudio._id,
                                         newsdaily: newsdaily._id,
@@ -350,7 +343,7 @@
                                     for (const [key, value] of Object.entries(areas)) {
                                         if (value.type != undefined) {
                                             if (value.type == "textrange") {
-                                                let temp = new LabelingbytaxonomiesService();
+                                                let temp = new LabelingbysentimentsService();
                                                 temp.labelingtool = vm.labelingbylabelstudio._id;
                                                 temp.newsdaily = newsdaily._id;
                                                 temp.keylabelstudio = key;
@@ -461,7 +454,7 @@
                                             }
                                         }
                                     }
-                                    LabelingbytaxonomiesService.insertOrUpdate(dataInsertOrUpdate).$promise.then(function (data) {
+                                    LabelingbysentimentsService.insertOrUpdate(dataInsertOrUpdate).$promise.then(function (data) {
                                         dataInsertOrUpdate = [];
                                     });;
                                     Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i> Labeling by Taxonomy updated!' });
@@ -489,7 +482,7 @@
                     //     });
 
                     //     //remove label
-                    //     LabelingbytaxonomiesService.checkingEditOrRemove({
+                    //     LabelingbysentimentsService.checkingEditOrRemove({
                     //       typefetch: 'removedlist',
                     //       labelingtool: vm.labelingbylabelstudio._id,
                     //       newsdaily: newsdaily._id

@@ -1,0 +1,77 @@
+<div class="row">
+    <div class="col-md-12">
+      <div class="card card-info">
+        <div class="card-header">
+          <h3 class="card-title">Label of Sentiment</h3>
+          <div class="card-tools">
+            <div class="input-group input-group-sm" style="width: 150px;">
+              <button id="btn_export" class="btn btn-success btn-sm">
+                <i class="fas fa-file-excel" aria-hidden="true"></i>
+              </button>
+              <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search" placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
+  
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-default">
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-body table-responsive p-0">
+          <table class="table table-hover text-wrap">
+            <thead>
+              <tr>
+                <th style="width: 10px">#</th>
+                <th>Sentiment</th>
+                <th>Text</th>
+                <th>Comments</th>
+                <th style="width: 100px">News</th>
+                <th>Created</th>
+                <th style="width: 100px">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="(index, row) in vm.pagedItems">
+                <td ui-sref="labelingbysentiments.view({ labelingbysentimentId: row._id })"><span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
+                <td>
+                  <p ng-repeat="sentiment in row.sentiments">
+                    <span ng-bind="sentiment.name"></span>
+                  </p>
+                </td>
+                <td><span ng-bind="row.text"></span></td>
+                <td  ui-sref="sentiments.labeling({ commentId: row.sentiment[0]._id })" ><a href="{{ row.sentiment[0].content }}">{{ row.sentiment[0].content }}</a></td>
+                <td  ui-sref="sentiments.labeling({ commentId: row.sentiment[0]._id })" ><a href="{{ row.sentiment[0].content }}">{{ row.sentiment[0].content }}</a></td>
+                <td><span ng-bind="row.created | date:'mediumDate'"></span></td>
+                <td>
+                  <div class="btn-group btn-group-sm">
+                    <a class="btn btn-primary"
+                       ui-sref="labelingbysentiments.view({ labelingbysentimentId: row._id })">
+                      <i class="fas fa-eye"></i>
+                    </a>
+                    <a class="btn btn-primary"
+                       ng-if="vm.isAdmin || vm.isManager"
+                       ui-sref="labelingbysentiments.edit({ labelingbysentimentId: row._id })">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <a class="btn btn-danger" ng-if="vm.isAdmin || vm.isManager" ng-click="vm.remove(row._id)">
+                      <i class="fas fa-trash" style="color:white"></i>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="card-footer clearfix" ng-if="vm.filterLength > 0">
+            <b style="color: blue;">Total: {{vm.filterLength}} (rows)</b>
+            <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage" total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"></uib-pagination>
+          </div>
+          <div class="card-footer clearfix" ng-if="vm.filterLength == 0" style="text-align: center;">
+            <span style="color: black; font-weight: bold;">No search results found!</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
