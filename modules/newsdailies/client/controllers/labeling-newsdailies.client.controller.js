@@ -105,9 +105,9 @@
             choice += `</Labels>
             <Text name="text" value="$text"></Text>`;
 
-            // choice += `<Taxonomy name="taxonomy" toName="text">`;
-            // choice += OBJtoXML(tree);//BFS(tree));
-            // choice += `</Taxonomy>`;
+            choice += `<Taxonomy name="taxonomy" toName="text">`;
+            choice += OBJtoXML(tree);//BFS(tree));
+            choice += `</Taxonomy>`;
 
             choice += '</View>';
             console.log("---------------------")

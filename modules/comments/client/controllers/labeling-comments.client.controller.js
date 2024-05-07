@@ -32,15 +32,26 @@
                 contentObject[resource._id] = resource.content;
             });
         });
-
-        LabelingbylabelstudiosService.query({ comment: comment._id }).$promise.then(function (labelingbylabelstudio) {
-
+        // for (var key in contentObject) {
+        //     (function (currentKey) {
+        //         LabelingbylabelstudiosService.query({ newsdaily: currentKey }).$promise.then(function (labelingbylabelstudio) {
+        //             if (labelingbylabelstudio.length > 0) {
+        //                 vm.labelingbylabelstudio = labelingbylabelstudio[0];
+        //             } else {
+        //                 vm.labelingbylabelstudio = new LabelingbylabelstudiosService();
+        //             }
+        //         });
+        //     })(key);
+        // }
+        LabelingbylabelstudiosService.query({ newsdaily: "60c0640a883760ddac1a39ac" }).$promise.then(function (labelingbylabelstudio) {
             if (labelingbylabelstudio.length > 0) {
                 vm.labelingbylabelstudio = labelingbylabelstudio[0];
+                console.log("label:", vm.labelingbylabelstudio)
             } else {
                 vm.labelingbylabelstudio = new LabelingbylabelstudiosService();
             }
         });
+
         vm.removedentries = [];//remove entries
         vm.labelingbylabelstudio = new LabelingbylabelstudiosService();
         // vm.newsbytaxonomies = null;
@@ -184,7 +195,7 @@
                                                         labelObject.keylabelstudio = key;
                                                         labelObject.labelingtool = vm.labelingbylabelstudio._id;
                                                         labelObject.comment = commentId;
-
+                                                        console.log("abcdef:", labelObject)
                                                         if (value.results.length > 0) {
                                                             for (var i = 0; i < value.results.length; i++) {
                                                                 if (value.results[i].type == "labels") {
@@ -317,7 +328,28 @@
                     onUpdateCompletion: function (ls, completion) {
                         if (vm.labelingbylabelstudio._id) {
                             vm.labelingbylabelstudio.completion = JSON.stringify(completion.toJSON());
-
+                            vm.labelingbylabelstudio.completion = JSON.stringify(completion.toJSON());
+                            var completionObject = JSON.parse(vm.labelingbylabelstudio.completion);
+                            console.log("list:", contentObject)
+                            var commentId = ""
+                            for (const key in completionObject.areas) {
+                                if (completionObject.areas.hasOwnProperty(key)) {
+                                    const item = completionObject.areas[key];
+                                    const text = item.text;
+                                    for (const [key, elements] of Object.entries(contentObject)) {
+                                        if (typeof elements === 'string') {
+                                            if (elements.includes(text)) {
+                                                commentId = key
+                                                console.log('Text được tìm thấy trong phần tử có keyy:', key);
+                                            }
+                                        } else {
+                                            console.error(`Giá trị của phần tử ${key} không phải là chuỗi.`);
+                                        }
+                                    }
+    
+    
+                                }
+                            }
                             vm.labelingbylabelstudio.$update(function (res) {//save scuccess
                                 Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i>Label-Studio Updated!' });
                                 if (vm.removedentries.length > 0) {
@@ -336,6 +368,7 @@
                                     });
                                 }
                                 /***********CODE SAVE ANOTHER TABLES*/
+                                console.log("iddd", commentId)
                                 completion = completion.toJSON();
                                 if (completion != undefined) {
                                     var areas = completion.areas;
@@ -345,7 +378,7 @@
                                             if (value.type == "textrange") {
                                                 let temp = new LabelingbysentimentsService();
                                                 temp.labelingtool = vm.labelingbylabelstudio._id;
-                                                temp.newsdaily = newsdaily._id;
+                                                temp.newsdaily = commentId;
                                                 temp.keylabelstudio = key;
                                                 temp.start = value.start;
                                                 temp.end = value.end;

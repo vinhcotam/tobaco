@@ -26,6 +26,22 @@ var CommentSchema = new Schema({
     default: '',
     trim: true
   },
+  sentiment_ai: {
+    type: String,
+    default: 'Negative',
+  },
+  ai_score: {
+    type: String,
+    default: 1
+  },
+  sentiment_researcher: {
+    type: String,
+    default: 'Negative',
+  },
+  researcher_score: {
+    type: String,
+    default: 1
+  },
   news_id: {
     type: Schema.ObjectId
   },
