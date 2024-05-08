@@ -40,7 +40,17 @@
         promise.then(function (number) {
             vm.filterLength = number[0];
         });
-        //update label
+        vm.goToLabel = function (newsId) {
+            console.log("print", vm.newsId)
+            $state.go('comments.labeling', { newsId: vm.newsId });
+
+        };
+        vm.goToLabeling = function (newsId) {
+            
+            $state.go('comments.labeling_v2', { newsId: vm.newsId });
+
+        };
+        // update labeling
         vm.confirmLabeling = function (){
             console.log(vm.comments);
             var updatePromises = [];
@@ -64,7 +74,7 @@
         
 
         vm.newsId = $stateParams.newsId;
-        // auto labeling
+        //auto labeling
         vm.autoLabeling = function () {
             console.log("print", vm.newsId)
             var apiUrl = 'http://localhost:5000/sentiment';
