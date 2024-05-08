@@ -1,3 +1,4 @@
+
 (function () {
     'use strict';
 
@@ -6,10 +7,10 @@
         .controller('Labelingv2commentsController', Labelingv2commentsController);
 
     Labelingv2commentsController.$inject = ['$scope', '$filter', '$state', '$window', 'Authentication', 'CommentsService', '$stateParams', 
-        '$http', 'SentimentsService'
+        '$http', 'SentimentsService', 'Notification'
     ];
 
-    function Labelingv2commentsController($scope, $filter, $state, $window, Authentication, CommentsService, $stateParams, $http, SentimentsService) {
+    function Labelingv2commentsController($scope, $filter, $state, $window, Authentication, CommentsService, $stateParams, $http, SentimentsService, Notification) {
         var vm = this;
         vm.authentication = Authentication;
         if (vm.authentication.user == null) {
@@ -18,6 +19,7 @@
         var newsId = $stateParams.newsId;
         var newsTitle = $stateParams.newsTitle
         var newsSummary = $stateParams.newsSummary
+         
         vm.newsId = newsId
         console.log("aaab", vm.newsId)
         vm.newsTitle = newsTitle
@@ -44,10 +46,30 @@
 
         };
         vm.goToLabeling = function (newsId) {
-            console.log("print", vm.newsId)
+            
             $state.go('comments.labeling_v2', { newsId: vm.newsId });
 
         };
+        vm.confirmLabeling = function (){
+            console.log(vm.comments);
+            var updatePromises = [];
+        
+            vm.comments.forEach(function(element) {
+                updatePromises.push(CommentsService.update(element).$promise);
+                console.log("print");
+            });
+        
+            Promise.all(updatePromises)
+                .then(function(results) {
+                    console.log("All comments have been updated:", results);
+                    Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i>Labeling Updated!' });
+                })
+                .catch(function(error) {
+                    console.error("Error updating comments:", error);
+                    Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>Labeling Not Updated!' });
+                });
+        };
+
         
 
         vm.newsId = $stateParams.newsId;
@@ -93,11 +115,13 @@
                 CommentsService.query(params, function (data) {
                     vm.filteredItems = data;
                     vm.pagedItems = data;
+                    vm.comments = data
                     SentimentsService.query(function (sentiments) {
                       vm.sentiments = sentiments;
                       data.forEach(function(element) {
                         if (!element.hasOwnProperty('sentiment_researcher')) {
                             element.sentiment_researcher = element.sentiment_ai;
+                            element.researcher_score = element.score_ai
                         }
                     });
                     
