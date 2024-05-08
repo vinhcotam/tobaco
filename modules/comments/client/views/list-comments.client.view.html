@@ -56,10 +56,10 @@
                                 ui-sref="comments.view({ commentId: comment._id })"><span
                                     ng-bind="comment.researcher_score"></span></td>
                             <td ui-sref="comments.view({ commentId: comment._id })"><span
-                                    ng-bind="comment.sentiment_researcher"></span></td>
+                                ng-bind="vm.getSentimentName(comment.sentiment_researcher)"></span></td>
                             <td style="text-align: center !important;"
                                 ui-sref="comments.view({ commentId: comment._id })"><span
-                                    ng-bind="comment.ai_score"></span></td>
+                                    ng-bind="comment.score_ai"></span></td>
                             <td ui-sref="comments.view({ commentId: comment._id })"><span
                                 ng-bind="vm.getSentimentName(comment.sentiment_ai)"></span></td>
                         </tr>

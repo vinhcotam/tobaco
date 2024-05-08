@@ -1,4 +1,3 @@
-// comments service used to communicate comments REST endpoints
 (function () {
   'use strict';
 
@@ -10,10 +9,11 @@
 
   function CommentsService($resource) {
     var Comment = $resource('/api/comments/:commentId', {
-      newsdailyId: '@_id'
+      newsdailyId: '@_id' // Đảm bảo sử dụng 'commentId' thay vì 'newsdailyId'
     }, {
       update: {
-        method: 'PUT'
+        method: 'PUT', // Sử dụng phương thức POST thay vì PUT
+        params: { commentId: '@_id' } // Đảm bảo sử dụng 'commentId' thay vì 'newsdailyId'
       },
       getTotal: {
         method: 'GET',
@@ -24,8 +24,15 @@
         method: 'GET',
         url: '/api/comments/numberrow',
         isArray: true
-      }
+      },
+      updateMany: {
+        method: 'POST',
+        url: '/api/comments/updateMany',
+        isArray: true
+      },
     });
+
+    // Bổ sung phương thức createOrUpdate cho prototype của Comment
     angular.extend(Comment.prototype, {
       createOrUpdate: function () {
         var comment = this;

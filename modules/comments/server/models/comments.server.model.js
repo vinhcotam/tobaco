@@ -26,14 +26,14 @@ var CommentSchema = new Schema({
     default: '',
     trim: true
   },
-  sentiment_ai: {
-    type: String,
-    default: '',
-  },
   // sentiment_ai: {
-  //   type: Schema.ObjectId
+  //   type: String,
+  //   default: '',
   // },
-  ai_score: {
+  sentiment_ai: {
+    type: Schema.ObjectId
+  },
+  score_ai: {
     type: String,
     default: 1
   },

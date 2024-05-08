@@ -54,53 +54,65 @@
       vm.figureOutItemsToDisplay();
     }
 
+    // function figureOutItemsToDisplay() {
+    //   var begin = ((vm.currentPage - 1) * vm.itemsPerPage);
+    //   var end = begin + vm.itemsPerPage;
+    //   var params = { currentPage: vm.currentPage };
+
+    //   if (vm.search !== undefined) {
+    //     params.search = vm.search;
+    //     CommentsService.getTotal(params).$promise.then(function (number) {
+    //       vm.filterLength = number[0];
+    //       vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
+    //     });
+    //   }
+    //   if (angular.isDefined(newsId)) {
+    //     params.newsId = newsId;
+    //   }
+
+    // }
     function figureOutItemsToDisplay() {
       var begin = ((vm.currentPage - 1) * vm.itemsPerPage);
       var end = begin + vm.itemsPerPage;
       var params = { currentPage: vm.currentPage };
 
       if (vm.search !== undefined) {
-        params.search = vm.search;
-        CommentsService.getTotal(params).$promise.then(function (number) {
-          vm.filterLength = number[0];
-          vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
-        });
+          params.search = vm.search;
+          CommentsService.getTotal(params).$promise.then(function (number) {
+              vm.filterLength = number[0];
+              vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
+          });
       }
       if (angular.isDefined(newsId)) {
-        params.newsId = newsId;
+          params.newsId = newsId;
       }
       CommentsService.query(params, function (data) {
-        vm.filteredItems = data;
-        vm.pagedItems = data;
-        CommentsService.query(params, function (data) {
           vm.filteredItems = data;
           vm.pagedItems = data;
-          console.log("abcdscas:::", params);
-          console.log("abcdscas:::", data);
-          SentimentsService.query(function (sentiments) {
-            vm.sentiments = sentiments;
-            vm.getSentimentName = function(sentimentId) {
-              for (var i = 0; i < vm.sentiments.length; i++) {
-                if (vm.sentiments[i]._id === sentimentId) {
-                  return vm.sentiments[i].name;
-                }
-              }
-              return '';
-            };
-          });
-          data.forEach(element => {
-            if (element.sentiment_researcher === "") {
-                element.sentiment_researcher = element.sentiment_ai;
-                element.defaultSentiment = element.sentiment_ai; 
-            } else {
-                element.defaultSentiment = element.sentiment_researcher;
-            }
-        });
-        
-        });
+              SentimentsService.query(function (sentiments) {
+                vm.sentiments = sentiments;
+                data.forEach(function(element) {
+                  if (!element.hasOwnProperty('sentiment_researcher')) {
+                      element.sentiment_researcher = element.sentiment_ai;
+                  }
+              });
+              
+                vm.getSentimentName = function(sentimentId) {
+                  for (var i = 0; i < vm.sentiments.length; i++) {
+                    if (vm.sentiments[i]._id === sentimentId) {
+                      return vm.sentiments[i].name;
+                    }
+                  }
+                  return '';
+                };
+              });
+            
+              
+            
+          
+          
       });
-    }
-
+  }
     function pageChanged() {
       vm.figureOutItemsToDisplay();
     }

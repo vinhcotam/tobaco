@@ -16,6 +16,20 @@
     console.log("checkkk:", vm.comment)
     vm.error = null;
     vm.form = {};
+    vm.save = save;
+    function save(isValid) {
+      console.log(vm.sentiment)
+      if (!isValid) {
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.sentimentForm');
+        return false;
+      }
 
+      // TODO: move create/update logic to service
+      if (vm.comment._id) {
+        vm.comment.$update(successCallback, errorCallback);
+      } else {
+        vm.comment.$save(successCallback, errorCallback);
+      }
+    }
   }
 }());
