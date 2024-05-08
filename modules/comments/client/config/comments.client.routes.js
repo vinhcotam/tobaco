@@ -37,6 +37,18 @@
           pageTitle: 'Comments List'
         }
       })
+      .state('comments.labeling_v2', {
+        url: '/:newsId/labeling_v2',
+        templateUrl: '/modules/comments/client/views/labeling-comments_v2.client.view.html',
+        controller: 'Labelingv2commentsController',
+        controllerAs: 'vm',
+        resolve: {
+          commentResolve: getCommentV1
+        },
+        data: {
+          pageTitle: 'Labeling comments'
+        }
+      })
       .state('comments.labeling', {
         url: '/:newsId/labeling',
         templateUrl: '/modules/comments/client/views/labeling-comments.client.view.html',

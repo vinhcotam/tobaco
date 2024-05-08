@@ -8,12 +8,10 @@
                 <p ng-bind="vm.newsSummary"></p>
             </div>
             <div class="card-header">
-                <h3 class="card-title">Comments</h3>
+                <h3 class="card-title">Labeling</h3>
                 <div class="card-tools" style="display: flex; align-items: center;">
                     <button class="btn float-right btn_labeling text-white" id="btn_labeling"
-                        ng-click="vm.goToLabeling(newsdailyId)">Labeling</button>
-                    <button class="btn float-right btn_view_cmt text-white" id="btn_view_cmt"
-                        ng-click="vm.goToLabel(newsdailyId)">View
+                        ng-click="vm.goToLabeling(newsdailyId)">View
                         Report</button>
                     <div class="input-group input-group-sm">
                         <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search"
@@ -26,8 +24,18 @@
                         </div>
                     </div>
                 </div>
+
+            </div>
+            <div class="group-button-label" style="margin-top: 1%; margin-left: 1%;">
+                <div class="button-label" style="padding-bottom: 15px;">
+                    <button class="btn btn-warning text-white btn-autolabel" id="btn-autolabel"
+                        ng-click="vm.autoLabeling()">Auto Labeling</button>
+                    <button class="btn btn-success btn-confirm" id="btn-confirm" ng-click="vm.confirmLabeling()">Confirm
+                        Labeling</button>
+                </div>
             </div>
             <div class="card-body table-responsive p-0">
+
                 <table class="table table-hover text-wrap">
                     <thead>
                         <tr>
@@ -41,10 +49,10 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="(index, comment) in vm.pagedItems">
-                            <td ui-sref="comments.view({ commentId: comment._id })">
+                            <td>
                                 <span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span>
                             </td>
-                            <td ui-sref="comments.view({ commentId: comment._id })">
+                            <td>
                                 <span ng-bind="comment.content"></span>
                                 <ul>
                                     <li ng-repeat="(key, value) in comment.reaction">
@@ -52,16 +60,23 @@
                                     </li>
                                 </ul>
                             </td>
-                            <td style="text-align: center !important;"
-                                ui-sref="comments.view({ commentId: comment._id })"><span
-                                    ng-bind="comment.researcher_score"></span></td>
-                            <td ui-sref="comments.view({ commentId: comment._id })"><span
-                                    ng-bind="comment.sentiment_researcher"></span></td>
-                            <td style="text-align: center !important;"
-                                ui-sref="comments.view({ commentId: comment._id })"><span
-                                    ng-bind="comment.ai_score"></span></td>
-                            <td ui-sref="comments.view({ commentId: comment._id })"><span
-                                ng-bind="vm.getSentimentName(comment.sentiment_ai)"></span></td>
+                            <td style="text-align: center !important;"><span ng-bind="comment.researcher_score"></span>
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                  <select class="form-control" ng-model="comment.sentiment_researcher">
+                                    <option value="">-- Select Sentiment --</option>
+                                    <option ng-repeat="sentiment in vm.sentiments" value="{{sentiment._id}}"
+                                      ng-selected="sentiment._id === comment.sentiment_researcher">
+                                      {{sentiment.name}}
+                                    </option>
+                                  </select>
+                                </div>
+                              </td>
+                              
+                            
+                            <td style="text-align: center !important;"><span ng-bind="comment.ai_score"></span></td>
+                            <td><span ng-bind="vm.getSentimentName(comment.sentiment_ai)"></span></td>
                         </tr>
                     </tbody>
                 </table>
