@@ -191,7 +191,7 @@ exports.list = function (req, res) {
             Comment.find(condition)
                 .populate('user', 'displayName')
                 .skip(skipCount)
-                .limit(limitCount)
+                // .limit(limitCount)
                 .then((comments) => {
                     res.jsonp(comments);
                     // res.jsonp({ comments: comments, newsTitle: newsTitle,newsSummary: newsSummary})

@@ -5,9 +5,9 @@
     .module('comments')
     .controller('CommentsListController', CommentsListController);
 
-  CommentsListController.$inject = ['$scope', '$filter', '$state', '$window', 'Authentication', 'CommentsService', '$stateParams', 'SentimentsService'];
+  CommentsListController.$inject = ['$scope', '$filter', '$state', '$window', 'Authentication', 'CommentsService', '$stateParams', 'SentimentsService', 'NewsdailiesService'];
 
-  function CommentsListController($scope, $filter, $state, $window, Authentication, CommentsService, $stateParams, SentimentsService) {
+  function CommentsListController($scope, $filter, $state, $window, Authentication, CommentsService, $stateParams, SentimentsService, NewsdailiesService) {
     var vm = this;
     vm.authentication = Authentication;
     if (vm.authentication.user == null) {
@@ -17,25 +17,28 @@
     var newsTitle = $stateParams.newsTitle
     var newsSummary = $stateParams.newsSummary
     vm.newsId = newsId
+    NewsdailiesService.get({ newsdailyId: vm.newsId }, function (data) {
+      vm.newsTitle = data.news_title
+      vm.newsSummary = data.news_summary
+    });
     console.log("aaab", vm.newsId)
-    vm.newsTitle = newsTitle
-    vm.newsSummary = newsSummary
     vm.buildPager = buildPager;
     vm.figureOutItemsToDisplay = figureOutItemsToDisplay;
     vm.pageChanged = pageChanged;
     vm.buildPager();
-    var promise = CommentsService.getTotal().$promise;
-    promise.then(function (number) {
-      vm.filterLength = number[0];
-      vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
-    });
-    if (typeof newsId !== 'undefined') {
-      promise = CommentsService.getTotal({ newsId: newsId }).$promise;
-      
-    }
-    promise.then(function (number) {
-      vm.filterLength = number[0];
-    });
+    // var promise = CommentsService.getTotal().$promise;
+    // promise.then(function (number) {
+    //   vm.filterLength = number[0];
+    //   vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
+    //   console.log("print", vm.totalPages)
+    // });
+    // if (typeof newsId !== 'undefined') {
+    //   promise = CommentsService.getTotal({ newsId: newsId }).$promise;
+
+    // }
+    // promise.then(function (number) {
+    //   vm.filterLength = number[0];
+    // });
     vm.goToLabel = function (newsId) {
       console.log("print", vm.newsId)
       $state.go('comments.labeling', { newsId: vm.newsId });
@@ -46,7 +49,7 @@
       $state.go('comments.labeling_v2', { newsId: vm.newsId });
 
     };
-    
+
     function buildPager() {
       vm.pagedItems = [];
       vm.itemsPerPage = 10;
@@ -77,42 +80,43 @@
       var params = { currentPage: vm.currentPage };
 
       if (vm.search !== undefined) {
-          params.search = vm.search;
-          CommentsService.getTotal(params).$promise.then(function (number) {
-              vm.filterLength = number[0];
-              vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
-          });
+        params.search = vm.search;
+        CommentsService.getTotal(params).$promise.then(function (number) {
+          vm.filterLength = number[0];
+          vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
+          console.log(vm.totalPages)
+        });
       }
       if (angular.isDefined(newsId)) {
-          params.newsId = newsId;
+        params.newsId = newsId;
       }
       CommentsService.query(params, function (data) {
-          vm.filteredItems = data;
-          vm.pagedItems = data;
-              SentimentsService.query(function (sentiments) {
-                vm.sentiments = sentiments;
-                data.forEach(function(element) {
-                  if (!element.hasOwnProperty('sentiment_researcher')) {
-                      element.sentiment_researcher = element.sentiment_ai;
-                  }
-              });
-              
-                vm.getSentimentName = function(sentimentId) {
-                  for (var i = 0; i < vm.sentiments.length; i++) {
-                    if (vm.sentiments[i]._id === sentimentId) {
-                      return vm.sentiments[i].name;
-                    }
-                  }
-                  return '';
-                };
-              });
-            
-              
-            
-          
-          
+        vm.filteredItems = data;
+        vm.pagedItems = data;
+        SentimentsService.query(function (sentiments) {
+          vm.sentiments = sentiments;
+          data.forEach(function (element) {
+            if (!element.hasOwnProperty('sentiment_researcher')) {
+              element.sentiment_researcher = element.sentiment_ai;
+            }
+          });
+
+          vm.getSentimentName = function (sentimentId) {
+            for (var i = 0; i < vm.sentiments.length; i++) {
+              if (vm.sentiments[i]._id === sentimentId) {
+                return vm.sentiments[i].name;
+              }
+            }
+            return '';
+          };
+        });
+
+
+
+
+
       });
-  }
+    }
     function pageChanged() {
       vm.figureOutItemsToDisplay();
     }

@@ -49,6 +49,12 @@
       roles: ['user']
     });
     menuService.addSubMenuItem('topbar', 'statistics', {
+      title: 'Sentiments',
+      icon: 'fas fa-chart-pie',
+      state: 'comments.statisticbysentiments',
+      roles: ['user']
+    });
+    menuService.addSubMenuItem('topbar', 'statistics', {
       title: 'TI Tactic',
       icon: 'fas fa fa-tree',
       state: 'newsbytaxonomies.statistictaxo',

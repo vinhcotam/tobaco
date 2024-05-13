@@ -23,6 +23,16 @@
           pageTitle: 'Comments List'
         }
       })
+      .state('comments.statisticbysentiments', {
+        url: '/comments/statistic/sentiment',
+        templateUrl: '/modules/comments/client/views/statistic-sentiments.client.view.html',
+        controller: 'LabelingbysentimentsStatisticController',
+        controllerAs: 'vm',
+        
+        data: {
+          pageTitle: 'Statistic by Sentiments'
+        }
+      })
       .state('comments.listByNewsId', {
         url: '/:newsId',
         templateUrl: '/modules/comments/client/views/list-comments.client.view.html',
@@ -79,6 +89,14 @@
   getCommentV1.$inject = ['$stateParams', 'CommentsService'];
   function getCommentV1($stateParams, CommentsService) {
     return CommentsService.getCommentsByNewsId($stateParams.newsId);
+  }
+
+  getLabelingbysentiment.$inject = ['$stateParams', 'LabelingbytaxonomiesService'];
+
+  function getLabelingbysentiment($stateParams, LabelingbysentimentsStatisticService) {
+    return LabelingbysentimentsStatisticService.get({
+      commentId: $stateParams.commentId
+    }).$promise;
   }
 
   function getComment($stateParams, CommentsService) {

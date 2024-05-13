@@ -11,8 +11,8 @@
                 <h3 class="card-title">Labeling</h3>
                 <div class="card-tools" style="display: flex; align-items: center;">
                     <button class="btn float-right btn_labeling text-white" id="btn_labeling"
-                        ng-click="vm.goToLabeling(newsdailyId)">View
-                        Report</button>
+                    ui-sref="comments.listByNewsId({ newsId: vm.newsId })">View
+                        Comments</button>
                     <div class="input-group input-group-sm">
                         <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search"
                             placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
@@ -26,14 +26,15 @@
                 </div>
 
             </div>
-            <div class="group-button-label" style="margin-top: 1%; margin-left: 1%;">
-                <div class="button-label" style="padding-bottom: 15px;">
+            <div class="group-button-label" style="margin-top: 1%; margin-right: 1%;">
+                <div class="button-label" style="padding-bottom: 15px; text-align: right;">
                     <button class="btn btn-warning text-white btn-autolabel" id="btn-autolabel"
                         ng-click="vm.autoLabeling()">Auto Labeling</button>
                     <button class="btn btn-success btn-confirm" id="btn-confirm" ng-click="vm.confirmLabeling()">Confirm
                         Labeling</button>
                 </div>
             </div>
+            
             <div class="card-body table-responsive p-0">
 
                 <table class="table table-hover text-wrap">
@@ -72,9 +73,7 @@
                                     </option>
                                   </select>
                                 </div>
-                              </td>
-                              
-                            
+                              </td>                                                
                             <td style="text-align: center !important;"><span ng-bind="comment.score_ai"></span></td>
                             <td><span ng-bind="vm.getSentimentName(comment.sentiment_ai)"></span></td>
                         </tr>

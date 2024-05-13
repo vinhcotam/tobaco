@@ -6,11 +6,11 @@
         .module('comments')
         .controller('Labelingv2commentsController', Labelingv2commentsController);
 
-    Labelingv2commentsController.$inject = ['$scope', '$filter', '$state', '$window', 'Authentication', 'CommentsService', '$stateParams', 
-        '$http', 'SentimentsService', 'Notification'
+    Labelingv2commentsController.$inject = ['$scope', '$filter', '$state', '$window', 'Authentication', 'CommentsService', '$stateParams',
+        '$http', 'SentimentsService', 'Notification', 'NewsdailiesService'
     ];
 
-    function Labelingv2commentsController($scope, $filter, $state, $window, Authentication, CommentsService, $stateParams, $http, SentimentsService, Notification) {
+    function Labelingv2commentsController($scope, $filter, $state, $window, Authentication, CommentsService, $stateParams, $http, SentimentsService, Notification, NewsdailiesService) {
         var vm = this;
         vm.authentication = Authentication;
         if (vm.authentication.user == null) {
@@ -19,9 +19,15 @@
         var newsId = $stateParams.newsId;
         var newsTitle = $stateParams.newsTitle
         var newsSummary = $stateParams.newsSummary
-         
+
         vm.newsId = newsId
-        console.log("aaab", vm.newsId)
+
+        console.log("aaab", vm.newsId);
+        console.log("aaab", vm.newsId);
+        NewsdailiesService.get({ newsdailyId: vm.newsId }, function (data) {
+            vm.newsTitle = data.news_title
+            vm.newsSummary = data.news_summary
+        });
         vm.newsTitle = newsTitle
         vm.newsSummary = newsSummary
         vm.buildPager = buildPager;
@@ -46,32 +52,32 @@
 
         };
         vm.goToLabeling = function (newsId) {
-            
+
             $state.go('comments.labeling_v2', { newsId: vm.newsId });
 
         };
         // update labeling
-        vm.confirmLabeling = function (){
+        vm.confirmLabeling = function () {
             console.log(vm.comments);
             var updatePromises = [];
-        
-            vm.comments.forEach(function(element) {
+
+            vm.comments.forEach(function (element) {
                 updatePromises.push(CommentsService.update(element).$promise);
                 console.log("print");
             });
-        
+
             Promise.all(updatePromises)
-                .then(function(results) {
+                .then(function (results) {
                     console.log("All comments have been updated:", results);
                     Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i>Labeling Updated!' });
                 })
-                .catch(function(error) {
+                .catch(function (error) {
                     console.error("Error updating comments:", error);
                     Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>Labeling Not Updated!' });
                 });
         };
 
-        
+
 
         vm.newsId = $stateParams.newsId;
         //auto labeling
@@ -83,10 +89,13 @@
             $http.post(url)
                 .then(function (response) {
                     console.log(response);
+                    Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i>AutoLabeling Updated!' });
                     vm.figureOutItemsToDisplay();
                 })
                 .catch(function (error) {
                     console.error(error);
+                    Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>AutoLabeling Fail!' });
+
                 })
         }
         function buildPager() {
@@ -95,7 +104,7 @@
             vm.currentPage = 1;
             vm.figureOutItemsToDisplay();
         }
-        
+
         function figureOutItemsToDisplay() {
             var begin = ((vm.currentPage - 1) * vm.itemsPerPage);
             var end = begin + vm.itemsPerPage;
@@ -111,37 +120,35 @@
             if (angular.isDefined(newsId)) {
                 params.newsId = newsId;
             }
+
+
             CommentsService.query(params, function (data) {
                 vm.filteredItems = data;
                 vm.pagedItems = data;
-                CommentsService.query(params, function (data) {
-                    vm.filteredItems = data;
-                    vm.pagedItems = data;
-                    vm.comments = data
-                    SentimentsService.query(function (sentiments) {
-                      vm.sentiments = sentiments;
-                      data.forEach(function(element) {
+                vm.comments = data
+                SentimentsService.query(function (sentiments) {
+                    vm.sentiments = sentiments;
+                    data.forEach(function (element) {
                         if (!element.hasOwnProperty('sentiment_researcher')) {
                             element.sentiment_researcher = element.sentiment_ai;
                             element.researcher_score = element.score_ai
                         }
                     });
-                    
-                      vm.getSentimentName = function(sentimentId) {
+
+                    vm.getSentimentName = function (sentimentId) {
                         for (var i = 0; i < vm.sentiments.length; i++) {
-                          if (vm.sentiments[i]._id === sentimentId) {
-                            return vm.sentiments[i].name;
-                          }
+                            if (vm.sentiments[i]._id === sentimentId) {
+                                return vm.sentiments[i].name;
+                            }
                         }
                         return '';
-                      };
-                    });
-                  
-                    
-                  });
-                
-                
+                    };
+                });
+
+
             });
+
+
         }
 
         function pageChanged() {
