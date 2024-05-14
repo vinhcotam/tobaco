@@ -19,11 +19,7 @@
         var newsId = $stateParams.newsId;
         var newsTitle = $stateParams.newsTitle
         var newsSummary = $stateParams.newsSummary
-
         vm.newsId = newsId
-
-        console.log("aaab", vm.newsId);
-        console.log("aaab", vm.newsId);
         NewsdailiesService.get({ newsdailyId: vm.newsId }, function (data) {
             vm.newsTitle = data.news_title
             vm.newsSummary = data.news_summary
@@ -34,36 +30,18 @@
         vm.figureOutItemsToDisplay = figureOutItemsToDisplay;
         vm.pageChanged = pageChanged;
         vm.buildPager();
-        var promise = CommentsService.getTotal().$promise;
-        promise.then(function (number) {
-            vm.filterLength = number[0];
-            vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
-        });
-        if (typeof newsId !== 'undefined') {
-            promise = CommentsService.getTotal({ newsId: newsId }).$promise;
-
-        }
-        promise.then(function (number) {
-            vm.filterLength = number[0];
-        });
         vm.goToLabel = function (newsId) {
-            console.log("print", vm.newsId)
             $state.go('comments.labeling', { newsId: vm.newsId });
-
         };
         vm.goToLabeling = function (newsId) {
-
             $state.go('comments.labeling_v2', { newsId: vm.newsId });
-
         };
         // update labeling
         vm.confirmLabeling = function () {
             console.log(vm.comments);
             var updatePromises = [];
-
             vm.comments.forEach(function (element) {
                 updatePromises.push(CommentsService.update(element).$promise);
-                console.log("print");
             });
 
             Promise.all(updatePromises)

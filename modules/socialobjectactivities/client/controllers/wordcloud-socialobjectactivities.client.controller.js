@@ -34,7 +34,7 @@
         }, function (start, end, label) {
             vm.startfilterdate = start.format('YYYY-MM-DD');
             vm.endfilterdate = end.format('YYYY-MM-DD');
-            
+
 
             figureOutItemsToDisplay();
         });
@@ -43,7 +43,6 @@
         $('.choose_container input[type="radio"]').change(function () {
             var selectedValue = $(this).val();
             vm.typeFilter = selectedValue
-            console.log("aaa: ", vm.typeFilter)
             // Thực hiện các thao tác khác dựa trên giá trị đã chọn
         });
         vm.isDateEmpty = false;
@@ -54,7 +53,7 @@
                 vm.isDateEmpty = false;
             }
         };
-        
+
         //get image from api
         vm.analysisSocial = function () {
             vm.checkDateEmpty();
@@ -66,20 +65,27 @@
             var type = encodeURIComponent(vm.typeFilter);
             var startDate = encodeURIComponent(vm.startfilterdate);
             var endDate = encodeURIComponent(vm.endfilterdate);
+            ;
             document.getElementById("loading-container").style.display = "block";
-
             var url = apiUrl + '?type=' + type + '&start_date=' + startDate + '&end_date=' + endDate;
             $http.post(url)
                 .then(function (response) {
                     console.log(response.data);
                     var base64DataArray = response.data.img_array;
-                    displayImageSlider(base64DataArray);
+                    if (Array.isArray(base64DataArray) && base64DataArray.length > 0) {
+                        document.getElementById("loading-container").style.display = "none"
+                        displayImageSlider(base64DataArray);
+
+                    } else {
+                        document.getElementById("no_data").style.display = "block";
+                        document.getElementById("loading-container").style.display = "none"
+                    }
                 })
                 .catch(function (error) {
                     console.error(error);
                 })
                 .finally(function () {
-                    document.getElementById("loading-container").style.display = "none";
+
                 });
 
             // display image into slider

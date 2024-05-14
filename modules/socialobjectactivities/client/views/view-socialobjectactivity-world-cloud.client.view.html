@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="card card-info">
             <div class="card-header">
-                <h3 class="card-title">Worcs Cloud</h3>
+                <h3 class="card-title">Word Cloud</h3>
                 <div class="card-tools" style="display: flex; align-items: center;">
 
                 </div>
@@ -30,16 +30,17 @@
                     </div>
                     <p>Loading...</p>
                 </div>
+                <p style="display: none; text-align: center;" id="no_data">No data found</p>
                 
                 <div style="margin-left: 2%;" id="error-container" ng-show="vm.isDateEmpty" class="error-text">Please
                     enter the date.</div>
                 <div id="demo" class="carousel slide" data-ride="carousel" style="margin-bottom: 1%;">
                     <div class="carousel-inner" id="imageWrapper">
                     </div>
-                    <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                    <a class="carousel-control-prev" style="background-color: black;" href="#demo" data-slide="prev">
                         <span class="carousel-control-prev-icon"></span>
                     </a>
-                    <a class="carousel-control-next" href="#demo" data-slide="next">
+                    <a class="carousel-control-next" style="background-color: black;" href="#demo" data-slide="next">
                         <span class="carousel-control-next-icon"></span>
                     </a>
                 </div>

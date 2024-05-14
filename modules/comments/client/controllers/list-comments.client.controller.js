@@ -14,38 +14,20 @@
       window.location.href = '/authentication/signin';
     }
     var newsId = $stateParams.newsId;
-    var newsTitle = $stateParams.newsTitle
-    var newsSummary = $stateParams.newsSummary
     vm.newsId = newsId
     NewsdailiesService.get({ newsdailyId: vm.newsId }, function (data) {
       vm.newsTitle = data.news_title
       vm.newsSummary = data.news_summary
     });
-    console.log("aaab", vm.newsId)
     vm.buildPager = buildPager;
     vm.figureOutItemsToDisplay = figureOutItemsToDisplay;
     vm.pageChanged = pageChanged;
     vm.buildPager();
-    // var promise = CommentsService.getTotal().$promise;
-    // promise.then(function (number) {
-    //   vm.filterLength = number[0];
-    //   vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
-    //   console.log("print", vm.totalPages)
-    // });
-    // if (typeof newsId !== 'undefined') {
-    //   promise = CommentsService.getTotal({ newsId: newsId }).$promise;
-
-    // }
-    // promise.then(function (number) {
-    //   vm.filterLength = number[0];
-    // });
     vm.goToLabel = function (newsId) {
-      console.log("print", vm.newsId)
       $state.go('comments.labeling', { newsId: vm.newsId });
 
     };
     vm.goToLabeling = function (newsId) {
-      console.log("print", vm.newsId)
       $state.go('comments.labeling_v2', { newsId: vm.newsId });
 
     };
@@ -56,24 +38,6 @@
       vm.currentPage = 1;
       vm.figureOutItemsToDisplay();
     }
-
-    // function figureOutItemsToDisplay() {
-    //   var begin = ((vm.currentPage - 1) * vm.itemsPerPage);
-    //   var end = begin + vm.itemsPerPage;
-    //   var params = { currentPage: vm.currentPage };
-
-    //   if (vm.search !== undefined) {
-    //     params.search = vm.search;
-    //     CommentsService.getTotal(params).$promise.then(function (number) {
-    //       vm.filterLength = number[0];
-    //       vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
-    //     });
-    //   }
-    //   if (angular.isDefined(newsId)) {
-    //     params.newsId = newsId;
-    //   }
-
-    // }
     function figureOutItemsToDisplay() {
       var begin = ((vm.currentPage - 1) * vm.itemsPerPage);
       var end = begin + vm.itemsPerPage;

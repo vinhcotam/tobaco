@@ -43,10 +43,10 @@
                     </thead>
                     <tbody>
                         <tr ng-repeat="(index, comment) in vm.pagedItems">
-                            <td ui-sref="comments.view({ commentId: comment._id })">
+                            <td >
                                 <span ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span>
                             </td>
-                            <td ui-sref="comments.view({ commentId: comment._id })">
+                            <td >
                                 <span ng-bind="comment.content"></span>
                                 <ul>
                                     <li ng-repeat="(key, value) in comment.reaction">
@@ -55,14 +55,14 @@
                                 </ul>
                             </td>
                             <td style="text-align: center !important;"
-                                ui-sref="comments.view({ commentId: comment._id })"><span
+                                ><span
                                     ng-bind="comment.researcher_score"></span></td>
-                            <td ui-sref="comments.view({ commentId: comment._id })"><span
+                            <td ><span
                                     ng-bind="vm.getSentimentName(comment.sentiment_researcher)"></span></td>
                             <td style="text-align: center !important;"
-                                ui-sref="comments.view({ commentId: comment._id })"><span
+                                ><span
                                     ng-bind="comment.score_ai"></span></td>
-                            <td ui-sref="comments.view({ commentId: comment._id })"><span
+                            <td ><span
                                     ng-bind="vm.getSentimentName(comment.sentiment_ai)"></span></td>
                         </tr>
                     </tbody>

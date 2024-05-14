@@ -60,7 +60,7 @@
         getAllComments: {
             method: 'GET',
             url: '/api/comments/',
-            isArray: true // Thay đổi thành false nếu server trả về một đối tượng
+            isArray: true 
         },
         getTotal: {
             method: 'GET',
