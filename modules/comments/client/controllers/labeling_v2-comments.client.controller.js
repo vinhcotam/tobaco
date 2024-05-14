@@ -19,6 +19,7 @@
         var newsId = $stateParams.newsId;
         var newsTitle = $stateParams.newsTitle
         var newsSummary = $stateParams.newsSummary
+
         vm.newsId = newsId
         NewsdailiesService.get({ newsdailyId: vm.newsId }, function (data) {
             vm.newsTitle = data.news_title
@@ -36,9 +37,16 @@
         vm.goToLabeling = function (newsId) {
             $state.go('comments.labeling_v2', { newsId: vm.newsId });
         };
-        // update labeling
+        // Lắng nghe sự kiện SSE từ máy chủ
+        var source = new EventSource('/sse');
+        source.addEventListener('message', function (event) {
+            var updatedComment = JSON.parse(event.data);
+            vm.comments = []
+            vm.comments.push(updatedComment);
+            figureOutItemsToDisplay()
+        });
+
         vm.confirmLabeling = function () {
-            console.log(vm.comments);
             var updatePromises = [];
             vm.comments.forEach(function (element) {
                 updatePromises.push(CommentsService.update(element).$promise);
@@ -54,6 +62,8 @@
                     Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>Labeling Not Updated!' });
                 });
         };
+
+
 
 
 
@@ -76,6 +86,7 @@
 
                 })
         }
+
         function buildPager() {
             vm.pagedItems = [];
             vm.itemsPerPage = 10;

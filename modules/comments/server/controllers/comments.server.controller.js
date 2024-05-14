@@ -9,10 +9,16 @@ var path = require('path'),
     Newsdaily = mongoose.model('Newsdaily'),
     errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
     _ = require('lodash');
-
+const SSE = require('express-sse');
+const sse = new SSE();
 /**
- * Create a sentment
+ * Create a comment
  */
+
+function sendSSE(res, data) {
+    res.write('data: ' + JSON.stringify(data) + '\n\n');
+}
+
 exports.create = function (req, res) {
     var comment = new Comment(req.body);
     // comment.user = req.user;
@@ -48,13 +54,33 @@ exports.read = function (req, res) {
 /**
  * Update a comment
  */
+// exports.update = function (req, res) {
+//     var comment = req.comment;
+//     comment = _.extend(comment, req.body);
+//     comment.save()
+//         .then((comment) => {
+//             sse.send(comment); // Gửi cập nhật thông qua SSE
+//             console.log('Event "update" has been emitted.');
+//             res.jsonp(comment);
+//         })
+//         .catch((err) => {
+//             if (err) {
+//                 return res.status(400).send({
+//                     message: errorHandler.getErrorMessage(err)
+//                 });
+//             }
+//         });
+// };
+
 exports.update = function (req, res) {
     var comment = req.comment;
+    var sse = req.app.locals.sse; 
 
     comment = _.extend(comment, req.body);
-
     comment.save()
         .then((comment) => {
+            sse.send(comment); 
+            console.log('Event "update" has been emitted.');
             res.jsonp(comment);
         })
         .catch((err) => {
@@ -64,8 +90,11 @@ exports.update = function (req, res) {
                 });
             }
         });
-
 };
+
+
+
+
 
 /**
  * Delete an comment
@@ -187,7 +216,6 @@ exports.list = function (req, res) {
         .then((totalCount) => {
             // Calculate the number of pages
             var totalPages = Math.ceil(totalCount / limitCount);
-            console.log("toaas", totalPages)
             Comment.find(condition)
                 .populate('user', 'displayName')
                 .skip(skipCount)
