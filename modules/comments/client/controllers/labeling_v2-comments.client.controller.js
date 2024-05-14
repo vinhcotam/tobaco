@@ -46,23 +46,43 @@
             figureOutItemsToDisplay()
         });
 
+        // vm.confirmLabeling = function () {
+        //     var updatePromises = [];
+        //     vm.comments.forEach(function (element) {
+        //         updatePromises.push(CommentsService.update(element).$promise);
+        //     });
+
+        //     Promise.all(updatePromises)
+        //         .then(function (results) {
+        //             console.log("All comments have been updated:", results);
+        //             Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i>Labeling Updated!' });
+        //         })
+        //         .catch(function (error) {
+        //             console.error("Error updating comments:", error);
+        //             Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>Labeling Not Updated!' });
+        //         });
+        // };
         vm.confirmLabeling = function () {
-            var updatePromises = [];
-            vm.comments.forEach(function (element) {
-                updatePromises.push(CommentsService.update(element).$promise);
-            });
-
-            Promise.all(updatePromises)
-                .then(function (results) {
-                    console.log("All comments have been updated:", results);
-                    Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i>Labeling Updated!' });
-                })
-                .catch(function (error) {
-                    console.error("Error updating comments:", error);
-                    Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>Labeling Not Updated!' });
+            if (confirm("Confirm labels ?")) {
+                var updatePromises = [];
+                vm.comments.forEach(function (element) {
+                    updatePromises.push(CommentsService.update(element).$promise);
                 });
+        
+                Promise.all(updatePromises)
+                    .then(function (results) {
+                        console.log("All comments have been updated:", results);
+                        Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i>Labeling Updated!' });
+                    })
+                    .catch(function (error) {
+                        console.error("Error updating comments:", error);
+                        Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>Labeling Not Updated!' });
+                    });
+            } else {
+                console.log("Update canceled!");
+            }
         };
-
+        
 
 
 
@@ -93,7 +113,7 @@
             vm.currentPage = 1;
             vm.figureOutItemsToDisplay();
         }
-
+        
         function figureOutItemsToDisplay() {
             var begin = ((vm.currentPage - 1) * vm.itemsPerPage);
             var end = begin + vm.itemsPerPage;
