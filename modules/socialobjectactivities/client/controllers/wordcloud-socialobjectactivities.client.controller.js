@@ -65,35 +65,37 @@
             var type = encodeURIComponent(vm.typeFilter);
             var startDate = encodeURIComponent(vm.startfilterdate);
             var endDate = encodeURIComponent(vm.endfilterdate);
-            ;
             document.getElementById("loading-container").style.display = "block";
             var url = apiUrl + '?type=' + type + '&start_date=' + startDate + '&end_date=' + endDate;
             $http.post(url)
                 .then(function (response) {
                     console.log(response.data);
                     var base64DataArray = response.data.img_array;
+                    vm.base64DataArray = base64DataArray;
                     if (Array.isArray(base64DataArray) && base64DataArray.length > 0) {
                         document.getElementById("loading-container").style.display = "none"
                         displayImageSlider(base64DataArray);
-
+                        document.getElementById("demo").style.display = "block"
+                        document.querySelector("#demo .carousel-indicators").style.display = "flex !important";
                     } else {
                         document.getElementById("no_data").style.display = "block";
                         document.getElementById("loading-container").style.display = "none"
+                        document.querySelector("#demo .carousel-indicators").style.display = "none";
                     }
                 })
                 .catch(function (error) {
                     console.error(error);
                 })
                 .finally(function () {
-
+                    document.getElementById("demo").style.display = "block";
                 });
-
+        
             // display image into slider
             function displayImageSlider(base64DataArray) {
                 var imageWrapper = document.getElementById('imageWrapper');
                 if (imageWrapper) {
                     imageWrapper.innerHTML = '';
-
+                    vm.base64DataArray = base64DataArray;
                     base64DataArray.forEach(function (base64Data, index) {
                         var image = new Image();
                         image.onload = function () {
@@ -102,7 +104,7 @@
                             if (index === 0) {
                                 slide.classList.add('active');
                             }
-                            //fix width, height of image
+                            // Fix width, height of image
                             var maxWidth = 720;
                             var maxHeight = 1920;
                             var width = image.width;
@@ -116,7 +118,7 @@
                                 height = maxHeight;
                                 width = height * aspectRatio;
                             }
-
+        
                             var imgElement = document.createElement('img');
                             imgElement.src = image.src;
                             imgElement.classList.add('d-block');
@@ -131,31 +133,12 @@
                         };
                         image.src = 'data:image/png;base64,' + base64Data;
                     });
-
-                    var mySwiper = new Swiper('.swiper-container', {
-                        loop: true,
-                        speed: 500,
-                        autoplay: {
-                            delay: 3000,
-                            disableOnInteraction: false
-                        },
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
-                        pagination: {
-                            el: '.swiper-pagination',
-                            clickable: true,
-                        },
-                    });
                 } else {
                     console.error('Image wrapper not found.');
                 }
             }
-
-
-
         };
+        
 
 
 

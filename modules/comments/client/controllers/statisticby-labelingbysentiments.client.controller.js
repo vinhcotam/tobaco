@@ -14,13 +14,30 @@
     vm.argumentMax = 5;
     SentimentsService.query(function (sentiments) {
       vm.sentiments = sentiments;
-
       CommentsAllService.getAllComments(function (rows) {
         var labels = [];
         var data = [];
         var colors = [];
         var sentimentMap = {};
-
+        var roles = vm.authentication.user.roles;
+        vm.isRole = -1;
+        roles.forEach(function (element, index) {
+          if (element === 'admin') {
+            vm.isRole = 0;
+          } else if (element === 'manager' && vm.isRole === -1) {
+            vm.isRole = 1;
+          } else if (element === 'user' && vm.isRole === -1) {
+            vm.isRole = 2;
+          }
+        });
+        // for (var i = 0; i < rows.length; i++) {
+        //   if (vm.isRole === 2 && rows[i]._id.name.length === 0) {
+        //     continue;
+        //   }
+        //   labels.push(rows[i]._id.name[0]);
+        //   data.push(rows[i].count);
+        //   colors.push('#' + Math.floor(Math.random() * 16777215).toString(16));
+        // }
         for (var i = 0; i < rows.length; i++) {
           var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
           var sentimentName = '';

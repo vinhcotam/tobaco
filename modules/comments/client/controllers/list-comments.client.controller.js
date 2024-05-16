@@ -31,6 +31,9 @@
       $state.go('comments.labeling_v2', { newsId: vm.newsId });
 
     };
+    vm.goToNews = function(){
+      $state.go('newsdailies.view', {newsdailyId: vm.newsId});
+    }
 
     function buildPager() {
       vm.pagedItems = [];
@@ -73,12 +76,21 @@
             }
             return '';
           };
+          vm.getSentimentBackgroundColor = function (sentimentId) {
+            for (var i = 0; i < vm.sentiments.length; i++) {
+                if (vm.sentiments[i]._id === sentimentId) {
+                    if (vm.sentiments[i].name === 'positive') {
+                        return '#45AA16'; 
+                    } else if (vm.sentiments[i].name === 'negative') {
+                        return '#D30000'; 
+                    }else{
+                      return '#FFD467';
+                    }
+                }
+            }
+            return ''; 
+        };
         });
-
-
-
-
-
       });
     }
     function pageChanged() {

@@ -10,9 +10,14 @@
             <div class="card-header">
                 <h3 class="card-title">Labeling</h3>
                 <div class="card-tools" style="display: flex; align-items: center;">
-                    <button class="btn float-right btn_labeling text-white" id="btn_labeling"
-                    ui-sref="comments.listByNewsId({ newsId: vm.newsId })">View
+                    <button style="border-color: #fff; margin-right: 1%;"
+                        class="btn float-right btn_labeling text-white" id="btn_labeling"
+                        ui-sref="comments.listByNewsId({ newsId: vm.newsId })">View
                         Comments</button>
+                    <button style="border-color: #fff; margin-right: 1%;"
+                        class="btn float-right btn_view_cmt text-white" id="btn_view_cmt"
+                        ui-sref="comments.statisticbysentiments()">View
+                        Report</button>
                     <div class="input-group input-group-sm">
                         <input type="text" name="table_search" class="form-control float-right" ng-model="vm.search"
                             placeholder="Search" ng-change="vm.figureOutItemsToDisplay()">
@@ -34,7 +39,7 @@
                         Labeling</button>
                 </div>
             </div>
-            
+
             <div class="card-body table-responsive p-0">
 
                 <table class="table table-hover text-wrap">
@@ -65,15 +70,17 @@
                             </td>
                             <td>
                                 <div class="dropdown">
-                                  <select class="form-control" ng-model="comment.sentiment_researcher">
-                                    <option value="">-- Select Sentiment --</option>
-                                    <option ng-repeat="sentiment in vm.sentiments" value="{{sentiment._id}}"
-                                      ng-selected="sentiment._id === comment.sentiment_researcher">
-                                      {{sentiment.name}}
-                                    </option>
-                                  </select>
+                                    <select class="form-control" ng-model="comment.sentiment_researcher"
+                                        ng-change="updateResearcherScore(comment)">
+                                        <option value="">-- Select Sentiment --</option>
+                                        <option ng-repeat="sentiment in vm.sentiments" value="{{sentiment._id}}"
+                                            ng-selected="sentiment._id === comment.sentiment_researcher">
+                                            {{sentiment.name}}
+                                        </option>
+                                    </select>
                                 </div>
-                              </td>                                                
+                            </td>
+
                             <td style="text-align: center !important;"><span ng-bind="comment.score_ai"></span></td>
                             <td><span ng-bind="vm.getSentimentName(comment.sentiment_ai)"></span></td>
                         </tr>

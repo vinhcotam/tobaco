@@ -29,6 +29,7 @@
           vm.isRole = 2;
         }
       });
+      //
       for (var i = 0; i < rows.length; i++) {
         if (vm.isRole === 2 && rows[i]._id.name.length === 0) {
           continue;

@@ -37,7 +37,6 @@
         vm.goToLabeling = function (newsId) {
             $state.go('comments.labeling_v2', { newsId: vm.newsId });
         };
-        // Lắng nghe sự kiện SSE từ máy chủ
         var source = new EventSource('/sse');
         source.addEventListener('message', function (event) {
             var updatedComment = JSON.parse(event.data);
@@ -45,23 +44,28 @@
             vm.comments.push(updatedComment);
             figureOutItemsToDisplay()
         });
-
-        // vm.confirmLabeling = function () {
-        //     var updatePromises = [];
-        //     vm.comments.forEach(function (element) {
-        //         updatePromises.push(CommentsService.update(element).$promise);
-        //     });
-
-        //     Promise.all(updatePromises)
-        //         .then(function (results) {
-        //             console.log("All comments have been updated:", results);
-        //             Notification.success({ message: '<i class="fa fa-check" style="color: white;"></i>Labeling Updated!' });
-        //         })
-        //         .catch(function (error) {
-        //             console.error("Error updating comments:", error);
-        //             Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>Labeling Not Updated!' });
-        //         });
-        // };
+        $scope.updateResearcherScore = function(comment) {
+            var selectedSentiment = vm.sentiments.find(function(sentiment) {
+                return sentiment._id === comment.sentiment_researcher;
+            });
+        
+            switch (selectedSentiment.name) {
+                case 'positive':
+                    comment.researcher_score = 1;
+                    break;
+                case 'negative':
+                    comment.researcher_score = -1;
+                    break;
+                case 'neutral':
+                    comment.researcher_score = 0;
+                    break;
+                default:
+                    comment.researcher_score = null;
+                    break;
+            }
+        };
+        
+        
         vm.confirmLabeling = function () {
             if (confirm("Confirm labels ?")) {
                 var updatePromises = [];
@@ -88,7 +92,6 @@
 
 
         vm.newsId = $stateParams.newsId;
-        //auto labeling
         vm.autoLabeling = function () {
             console.log("print", vm.newsId)
             var apiUrl = 'http://localhost:5000/sentiment';
@@ -141,6 +144,16 @@
                         if (!element.hasOwnProperty('sentiment_researcher')) {
                             element.sentiment_researcher = element.sentiment_ai;
                             element.researcher_score = element.score_ai
+                        }
+                        var sentiment = vm.sentiments.find(function(sentiment) {
+                            return sentiment._id === element.sentiment_researcher;
+                        });
+                        if (sentiment && sentiment.name === 'positive') {
+                            element.researcher_score = 1;
+                        }else if(sentiment && sentiment.name === 'negative'){
+                            element.researcher_score = -1;
+                        }else{
+                            element.researcher_score = 0;
                         }
                     });
 

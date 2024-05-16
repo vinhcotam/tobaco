@@ -14,16 +14,15 @@
                     <label for="month" style="margin-right: 10px;">Month</label>
                     <input type="radio" id="month" name="chooseType" value="month" style="margin-right: 10px;">
                 </div>
-                <div class="date_container" style="display: flex; justify-content: space-between; padding-top: 2%;">
+                <div class="date_container" style="display: flex; align-items: center; padding-top: 2%;">
                     <label for="datetimefilter"
                         style="align-self: center; margin-right: 2%; margin-left: 2%;">Date</label>
-                    <input id="datetimefilter" type="text" style="margin-right: 50% !important; margin: 2%;"
-                        class="form-control" ng-model="vm.filterbydate" ng-change="vm.figureOutItemsToDisplay()"
-                        maxlength="10">
-                    <button type="submit" class="btn btn-success" style="margin: 2%;" ng-click="vm.analysisSocial()">
-                        Analysis
-                    </button>
+                    <input id="datetimefilter" type="text" class="form-control" ng-model="vm.filterbydate"
+                        ng-change="vm.figureOutItemsToDisplay()" maxlength="10" style="width: 30%;">
+                    <button type="submit" class="btn btn-success" style="margin: 2%;"
+                        ng-click="vm.analysisSocial()">Analysis</button>
                 </div>
+
                 <div id="loading-container" style="display: none; text-align: center;">
                     <div class="spinner-border text-primary" role="status">
                         <span class="sr-only">Loading...</span>
@@ -31,10 +30,15 @@
                     <p>Loading...</p>
                 </div>
                 <p style="display: none; text-align: center;" id="no_data">No data found</p>
-                
+
                 <div style="margin-left: 2%;" id="error-container" ng-show="vm.isDateEmpty" class="error-text">Please
                     enter the date.</div>
-                <div id="demo" class="carousel slide" data-ride="carousel" style="margin-bottom: 1%;">
+                <div id="demo" class="carousel slide" data-ride="carousel" style="margin-bottom: 1%; display: none;">
+                    <ol class="carousel-indicators" style="display: flex !important;">
+                        <li ng-repeat="image in vm.base64DataArray" data-target="#demo" data-slide-to="{{$index}}" ng-class="{active: $index === 0}"
+                            style="background-color: aqua; border-radius: 50%; margin-right: 5px; width: 10px; height: 10px;"></li>
+                    </ol>
+                    
                     <div class="carousel-inner" id="imageWrapper">
                     </div>
                     <a class="carousel-control-prev" style="background-color: black;" href="#demo" data-slide="prev">
@@ -44,6 +48,7 @@
                         <span class="carousel-control-next-icon"></span>
                     </a>
                 </div>
+
             </div>
 
         </div>
