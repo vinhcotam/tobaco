@@ -46,7 +46,7 @@ exports.read = function (req, res) {
 
     // Add a custom field to the Article, for determining if the current User is the "owner".
     // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
-    // comment.isCurrentUserOwner = req.user && comment.user && comment.user._id.toString() === req.user._id.toString();
+    comment.isCurrentUserOwner = req.user && comment.user && comment.user._id.toString() === req.user._id.toString();
 
     res.jsonp(comment);
 };
@@ -54,23 +54,6 @@ exports.read = function (req, res) {
 /**
  * Update a comment
  */
-// exports.update = function (req, res) {
-//     var comment = req.comment;
-//     comment = _.extend(comment, req.body);
-//     comment.save()
-//         .then((comment) => {
-//             sse.send(comment); // Gửi cập nhật thông qua SSE
-//             console.log('Event "update" has been emitted.');
-//             res.jsonp(comment);
-//         })
-//         .catch((err) => {
-//             if (err) {
-//                 return res.status(400).send({
-//                     message: errorHandler.getErrorMessage(err)
-//                 });
-//             }
-//         });
-// };
 
 exports.update = function (req, res) {
     var comment = req.comment;
@@ -214,15 +197,12 @@ exports.list = function (req, res) {
     // Get the total count of comments
     Comment.countDocuments(condition)
         .then((totalCount) => {
-            // Calculate the number of pages
             var totalPages = Math.ceil(totalCount / limitCount);
             Comment.find(condition)
                 .populate('user', 'displayName')
                 .skip(skipCount)
-                // .limit(limitCount)
                 .then((comments) => {
                     res.jsonp(comments);
-                    // res.jsonp({ comments: comments, newsTitle: newsTitle,newsSummary: newsSummary})
                 })
                 .catch((err) => {
                     if (err) {

@@ -59,7 +59,10 @@
                                     </li>
                                 </ul>
                             </td>
-                            <td style="text-align: center !important;"><span ng-bind="comment.researcher_score"></span>
+                            <td style="text-align: center !important;"><span
+                                    ng-style="{ 'background-color': vm.getSentimentBackgroundColor(comment.sentiment_researcher), 'color': '#fff', 'border-radius': '10%', 'padding': '10%', 'display': 'inline-flex', 'align-items': 'center', 'justify-content': 'center' }"
+                                    sentiment-color="{{ vm.getSentimentName(comment.sentiment_researcher) }}"
+                                    ng-bind="comment.researcher_score"></span>
                             </td>
                             <td style="text-align: center;">
                                 <span
@@ -67,20 +70,22 @@
                                     sentiment-color="{{ vm.getSentimentName(comment.sentiment_researcher) }}"
                                     ng-bind="vm.getSentimentName(comment.sentiment_researcher)"></span>
                             </td>
-
-                            <td style="text-align: center !important;"><span ng-bind="comment.score_ai"></span></td>
-                            <td><span
-                                    ng-style="{ 'background-color': vm.getSentimentBackgroundColor(comment.sentiment_ai) }"
+                            <td style="text-align: center !important;"><span
+                                    ng-style="{ 'background-color': vm.getSentimentBackgroundColor(comment.sentiment_ai), 'color': '#fff', 'border-radius': '10%', 'padding': '10%', 'display': 'inline-flex', 'align-items': 'center', 'justify-content': 'center' }"
                                     sentiment-color="{{ vm.getSentimentName(comment.sentiment_ai) }}"
-                                    ng-bind="vm.getSentimentName(comment.sentiment_ai)"
-                                    style="color: #fff; border-radius: 10%; padding: 10%;"></span></td>
+                                    ng-bind="comment.score_ai"></span>
+                            </td>
+                            <td><span
+                                    ng-style="{ 'background-color': vm.getSentimentBackgroundColor(comment.sentiment_ai), 'color': '#fff', 'border-radius': '10%', 'padding': '10%', 'display': 'inline-flex', 'align-items': 'center', 'justify-content': 'center' }"
+                                    sentiment-color="{{ vm.getSentimentName(comment.sentiment_ai) }}"
+                                    ng-bind="vm.getSentimentName(comment.sentiment_ai)"></span></td>
                         </tr>
                     </tbody>
                 </table>
-                <div class="card-footer clearfix" >
+                <div class="card-footer clearfix">
                     <uib-pagination boundary-links="true" max-size="8" items-per-page="vm.itemsPerPage"
-                        total-items="vm.filterLength" ng-model="vm.currentPage" ng-change="vm.pageChanged()"
-                    ></uib-pagination>
+                        total-items="vm.filterLength" ng-model="vm.currentPage"
+                        ng-change="vm.pageChanged()"></uib-pagination>
                 </div>
             </div>
         </div>

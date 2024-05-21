@@ -66,23 +66,36 @@
                                     </li>
                                 </ul>
                             </td>
-                            <td style="text-align: center !important;"><span ng-bind="comment.researcher_score"></span>
+                            <td style="text-align: center !important;"><span
+                                    ng-style="{ 'background-color': vm.getSentimentBackgroundColor(comment.sentiment_researcher), 'color': '#fff', 'border-radius': '10%', 'padding': '10%', 'display': 'inline-flex', 'align-items': 'center', 'justify-content': 'center' }"
+                                    sentiment-color="{{ vm.getSentimentName(comment.sentiment_researcher) }}"
+                                    ng-bind="comment.researcher_score"></span>
+                            </td>
                             </td>
                             <td>
                                 <div class="dropdown">
                                     <select class="form-control" ng-model="comment.sentiment_researcher"
-                                        ng-change="updateResearcherScore(comment)">
+                                        ng-change="updateResearcherScore(comment)"
+                                        ng-style="{ 'background-color': vm.getSentimentBackgroundColor(comment.sentiment_researcher), 'color': '#fff' }">
                                         <option value="">-- Select Sentiment --</option>
                                         <option ng-repeat="sentiment in vm.sentiments" value="{{sentiment._id}}"
-                                            ng-selected="sentiment._id === comment.sentiment_researcher">
+                                            ng-selected="sentiment._id === comment.sentiment_researcher"
+                                            ng-style="{ 'background-color': vm.getSentimentBackgroundColor(sentiment._id), 'color': '#fff' }">
                                             {{sentiment.name}}
                                         </option>
                                     </select>
                                 </div>
                             </td>
 
-                            <td style="text-align: center !important;"><span ng-bind="comment.score_ai"></span></td>
-                            <td><span ng-bind="vm.getSentimentName(comment.sentiment_ai)"></span></td>
+                            <td style="text-align: center !important;"><span
+                                    ng-style="{ 'background-color': vm.getSentimentBackgroundColor(comment.sentiment_ai), 'color': '#fff', 'border-radius': '10%', 'padding': '10%', 'display': 'inline-flex', 'align-items': 'center', 'justify-content': 'center' }"
+                                    sentiment-color="{{ vm.getSentimentName(comment.sentiment_ai) }}"
+                                    ng-bind="comment.score_ai"></span>
+                            </td>
+                            <td><span
+                                    ng-style="{ 'background-color': vm.getSentimentBackgroundColor(comment.sentiment_ai), 'color': '#fff', 'border-radius': '10%', 'padding': '10%', 'display': 'inline-flex', 'align-items': 'center', 'justify-content': 'center' }"
+                                    sentiment-color="{{ vm.getSentimentName(comment.sentiment_ai) }}"
+                                    ng-bind="vm.getSentimentName(comment.sentiment_ai)"></span></td>
                         </tr>
                     </tbody>
                 </table>

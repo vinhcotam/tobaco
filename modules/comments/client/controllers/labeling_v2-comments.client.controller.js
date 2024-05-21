@@ -137,38 +137,38 @@
             CommentsService.query(params, function (data) {
                 vm.filteredItems = data;
                 vm.pagedItems = data;
-                vm.comments = data
                 SentimentsService.query(function (sentiments) {
-                    vm.sentiments = sentiments;
-                    data.forEach(function (element) {
-                        if (!element.hasOwnProperty('sentiment_researcher')) {
-                            element.sentiment_researcher = element.sentiment_ai;
-                            element.researcher_score = element.score_ai
-                        }
-                        var sentiment = vm.sentiments.find(function(sentiment) {
-                            return sentiment._id === element.sentiment_researcher;
-                        });
-                        if (sentiment && sentiment.name === 'positive') {
-                            element.researcher_score = 1;
-                        }else if(sentiment && sentiment.name === 'negative'){
-                            element.researcher_score = -1;
-                        }else{
-                            element.researcher_score = 0;
-                        }
-                    });
-
-                    vm.getSentimentName = function (sentimentId) {
-                        for (var i = 0; i < vm.sentiments.length; i++) {
-                            if (vm.sentiments[i]._id === sentimentId) {
-                                return vm.sentiments[i].name;
+                  vm.sentiments = sentiments;
+                  data.forEach(function (element) {
+                    if (!element.hasOwnProperty('sentiment_researcher')) {
+                      element.sentiment_researcher = element.sentiment_ai;
+                    }
+                  });
+        
+                  vm.getSentimentName = function (sentimentId) {
+                    for (var i = 0; i < vm.sentiments.length; i++) {
+                      if (vm.sentiments[i]._id === sentimentId) {
+                        return vm.sentiments[i].name;
+                      }
+                    }
+                    return '';
+                  };
+                  vm.getSentimentBackgroundColor = function (sentimentId) {
+                    for (var i = 0; i < vm.sentiments.length; i++) {
+                        if (vm.sentiments[i]._id === sentimentId) {
+                            if (vm.sentiments[i].name === 'positive') {
+                                return '#45AA16'; 
+                            } else if (vm.sentiments[i].name === 'negative') {
+                                return '#D30000'; 
+                            }else{
+                              return '#FFD467';
                             }
                         }
-                        return '';
-                    };
+                    }
+                    return ''; 
+                };
                 });
-
-
-            });
+              });
 
 
         }
