@@ -13,29 +13,26 @@
     vm.argumentMin = 0;
     vm.argumentMax = 5;
     $(document).ready(function () {
-      $(".display_line_chart").hide();
-
       displayPieChart();
-  
+
       $(".line-chart a").click(function (e) {
-          e.preventDefault();
-          displayLineChart();
-          $(".display_line_chart").show();
-          $(".line-chart").addClass("active");
-          $(".default").removeClass("active");
+        e.preventDefault();
+        displayLineChart();
       });
-  
+
       $(".default a").click(function (e) {
-          e.preventDefault();
-          displayPieChart();
-          $(".display_line_chart").hide();
-          $(".default").addClass("active");
-          $(".line-chart").removeClass("active");
+        e.preventDefault();
+        displayPieChart();
+        
       });
-  });
+    });
 
     //pie chart
     function displayPieChart() {
+      $("#pieChart").show();
+      $("#lineChartt").hide();
+      $(".default").addClass("active");
+      $(".line-chart").removeClass("active");
       SentimentsService.query(function (sentiments) {
         vm.sentiments = sentiments;
         CommentsAllService.getAllComments(function (rows) {
@@ -120,6 +117,10 @@
 
     //line chart
     function displayLineChart() {
+      $("#pieChart").hide();
+      $("#lineChartt").show();
+      $(".line-chart").addClass("active");
+      $(".default").removeClass("active");
       SentimentsService.query(function (sentiments) {
         vm.sentiments = sentiments;
         CommentsAllService.getAllComments(function (rows) {
@@ -199,7 +200,7 @@
             });
           }
 
-          var lineChartCanvas = $('#pieChart').get(0).getContext('2d');
+          var lineChartCanvas = $('#lineChartt').get(0).getContext('2d');
           var lineOptions = {
             maintainAspectRatio: false,
             responsive: true

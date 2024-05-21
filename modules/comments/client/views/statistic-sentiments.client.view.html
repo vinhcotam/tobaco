@@ -1,45 +1,24 @@
 <div class="row">
-    <div class="col-md-12">
-      <div class="card card-info">
-        <div class="card-header">
-          <h2 class="card-title">Statistic by Sentiments</h2>
-        </div>
-        <div class="filter-new-groups" style="margin-bottom: 0px;">
-          <ul>
-            <li class="active default"><a href="">Total Sentiments: ({{vm.totals}} comments)</a></li>
-            <li class="line-chart"><a href="">Linechart</a></li>
-          </ul>
-        </div>
-        <div class="spinner-border text-warning hidden" role="status" style="margin-left: 45%; width: 100px; height: 100px;">
-          <span class="sr-only">Loading...</span>
-        </div>
-        <div class="card-body">
-          <canvas id="pieChart" style="width: 100%;" class="pieChart"></canvas>
-        </div>
-        <div class="display_line_chart hidden">
-          <div style="margin: 0px 20px 20px 20px;">
-            <span>Total <span style="font-weight: bold; font-size: 24px;">{{ vm.percentGroup[0].total }} </span> news</span>
-          </div>
-          <div class="row" style="height: auto;">
-            <div class="col-md-8" style="border: groove 1px; padding-bottom: 15px; margin-left: 20px;">
-              <canvas id="lineChart" style="width: 100%; height: 324px;" class="lineChart"></canvas>
-              <canvas id="lineChartMonth" style="width: 100%; height: 324px;" class="lineChart"></canvas>
-            </div>
-            <div class="col-md-3" style="border: groove 1px; margin-left: 10px; height: auto;">
-              <span style="font-weight: bold; font-size: 24px;">Statistics</span>
-              <div style="border-bottom: solid 1px; margin-bottom: 20px;" ng-repeat="(key, value) in vm.percentGroup">
-                <span>{{ value.label }}</span>
-                <div style="display: flex; padding-bottom:15px;">
-                  <span style="width: 60%; font-weight: bold; font-size: 18px;">{{ value.percent }} %</span>
-                  <span ng-if="value.type === 1" class="description-percentage text-success"><i class="fas fa-caret-up"></i> {{ value.compare_percent }} %</span>
-                  <span ng-if="value.type === -1" class="description-percentage text-danger"><i class="fas fa-caret-down"></i> {{ value.compare_percent }} %</span>
-                  <span ng-if="value.type === 0" class="description-percentage text-warning"><i class="fas fa-caret-left"></i> {{ value.compare_percent }} %</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+  <div class="col-md-12">
+    <div class="card card-info">
+      <div class="card-header">
+        <h2 class="card-title">Statistic by Sentiments</h2>
+      </div>
+      <div class="filter-new-groups" style="margin-bottom: 0px;">
+        <ul>
+          <li class="active default"><a href="">Total Sentiments: ({{vm.totals}} comments)</a></li>
+          <li class="line-chart"><a href="">Linechart</a></li>
+        </ul>
+      </div>
+      <div class="spinner-border text-warning hidden" role="status"
+        style="margin-left: 45%; width: 100px; height: 100px;">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div class="card-body">
+        <canvas id="pieChart" style="width: 100%;" class="pieChart"></canvas>
+        <canvas id="lineChartt" style="width: 100%;" class="lineChartt"></canvas>
+
       </div>
     </div>
   </div>
-  
+</div>
