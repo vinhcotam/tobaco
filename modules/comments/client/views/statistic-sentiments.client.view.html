@@ -9,15 +9,18 @@
           <li class="active default">
             <div class="d-flex flex-column">
               <a style="margin-right: auto;" href="" ng-click="displayChartType(vm.chartType)">Total Sentiments: ({{vm.totals}} comments)</a>
-              <div class="form-group d-flex align-items-center" style="margin-left: 6%;">
+              <div class="form-group d-flex align-items-center" style="margin-left: 6%;" ng-init="vm.selectedNewsGroupId = '0'; vm.displayPieChart()">
                 <select style="margin-right: 10px;" name="group_news" class="form-control" ng-model="vm.selectedNewsGroupId" ng-if="vm.isLoaded">
-                  <option value="0">Tất cả</option>
+                  <option value="0" selected>Tất cả</option>
                   <option ng-repeat="group in vm.newsGroups" value="{{group._id}}">
                     {{group.name}}
                   </option>
                 </select>
                 <button ng-click="vm.filterByGroups()" type="submit" class="btn btn-primary" id="btn_groups_filter"><i class="fa fa-filter"></i></button>
               </div>
+              
+              
+              
               <div class="chart-type-selector" style="margin-left: 6%;">
                 <label>
                   <input type="radio" name="chart-type" value="pie" ng-model="vm.chartType" ng-change="vm.displayPieChart()" ng-init="vm.chartType = 'pie'"> Pie Chart

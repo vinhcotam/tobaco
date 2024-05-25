@@ -150,7 +150,7 @@ div.filter-new-groups {
 }
 
 div.filter-new-groups ul {
-	background-color: #333333;
+	/* background-color: #333333; */
 	list-style: none;
 	overflow: hidden;
 	padding: 0;
@@ -162,7 +162,7 @@ div.filter-new-groups ul li {
 }
 
 div.filter-new-groups ul li a {
-	color: white;
+	color: black;
 	display: block;
 	padding: 16px;
 	text-align: center;
@@ -170,16 +170,17 @@ div.filter-new-groups ul li a {
 }
 
 div.filter-new-groups ul li a:hover {
-	background-color: #111111;
+	/* background-color: #111111; */
 	cursor: pointer;
 	font-weight: bold;
 	text-decoration: underline;
 }
 
 div.filter-new-groups ul li.active a {
-	background-color: #111111;
+	/* background-color: #111111; */
 	cursor: pointer;
 	font-weight: bold;
+	color:#000;
 	text-decoration: underline;
 
 }

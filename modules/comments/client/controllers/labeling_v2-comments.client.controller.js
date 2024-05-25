@@ -86,11 +86,7 @@
                 console.log("Update canceled!");
             }
         };
-        
-
-
-
-
+    
         vm.newsId = $stateParams.newsId;
         vm.autoLabeling = function () {
             console.log("print", vm.newsId)

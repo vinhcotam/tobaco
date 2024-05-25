@@ -22,10 +22,13 @@
         vm.newsGroups = data;
         vm.isLoaded = true;
         console.log("groupss", vm.newsGroups);
+        console.log("Selected value: ", vm.selectedNewsGroupId);
+        if(vm.selectedNewsGroupId ==0){
+          vm.filterByGroups()
+        }
       });
     }
     vm.filterByGroups = function() {
-      console.log("Selected value: ", vm.selectedNewsGroupId);
       $("#pieChart").show();
       $("#lineChartt").hide();
       $(".default").addClass("active");
