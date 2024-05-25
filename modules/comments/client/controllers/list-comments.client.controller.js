@@ -51,12 +51,13 @@
         CommentsService.getTotal(params).$promise.then(function (number) {
           vm.filterLength = number[0];
           vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
-          console.log(vm.totalPages)
+          
         });
       }
       if (angular.isDefined(newsId)) {
         params.newsId = newsId;
       }
+      console.log("Â",vm.totalPages)
       CommentsService.query(params, function (data) {
         vm.filteredItems = data;
         vm.pagedItems = data;

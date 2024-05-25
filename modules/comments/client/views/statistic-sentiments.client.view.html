@@ -6,9 +6,90 @@
       </div>
       <div class="filter-new-groups" style="margin-bottom: 0px;">
         <ul>
-          <li class="active default"><a href="">Total Sentiments: ({{vm.totals}} comments)</a></li>
-          <li class="line-chart"><a href="">Linechart</a></li>
+          <li class="active default">
+            <div class="d-flex flex-column">
+              <a style="margin-right: auto;" href="" ng-click="displayChartType(vm.chartType)">Total Sentiments: ({{vm.totals}} comments)</a>
+              <div class="form-group d-flex align-items-center" style="margin-left: 6%;">
+                <select style="margin-right: 10px;" name="group_news" class="form-control" ng-model="vm.selectedNewsGroupId" ng-if="vm.isLoaded">
+                  <option value="0">Tất cả</option>
+                  <option ng-repeat="group in vm.newsGroups" value="{{group._id}}">
+                    {{group.name}}
+                  </option>
+                </select>
+                <button ng-click="vm.filterByGroups()" type="submit" class="btn btn-primary" id="btn_groups_filter"><i class="fa fa-filter"></i></button>
+              </div>
+              <div class="chart-type-selector" style="margin-left: 6%;">
+                <label>
+                  <input type="radio" name="chart-type" value="pie" ng-model="vm.chartType" ng-change="vm.displayPieChart()" ng-init="vm.chartType = 'pie'"> Pie Chart
+                </label>
+                <label>
+                  <input type="radio" name="chart-type" value="line" ng-model="vm.chartType" ng-change="vm.displayLineChart()" ng-checked="vm.chartType === 'line'"> Line Chart
+                </label>
+              </div>
+            </div>
+          </li>
+          <!-- <li class="line-chart"><a href="">Linechart</a></li> -->
+          <li class="week"><a href="">Week</a></li>
+          <li class="month"><a href="">Month</a></li>
         </ul>
+        <div class="filter-new-groups-detail row hidden" style="margin-left: 1%;">
+          <div class="form-group col-sm-4 start-date" style="display: flex; margin-right: 30px;">
+            <label for="" style="padding-right: 20px; padding-top: 5px;">From</label>
+            <div class="input-group date" id="from-date" data-target-input="nearest">
+              <input id="startdate" class="form-control datetimepicker-input" data-target="#from-date"
+                ng-model="vm.filtergroupstartdate">
+              <div class="input-group-append" data-target="#from-date" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-sm-4 end-date" style="display: flex;">
+            <label for="" style="padding-right: 20px; padding-top: 5px;">To</label>
+            <div class="input-group date" id="end-date" data-target-input="nearest">
+              <input type="text" id="enddate" class="form-control datetimepicker-input" data-target="#end-date"
+                ng-model="vm.filtergroupenddate">
+              <div class="input-group-append" data-target="#end-date" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-sm-4 start-month" style="display: flex; margin-right: 30px;">
+            <label for="" style="padding-right: 20px; padding-top: 5px;">From</label>
+            <div class="input-group date" id="startMonth" data-target-input="nearest">
+              <input id="start-month" class="form-control datetimepicker-input" data-target="#startMonth">
+              <div class="input-group-append" data-target="#startMonth" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-sm-4 end-month" style="display: flex;">
+            <label for="" style="padding-right: 20px; padding-top: 5px;">To</label>
+            <div class="input-group date" id="endMonth" data-target-input="nearest">
+              <input type="text" id="end-month" class="form-control datetimepicker-input" data-target="#endMonth">
+              <div class="input-group-append" data-target="#endMonth" data-toggle="datetimepicker">
+                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-sm-4" style="display: flex;">
+            <label for="" style="padding-right: 20px; padding-top: 5px;">From</label>
+            <div>
+              <input id="agrument_min" ng-model="vm.argumentMin">
+            </div>
+          </div>
+          <div class="form-group col-sm-4" style="display: flex;">
+            <label for="" style="padding-right: 20px; padding-top: 5px;">To</label>
+            <div>
+              <input id="agrument_max" ng-model="vm.argumentMax">
+            </div>
+          </div>
+          <div class="form-group col-sm-2" style="padding-left: 20px;">
+            <button type="submit" class="btn btn-primary" id="btn_week_filter" ng-click="vm.filterArgumentByDate()"><i
+                class="fa fa-filter"></i></button>
+            <button type="submit" class="btn btn-primary" id="btn_month_filter" ng-click="vm.filterArgumentByMonth()"><i
+                class="fa fa-filter"></i></button>
+          </div>
+        </div>
       </div>
       <div class="spinner-border text-warning hidden" role="status"
         style="margin-left: 45%; width: 100px; height: 100px;">
@@ -18,6 +99,33 @@
         <canvas id="pieChart" style="width: 100%;" class="pieChart"></canvas>
         <canvas id="lineChartt" style="width: 100%;" class="lineChartt"></canvas>
 
+      </div>
+      <div class="display_line_chart hidden">
+        <div style="margin: 0px 20px 20px 20px;">
+          <span>Total <span style="font-weight: bold; font-size: 24px;">{{ vm.percentGroup[0].total }} </span>
+            news</span>
+        </div>
+        <div class="row" style="height: auto;">
+          <div class="col-md-8" style="border: groove 1px; padding-bottom: 15px; margin-left: 20px;">
+            <canvas id="lineChart" style="width: 100%; height: 324px;" class="lineChart"></canvas>
+            <canvas id="lineChartMonth" style="width: 100%; height: 324px;" class="lineChart"></canvas>
+          </div>
+          <div class="col-md-3" style="border: groove 1px; margin-left: 10px; height: auto;">
+            <span style="font-weight: bold; font-size: 24px;">Statistics</span>
+            <div style="border-bottom: solid 1px; margin-bottom: 20px;" ng-repeat="(key, value) in vm.percentGroup">
+              <span>{{ value.label }}</span>
+              <div style="display: flex; padding-bottom:15px;">
+                <span style="width: 60%; font-weight: bold; font-size: 18px;">{{ value.percent }} %</span>
+                <span ng-if="value.type === 1" class="description-percentage text-success"><i
+                    class="fas fa-caret-up"></i> {{ value.compare_percent }} %</span>
+                <span ng-if="value.type === -1" class="description-percentage text-danger"><i
+                    class="fas fa-caret-down"></i> {{ value.compare_percent }} %</span>
+                <span ng-if="value.type === 0" class="description-percentage text-warning"><i
+                    class="fas fa-caret-left"></i> {{ value.compare_percent }} %</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

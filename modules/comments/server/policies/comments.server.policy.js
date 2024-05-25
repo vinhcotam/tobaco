@@ -23,6 +23,9 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/comments/numberrow',
       permissions: '*'
+    }, {
+      resources: '/api/comments/statisticbysentiment',
+      permissions: '*'
     }]
   }, {
     roles: ['user'],
@@ -35,6 +38,9 @@ exports.invokeRolesPolicies = function () {
     }, {
       resources: '/api/comments/numberrow',
       permissions: ['get']
+    }, {
+      resources: '/api/comments/statisticbysentiment',
+      permissions: ['get']
     }]
   }, {
     roles: ['guest'],
@@ -46,6 +52,9 @@ exports.invokeRolesPolicies = function () {
       permissions: ['get']
     }, {
       resources: '/api/comments/numberrow',
+      permissions: ['get']
+    }, {
+      resources: '/api/comments/statisticbysentiment',
       permissions: ['get']
     }]
   }]);
@@ -79,3 +88,54 @@ exports.isAllowed = function (req, res, next) {
     }
   });
 };
+exports.tokenAuth = async (req, res, next) => {
+  console.log(req.headers)
+  const token = req.header('Authorization').replace('Bearer ', '');
+
+  const data = jwt.verify(token, 'tabao');
+  //console.log(data, token)
+  const User = mongoose.model('User');
+
+  try {
+    const user = await User.findOne({ _id: data._id, 'tokens.token': token })
+    if (!user) {
+      throw new Error({ error: 'Not authorized' })
+    }
+
+    var roles = user.roles;
+    var isRole = -1;
+    roles.forEach(function (element, index) {
+      if (element == 'admin') {
+        isRole = 0;
+      } else if (element == 'manager' && isRole == -1) {
+        isRole = 1;
+      } else if (element == 'user' && isRole == -1) {
+        isRole = 2;
+      }
+    });
+
+    req.user = user;
+    let condition = { assigned_user: user._id };
+    if (isRole == 2) {
+      condition.working_status = 1;
+    }
+
+    await Assignedtopic.find(condition, '_id topic assigned_user working_status created')
+      .populate('topic', '_id topic_name')
+      .then((topics) => {
+        user.topics = topics;
+        req.user = user;
+      })
+      .catch((err) => {
+        if (err) {
+          return done(err);
+        }
+      });
+    req.token = token;
+
+    next();
+  } catch (error) {
+    res.status(401).send({ error: 'Not authorized to access this resource' })
+  }
+}
+

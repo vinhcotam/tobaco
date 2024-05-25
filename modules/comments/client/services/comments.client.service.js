@@ -73,8 +73,14 @@
       updateMany: {
         method: 'POST',
         url: '/api/comments/updateMany',
-        isArray: true
-      }
+        isArray: true}
+    //   },
+    //   getCommentsByTopics: {
+    //     method: 'GET',
+    //     url: '/api/comments/',
+    //     isArray: true
+    // }
+    
     });
 
     return Comment;
@@ -82,7 +88,7 @@
 
   function LabelingbysentimentsStatisticService($resource) {
     return $resource('/api/comments/statisticbysentiment', {
-      newsdailyId: '@_id'
+      commentId: '@_id'
     }, {
       update: {
         method: 'PUT'

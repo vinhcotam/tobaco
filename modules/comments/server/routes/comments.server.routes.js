@@ -20,15 +20,20 @@ module.exports = function (app) {
   app.route('/api/comments/numberrow').all(commentsPolicy.isAllowed)
     .get(comments.count)
 
+
+  app.route('/api/comments/statisticbysentiment').all(commentsPolicy.isAllowed)
+    .get(comments.statisticbysentiment);
+  app.route('/api_m/comments/statisticbysentiment').all(commentsPolicy.tokenAuth)
+  .get(comments.statisticbysentiment);
   app.route('/api/comments/:commentId').all(commentsPolicy.isAllowed)
     .get(comments.read)
     .put(comments.update)
     .delete(comments.delete);
 
-    app.locals.sse = sse;
+  app.locals.sse = sse;
 
-    // Đường dẫn SSE
-    app.get('/sse', sse.init);
+  // Đường dẫn SSE
+  app.get('/sse', sse.init);
 
 
 

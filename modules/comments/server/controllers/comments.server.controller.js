@@ -57,12 +57,12 @@ exports.read = function (req, res) {
 
 exports.update = function (req, res) {
     var comment = req.comment;
-    var sse = req.app.locals.sse; 
+    var sse = req.app.locals.sse;
 
     comment = _.extend(comment, req.body);
     comment.save()
         .then((comment) => {
-            sse.send(comment); 
+            sse.send(comment);
             console.log('Event "update" has been emitted.');
             res.jsonp(comment);
         })
@@ -174,6 +174,7 @@ exports.list = function (req, res) {
         condition.$or = orcondition;
     }
 
+
     var limitCount = 10;
     var skipCount = limitCount * (currentPage - 1);
     var newsId = req.query.newsId;
@@ -253,3 +254,122 @@ exports.commentByID = function (req, res, next, id) {
         });
 
 };
+
+
+exports.statisticbysentiment = async (req, res) => {
+    
+
+    try {
+        const user = req.user;
+        const topics = user.topics.filter(topic => topic.working_status === 1);
+        const topicIds = topics.map(topic => topic.topic._id);
+        const newsgroup = req.query.newsgroup;
+        var newsdailies;
+        if(newsgroup !=0){
+            newsdailies = await Newsdaily.find({
+                topic: { $in: topicIds },
+                news_group: {$in: newsgroup}
+            }, '_id');  
+        }else{
+            newsdailies = await Newsdaily.find({
+                topic: { $in: topicIds }
+            }, '_id'); 
+        }
+
+
+        const newsIds = newsdailies.map(news => new mongoose.Types.ObjectId(news._id));
+
+        // Fetch comments with matching news_id
+        const comments = await Comment.aggregate([
+            {
+                $match: {
+                    news_id: { $in: newsIds.map(id => new mongoose.Types.ObjectId(id)) }
+                }
+            },
+            {
+                $lookup: {
+                    from: 'newsdailies',
+                    localField: 'news_id',
+                    foreignField: '_id',
+                    as: 'newsdailies_info'
+                }
+            },
+            {
+                $unwind: '$newsdailies_info'
+            },
+            {
+                $match: {
+                    'newsdailies_info.topic': { $in: topicIds.map(id => new mongoose.Types.ObjectId(id)) }
+                }
+            },
+            {
+                $project: {
+                    'newsdailies_info': 0
+                }
+            }
+        ]);
+        
+
+        // if (comments.length === 0) {
+        //     return res.status(400).json({ message: "No comments found." });
+        // }
+
+        return res.json(comments);
+    } catch (err) {
+        console.error("Error in statisticbysentiment:", err);
+        return res.status(500).json({ message: errorHandler.getErrorMessage(err) });
+    }
+    
+};
+
+
+// exports.statisticbysentiment = async (req, res) => {
+//     try {
+//         const user = req.user;
+//         const topics = user.topics.filter(topic => topic.working_status === 1);
+//         const topicIds = topics.map(topic => topic.topic._id);
+
+//         // Fetch newsdailies with matching topics
+//         const newsdailies = await Newsdaily.find({
+//             topic: { $in: topicIds }
+//         }, '_id'); // Only selecting _id field
+
+//         const newsIds = newsdailies.map(news => news._id);
+
+//         // Fetch comments with matching news_id
+//         const comments = await Comment.aggregate([
+//             {
+//                 $match: {
+//                     news_id: { $in: newsIds.map(id => mongoose.Types.ObjectId(id)) }
+//                 }
+//             },
+//             {
+//                 $lookup: {
+//                     from: 'newsdailies',
+//                     localField: 'news_id',
+//                     foreignField: '_id',
+//                     as: 'newsdailies_info'
+//                 }
+//             },
+//             {
+//                 $unwind: '$newsdailies_info'
+//             },
+//             {
+//                 $match: {
+//                     'newsdailies_info.topic': { $in: topicIds.map(id => mongoose.Types.ObjectId(id)) }
+//                 }
+//             },
+//             {
+//                 $project: {
+//                     'newsdailies_info': 0
+//                 }
+//             }
+//         ]);
+
+//         return res.json(comments);
+//     } catch (err) {
+//         return res.status(400).send({
+//             message: errorHandler.getErrorMessage(err)
+//         });
+//     }
+// };

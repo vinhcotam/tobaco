@@ -45,7 +45,8 @@ var CommentSchema = new Schema({
     default: 1
   },
   news_id: {
-    type: Schema.ObjectId
+    type: Schema.ObjectId,
+    ref: 'Newsdaily'
   },
   user: {
     type: Schema.ObjectId,
