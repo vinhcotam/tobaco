@@ -520,6 +520,7 @@ exports.statisticbyargument = function (req, res) {
       condition.topic = { '$in': topic_id };
     }
   }
+  console.log("điiii", condition);
   Labelingbytaxonomy
     .aggregate(
       [

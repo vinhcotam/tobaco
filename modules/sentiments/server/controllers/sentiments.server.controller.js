@@ -104,20 +104,7 @@ exports.count = function (req, res) {
             isRole = 2;
         }
     });
-    // if (isRole == 1 || isRole == 2) {
-    //     let topicIds = [];
-    //     req.user.topics.forEach(function (element, index) {
-    //         if (element.working_status == 1) {
-    //             topicIds.push(element.topic._id);
-    //         }
-    //     });
-    //     condition = { "topic": { "$in": topicIds } };
-    // }
 
-
-    // if (typeof req.query.topic != "undefined") {
-    //     condition.topic = req.query.topic;
-    // }
 
     //create search by or operator in mongodb
     var orcondition = [];

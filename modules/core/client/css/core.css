@@ -154,15 +154,14 @@ div.filter-new-groups ul {
 	list-style: none;
 	overflow: hidden;
 	padding: 0;
-
-}
+  }
 
 div.filter-new-groups ul li {
 	float: left;
 }
 
 div.filter-new-groups ul li a {
-	color: black;
+	/* color: black; */
 	display: block;
 	padding: 16px;
 	text-align: center;
@@ -178,9 +177,10 @@ div.filter-new-groups ul li a:hover {
 
 div.filter-new-groups ul li.active a {
 	/* background-color: #111111; */
+	color:#000;
 	cursor: pointer;
 	font-weight: bold;
-	color:#000;
+	
 	text-decoration: underline;
 
 }
@@ -271,6 +271,9 @@ div.hidden {
 	display: none !important;
 }
 
+/* div.card-title:hover{
+	cursor;
+} */
 button.hidden {
 	display: none !important;
 }

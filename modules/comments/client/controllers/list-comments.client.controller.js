@@ -27,6 +27,11 @@
       $state.go('comments.labeling', { newsId: vm.newsId });
 
     };
+    CommentsService.getTotal({ newsId: vm.newsId }).$promise.then(function (number) {
+      vm.filterLength = number[0];
+      console.log("vm.itemsPerPage", vm.itemsPerPage)
+      vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
+    });
     vm.goToLabeling = function (newsId) {
       $state.go('comments.labeling_v2', { newsId: vm.newsId });
 
@@ -50,17 +55,15 @@
         params.search = vm.search;
         CommentsService.getTotal(params).$promise.then(function (number) {
           vm.filterLength = number[0];
-          vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
-          
         });
       }
       if (angular.isDefined(newsId)) {
         params.newsId = newsId;
       }
-      console.log("Â",vm.totalPages)
       CommentsService.query(params, function (data) {
         vm.filteredItems = data;
         vm.pagedItems = data;
+        console.log("Dataaa", data)
         SentimentsService.query(function (sentiments) {
           vm.sentiments = sentiments;
           data.forEach(function (element) {

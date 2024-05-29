@@ -55,6 +55,9 @@ var CommentSchema = new Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+  date_comment: {
+    type: Date
   }
 });
 CommentSchema.plugin(materializedPlugin);

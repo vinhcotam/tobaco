@@ -44,6 +44,8 @@
         SentimentsService.query(params, function (data) {
           vm.filteredItems = data;
           vm.pagedItems = data;
+          console.log("Dataaa", data)
+
         });
       }
   

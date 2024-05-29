@@ -102,12 +102,49 @@ exports.delete = function (req, res) {
 /**
  * GET number rows of comment
  */
+// exports.count = function (req, res) {
+//     console.log('zooo count');
+//     var condition = {};
+//     var newsId = req.query.newsId;
+//     if (newsId !== undefined) {
+//         condition.news_id = newsId;
+//     }
+//     var roles = req.user.roles;
+//     var isRole = -1;
+//     roles.forEach(function (element, index) {
+//         if (element == 'admin') {
+//             isRole = 0;
+//         } else if (element == 'manager' && isRole == -1) {
+//             isRole = 1;
+//         } else if (element == 'user' && isRole == -1) {
+//             isRole = 2;
+//         }
+//     });
+
+//     //create search by or operator in mongodb
+//     var orcondition = [];
+//     if (req.query.search != undefined) {
+//         orcondition.push({ "name": { $regex: new RegExp(req.query.search) } });
+//         condition.$or = orcondition;
+//     }
+
+//     Comment.countDocuments(condition)
+//         .then((number) => {
+//             console.log("nbasd", number)
+//             res.jsonp([number]);
+//         })
+//         .catch((err) => {
+//             if (err) {
+//                 return res.status(400).send({
+//                     message: errorHandler.getErrorMessage(err)
+//                 });
+//             }
+//         });
+
+// };
 exports.count = function (req, res) {
     var condition = {};
-    var newsId = req.query.newsId;
-    if (newsId !== undefined) {
-        condition.news_id = newsId;
-    }
+
     var roles = req.user.roles;
     var isRole = -1;
     roles.forEach(function (element, index) {
@@ -120,8 +157,13 @@ exports.count = function (req, res) {
         }
     });
 
+
     //create search by or operator in mongodb
     var orcondition = [];
+    var newsId = req.query.newsId;
+    if (newsId !== undefined) {
+        condition.news_id = newsId;
+    }
     if (req.query.search != undefined) {
         orcondition.push({ "name": { $regex: new RegExp(req.query.search) } });
         condition.$or = orcondition;
@@ -140,11 +182,12 @@ exports.count = function (req, res) {
         });
 
 };
-
 /**
  * List of comments
  */
 exports.list = function (req, res) {
+    console.log('zooo list');
+
     var condition = {};
     var currentPage = 1;
     var roles = req.user.roles;
@@ -167,41 +210,20 @@ exports.list = function (req, res) {
         }
     }
 
-    // Create search by or operator in MongoDB
     var orcondition = [];
     if (req.query.search != undefined) {
         orcondition.push({ "name": { $regex: new RegExp(req.query.search) } });
         condition.$or = orcondition;
     }
 
-
-    var limitCount = 10;
-    var skipCount = limitCount * (currentPage - 1);
     var newsId = req.query.newsId;
-    var newsTitle = ""
-    var newsSummary = ""
-    if (newsId !== undefined) {
-        condition.news_id = newsId;
-        Newsdaily.findOne({ _id: newsId })
-            .then((news) => {
-                console.log("checkscas", news.news_title)
-                console.log("checkscas", news.news_summary)
-                // res.jsonp({ newsTitle: news.news_title });
-                newsTitle = news.news_title;
-                newsSummary = news.news_summary;
-                next();
-            })
-            .catch((err) => {
-            });
-
-    }
+    condition.news_id = newsId;
     // Get the total count of comments
     Comment.countDocuments(condition)
-        .then((totalCount) => {
-            var totalPages = Math.ceil(totalCount / limitCount);
+        .then(() => {
             Comment.find(condition)
                 .populate('user', 'displayName')
-                .skip(skipCount)
+                .skip(10 * (currentPage - 1)).limit(10)
                 .then((comments) => {
                     res.jsonp(comments);
                 })
@@ -255,37 +277,67 @@ exports.commentByID = function (req, res, next, id) {
 
 };
 
-
 exports.statisticbysentiment = async (req, res) => {
-    
-
     try {
         const user = req.user;
         const topics = user.topics.filter(topic => topic.working_status === 1);
         const topicIds = topics.map(topic => topic.topic._id);
         const newsgroup = req.query.newsgroup;
-        var newsdailies;
-        if(newsgroup !=0){
-            newsdailies = await Newsdaily.find({
-                topic: { $in: topicIds },
-                news_group: {$in: newsgroup}
-            }, '_id');  
-        }else{
-            newsdailies = await Newsdaily.find({
-                topic: { $in: topicIds }
-            }, '_id'); 
+        const start = req.query.start;
+        const end = req.query.end;
+
+        let newsdailies;
+        var isAdmin = req.user.roles.includes('admin');
+        if (!isAdmin) {
+            if (newsgroup != 0) {
+                newsdailies = await Newsdaily.find({
+                    topic: { $in: topicIds },
+                    news_group: { $in: newsgroup }
+                }, '_id');
+            } else {
+                newsdailies = await Newsdaily.find({
+                    topic: { $in: topicIds }
+                }, '_id');
+            }
+        } else {
+            if (newsgroup != 0) {
+                newsdailies = await Newsdaily.find({
+                    news_group: { $in: newsgroup }
+                }, '_id');
+            } else {
+                newsdailies = await Newsdaily.find({
+                }, '_id');
+            }
         }
 
 
-        const newsIds = newsdailies.map(news => new mongoose.Types.ObjectId(news._id));
-
-        // Fetch comments with matching news_id
-        const comments = await Comment.aggregate([
-            {
+        const newsIds = newsdailies.map(news => news._id);
+        var matchStage;
+        if (!isAdmin) {
+            matchStage = {
                 $match: {
                     news_id: { $in: newsIds.map(id => new mongoose.Types.ObjectId(id)) }
                 }
-            },
+            };
+        } else {
+            matchStage = {
+                $match: {
+                }
+            };
+        }
+
+
+        if (start && end) {
+            console.log("Start", start);
+            console.log("end", end);
+            matchStage.$match.date_comment = {
+                $gte: new Date(start),
+                $lte: new Date(end)
+            };
+        }
+        console.log("matchStage", matchStage)
+        const comments = await Comment.aggregate([
+            matchStage,
             {
                 $lookup: {
                     from: 'newsdailies',
@@ -294,82 +346,148 @@ exports.statisticbysentiment = async (req, res) => {
                     as: 'newsdailies_info'
                 }
             },
-            {
-                $unwind: '$newsdailies_info'
-            },
+            { $unwind: '$newsdailies_info' },
             {
                 $match: {
                     'newsdailies_info.topic': { $in: topicIds.map(id => new mongoose.Types.ObjectId(id)) }
                 }
             },
-            {
-                $project: {
-                    'newsdailies_info': 0
-                }
-            }
+            { $project: { 'newsdailies_info': 0 } }
         ]);
-        
 
-        // if (comments.length === 0) {
-        //     return res.status(400).json({ message: "No comments found." });
-        // }
-
-        return res.json(comments);
+        res.jsonp(comments);
     } catch (err) {
-        console.error("Error in statisticbysentiment:", err);
-        return res.status(500).json({ message: errorHandler.getErrorMessage(err) });
+        console.error(err);
+        res.status(400).send({ message: errorHandler.getErrorMessage(err) });
     }
-    
 };
-
 
 // exports.statisticbysentiment = async (req, res) => {
 //     try {
 //         const user = req.user;
 //         const topics = user.topics.filter(topic => topic.working_status === 1);
 //         const topicIds = topics.map(topic => topic.topic._id);
-
-//         // Fetch newsdailies with matching topics
-//         const newsdailies = await Newsdaily.find({
-//             topic: { $in: topicIds }
-//         }, '_id'); // Only selecting _id field
-
-//         const newsIds = newsdailies.map(news => news._id);
-
-//         // Fetch comments with matching news_id
-//         const comments = await Comment.aggregate([
-//             {
-//                 $match: {
-//                     news_id: { $in: newsIds.map(id => mongoose.Types.ObjectId(id)) }
-//                 }
-//             },
-//             {
-//                 $lookup: {
-//                     from: 'newsdailies',
-//                     localField: 'news_id',
-//                     foreignField: '_id',
-//                     as: 'newsdailies_info'
-//                 }
-//             },
-//             {
-//                 $unwind: '$newsdailies_info'
-//             },
-//             {
-//                 $match: {
-//                     'newsdailies_info.topic': { $in: topicIds.map(id => mongoose.Types.ObjectId(id)) }
-//                 }
-//             },
-//             {
-//                 $project: {
-//                     'newsdailies_info': 0
-//                 }
+//         const newsgroup = req.query.newsgroup;
+//         const start = req.query.start;
+//         const end = req.query.end;
+//         var roles = req.user.roles;
+//         var isRole = -1;
+//         var condition = {};
+//         if (start != undefined || end != undefined) {
+//             condition.date_comment = {
+//                 "$gte": new Date(req.query.start),
+//                 "$lte": new Date(req.query.end)
+//             };
+//         }
+//         console.log("dateee", condition);
+//         roles.forEach(function (element, index) {
+//             if (element == 'admin') {
+//                 isRole = 0;
+//             } else if (element == 'manager' && isRole == -1) {
+//                 isRole = 1;
+//             } else if (element == 'user' && isRole == -1) {
+//                 isRole = 2;
 //             }
-//         ]);
-
-//         return res.json(comments);
-//     } catch (err) {
-//         return res.status(400).send({
-//             message: errorHandler.getErrorMessage(err)
 //         });
+//         console.log("roleee", isRole);
+//         if (isRole != 0) {
+//             var newsdailies;
+//             if (newsgroup != 0) {
+//                 newsdailies = await Newsdaily.find({
+//                     topic: { $in: topicIds },
+//                     news_group: { $in: newsgroup }
+//                 }, '_id');
+//             } else {
+//                 newsdailies = await Newsdaily.find({
+//                     topic: { $in: topicIds }
+//                 }, '_id');
+//             }
+
+
+//             const newsIds = newsdailies.map(news => new mongoose.Types.ObjectId(news._id));
+//             const comments = await Comment.aggregate([
+//                 {
+//                     $match: {
+//                         news_id: { $in: newsIds.map(id => new mongoose.Types.ObjectId(id)) }
+//                     }
+//                 },
+//                 {
+//                     $lookup: {
+//                         from: 'newsdailies',
+//                         localField: 'news_id',
+//                         foreignField: '_id',
+//                         as: 'newsdailies_info'
+//                     }
+//                 },
+//                 {
+//                     $unwind: '$newsdailies_info'
+//                 },
+//                 {
+//                     $match: {
+//                         'newsdailies_info.topic': { $in: topicIds.map(id => new mongoose.Types.ObjectId(id)) }
+//                     }
+//                 }
+//                 ,
+//                 {
+//                     $project: {
+//                         'newsdailies_info': 0
+//                     }
+//                 }
+//             ]);
+//             // console.log("zooooo1", comments);
+//             return res.json(comments);
+//         } else {
+//             var newsdailies;
+//             if (newsgroup != 0) {
+//                 newsdailies = await Newsdaily.find({
+//                     news_group: { $in: newsgroup }
+//                 }, '_id');
+//             } else {
+//                 newsdailies = await Newsdaily.find({}, '_id');
+//             }
+
+//             console.log("adminnn")
+//             const newsIds = newsdailies.map(news => new mongoose.Types.ObjectId(news._id));
+//             const comments = await Comment
+//                 .aggregate([
+//                     {
+//                         $match: {
+//                             news_id: { $in: newsIds.map(id => new mongoose.Types.ObjectId(id)) }
+//                         }
+//                     },
+//                     {
+//                         $lookup: {
+//                             from: 'newsdailies',
+//                             localField: 'news_id',
+//                             foreignField: '_id',
+//                             as: 'newsdailies_info'
+//                         }
+//                     },
+//                     {
+//                         $unwind: '$newsdailies_info'
+//                     },
+//                     {
+//                         $match: {
+//                             'newsdailies_info.topic': { $in: topicIds.map(id => new mongoose.Types.ObjectId(id)) }
+//                         }
+//                     },
+//                     {
+//                         $project: {
+//                             'newsdailies_info': 0
+//                         }
+//                     }
+//                 ]);
+//             console.log("comments", comments)
+//             return res.json(comments);
+//         }
+
+
+//     } catch (err) {
+//         console.error("Error in statisticbysentiment:", err);
+//         return res.status(500).json({ message: errorHandler.getErrorMessage(err) });
 //     }
+
 // };
+
+
+
