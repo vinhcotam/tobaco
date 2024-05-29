@@ -250,9 +250,7 @@ exports.list = function (req, res) {
  * comment middleware
  */
 exports.commentByID = function (req, res, next, id) {
-    console.log("iddddddđ:", id)
 
-    console.log("reqqqq", req)
     if (!mongoose.Types.ObjectId.isValid(id)) {
         return res.status(400).send({
             message: 'Comment is invalid'
