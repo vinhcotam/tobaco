@@ -310,19 +310,14 @@ exports.statisticbysentiment = async (req, res) => {
 
 
         const newsIds = newsdailies.map(news => news._id);
+        console.log("newsIds", newsIds);
         var matchStage;
-        if (!isAdmin) {
             matchStage = {
                 $match: {
                     news_id: { $in: newsIds.map(id => new mongoose.Types.ObjectId(id)) }
                 }
             };
-        } else {
-            matchStage = {
-                $match: {
-                }
-            };
-        }
+        
 
 
         if (start && end) {

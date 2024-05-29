@@ -21,6 +21,10 @@ var SentimentSchema = new Schema({
     default: '',
     trim: true
   },
+  color: {
+    type: String
+  }
+  ,
   user: {
     type: Schema.ObjectId,
     ref: 'User'

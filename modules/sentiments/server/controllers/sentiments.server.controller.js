@@ -13,22 +13,52 @@ var path = require('path'),
 /**
  * Create a sentment
  */
+// exports.create = function (req, res) {
+//     var sentiment = new Sentiment(req.body);
+//     sentiment.user = req.user;
+//     console.log("sentimentsss", sentiment)
+//     sentiment.save()
+//         .then((sentiment) => {
+//             res.jsonp(sentiment);
+//         })
+//         .catch((err) => {
+//             if (err) {
+//                 return res.status(400).send({
+//                     message: errorHandler.getErrorMessage(err)
+//                 });
+//             }
+//         });
+
+// };
+
 exports.create = function (req, res) {
     var sentiment = new Sentiment(req.body);
     sentiment.user = req.user;
-    console.log("a", sentiment)
+
     sentiment.save()
         .then((sentiment) => {
             res.jsonp(sentiment);
         })
         .catch((err) => {
-            if (err) {
-                return res.status(400).send({
-                    message: errorHandler.getErrorMessage(err)
-                });
-            }
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
         });
+};
 
+exports.update = function (req, res) {
+    var sentiment = req.sentiment;
+    sentiment = _.extend(sentiment, req.body);
+
+    sentiment.save()
+        .then((sentiment) => {
+            res.jsonp(sentiment);
+        })
+        .catch((err) => {
+            return res.status(400).send({
+                message: errorHandler.getErrorMessage(err)
+            });
+        });
 };
 
 /**
@@ -48,24 +78,24 @@ exports.read = function (req, res) {
 /**
  * Update a sentiment
  */
-exports.update = function (req, res) {
-    var sentiment = req.sentiment;
+// exports.update = function (req, res) {
+//     var sentiment = req.sentiment;
 
-    sentiment = _.extend(sentiment, req.body);
+//     sentiment = _.extend(sentiment, req.body);
 
-    sentiment.save()
-        .then((sentiment) => {
-            res.jsonp(sentiment);
-        })
-        .catch((err) => {
-            if (err) {
-                return res.status(400).send({
-                    message: errorHandler.getErrorMessage(err)
-                });
-            }
-        });
+//     sentiment.save()
+//         .then((sentiment) => {
+//             res.jsonp(sentiment);
+//         })
+//         .catch((err) => {
+//             if (err) {
+//                 return res.status(400).send({
+//                     message: errorHandler.getErrorMessage(err)
+//                 });
+//             }
+//         });
 
-};
+// };
 
 /**
  * Delete an sentiment
