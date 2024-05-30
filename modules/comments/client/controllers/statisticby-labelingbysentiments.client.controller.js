@@ -21,11 +21,9 @@
       NewsgroupsService.query({}, function (data) {
         vm.newsGroups = data;
         vm.isLoaded = true;
-        console.log("groupss", vm.newsGroups);
-        console.log("Selected value: ", vm.selectedNewsGroupId);
-        if (vm.selectedNewsGroupId == 0) {
-          vm.filterByGroups()
-        }
+        // if (vm.selectedNewsGroupId == 0) {
+        //   vm.filterByGroups()
+        // }
       });
     }
     vm.filterByGroups = function () {
@@ -33,316 +31,137 @@
       $("#lineChartt").hide();
       $(".default").addClass("active");
       $(".line-chart").removeClass("active");
-      SentimentsService.query(function (sentiments) {
-        vm.sentiments = sentiments;
-        var sentimentColorMap = {};
-        sentiments.forEach(function(sentiment) {
-            sentimentColorMap[sentiment._id] = sentiment.color;
-        });
-    
-        LabelingbysentimentsStatisticService.query({ newsgroup: vm.selectedNewsGroupId }, function (rows) {
-            var labels = [];
-            var data = [];
-            var colors = [];
-            var sentimentMap = {};
-            var roles = vm.authentication.user.roles;
-            vm.isRole = -1;
-            roles.forEach(function (element) {
-                if (element === 'admin') {
-                    vm.isRole = 0;
-                } else if (element === 'manager' && vm.isRole === -1) {
-                    vm.isRole = 1;
-                } else if (element === 'user' && vm.isRole === -1) {
-                    vm.isRole = 2;
-                }
-            });
-    
-            vm.totals = rows.length;
-            for (var i = 0; i < rows.length; i++) {
-                var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
-                var sentimentName = '';
-                for (var k = 0; k < sentiments.length; k++) {
-                    if (sentiments[k]._id === sentimentValue) {
-                        sentimentName = sentiments[k].name;
-                        break;
-                    }
-                }
-                if (sentimentMap[sentimentName]) {
-                    sentimentMap[sentimentName].push(rows[i]);
-                } else {
-                    sentimentMap[sentimentName] = [rows[i]];
-                }
-            }
-    
-            for (var sentimentName in sentimentMap) {
-                var sentimentCount = sentimentMap[sentimentName].length;
-    
-                if (vm.isRole === 2 && sentimentName === "") {
-                    continue;
-                }
-                labels.push(sentimentName);
-                data.push(sentimentCount);
-                var sentiment = sentiments.find(s => s.name === sentimentName);
-                colors.push(sentiment ? sentiment.color : '#' + Math.floor(Math.random() * 16777215).toString(16));
-            }
-    
-            for (var k = 0; k < sentiments.length; k++) {
-                var sentimentName = sentiments[k].name;
-                if (!sentimentMap[sentimentName]) {
-                    labels.push(sentimentName);
-                    data.push(0);
-                    colors.push(sentiments[k].color);
-                }
-            }
-    
-            var donutData = {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: colors
-                }]
-            };
-    
-            var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-            var pieData = donutData;
-    
-            var pieOptions = {
-                maintainAspectRatio: false,
-                responsive: true,
-                tooltips: {
-                    callbacks: {
-                        label: function (tooltipItem, data) {
-                            var dataset = data.datasets[tooltipItem.datasetIndex];
-                            var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex) {
-                                var meta = dataset._meta[Object.keys(dataset._meta)[0]];
-                                if (!meta.data[currentIndex].hidden) {
-                                    return previousValue + currentValue;
-                                }
-                                return previousValue;
-                            }, 0);
-    
-                            var currentValue = dataset.data[tooltipItem.index];
-                            var percentage = (currentValue / total * 100).toFixed(2);
-                            return data.labels[tooltipItem.index] + ': ' + currentValue + ' (' + percentage + '%)';
-                        }
-                    }
-                }
-            };
-            var pieChart = new Chart(pieChartCanvas, {
-                type: 'pie',
-                data: pieData,
-                options: pieOptions
-            });
-        });
-    });
-    
-      // SentimentsService.query(function (sentiments) {
-      //   vm.sentiments = sentiments;
-      //   LabelingbysentimentsStatisticService.query({ newsgroup: vm.selectedNewsGroupId }, function (rows) {
-      //     var labels = [];
-      //     var data = [];
-      //     var colors = [];
-      //     var sentimentMap = {};
-      //     var roles = vm.authentication.user.roles;
-      //     vm.isRole = -1;
-      //     roles.forEach(function (element, index) {
-      //       if (element === 'admin') {
-      //         vm.isRole = 0;
-      //       } else if (element === 'manager' && vm.isRole === -1) {
-      //         vm.isRole = 1;
-      //       } else if (element === 'user' && vm.isRole === -1) {
-      //         vm.isRole = 2;
-      //       }
-      //     });
-      //     vm.totals = rows.length
-      //     for (var i = 0; i < rows.length - 1; i++) {
-      //       var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
-      //       var sentimentName = '';
-      //       for (var k = 0; k < sentiments.length; k++) {
-      //         if (sentiments[k]._id === sentimentValue) {
-      //           sentimentName = sentiments[k].name;
-      //           console.log("sennn", sentimentName);
-      //           break;
-      //         }
-      //       }
-      //       if (sentimentMap[sentimentName]) {
-      //         sentimentMap[sentimentName].push(rows[i]);
-      //       } else {
-      //         sentimentMap[sentimentName] = [rows[i]];
-      //       }
-      //     }
-      //     for (var sentimentName in sentimentMap) {
-      //       var sentimentCount = sentimentMap[sentimentName].length;
+      vm.displayPieChart();
 
-      //       if (vm.isRole === 2 && sentimentName === "") {
-      //         continue;
-      //       }
-      //       labels.push(sentimentName);
-      //       data.push(sentimentCount);
-      //       colors.push('#' + Math.floor(Math.random() * 16777215).toString(16));
-      //     }
-
-      //     for (var k = 0; k < sentiments.length; k++) {
-      //       var sentimentName = sentiments[k].name;
-      //       if (!sentimentMap[sentimentName]) {
-      //         labels.push(sentimentName);
-      //         data.push(0);
-      //         colors.push('#' + Math.floor(Math.random() * 16777215).toString(16));
-      //       }
-      //     }
-      //     var donutData = {
-      //       labels: labels,
-      //       datasets: [{
-      //         data: data,
-      //         backgroundColor: colors
-      //       }]
-      //     };
-
-
-      //     var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-      //     var pieData = donutData;
-
-      //     var pieOptions = {
-      //       maintainAspectRatio: false,
-      //       responsive: true,
-      //       tooltips: {
-      //         callbacks: {
-      //           label: function (tooltipItem, data) {
-      //             var dataset = data.datasets[tooltipItem.datasetIndex];
-      //             var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex) {
-      //               var meta = dataset._meta[Object.keys(dataset._meta)[0]];
-      //               if (!meta.data[currentIndex].hidden) {
-      //                 return previousValue + currentValue;
-      //               }
-      //               return previousValue;
-      //             }, 0);
-
-      //             var currentValue = dataset.data[tooltipItem.index];
-      //             var percentage = (currentValue / total * 100).toFixed(2);
-      //             return data.labels[tooltipItem.index] + ': ' + currentValue + ' (' + percentage + '%)';
-      //           }
-      //         }
-      //       }
-      //     };
-      //     var pieChart = new Chart(pieChartCanvas, {
-      //       type: 'pie',
-      //       data: pieData,
-      //       options: pieOptions
-      //     });
-      //   });
-      // });
     };
     //pie chart
     vm.displayPieChart = function displayPieChart() {
+      // Debugging log to check function call
+      console.log("displayPieChart function called");
+
       $("#pieChart").show();
       $("#lineChartt").hide();
       $(".default").addClass("active");
       $(".line-chart").removeClass("active");
-      console.log("Selected valuae: ", vm.selectedNewsGroupId);
+
+      // Check and destroy the existing chart instance if it exists
+      if (vm.pieChart) {
+        console.log("Destroying existing pie chart instance");
+        vm.pieChart.destroy();
+      }
+
+      var labels = [];
+      var data = [];
+      var colors = [];
+      var sentimentMap = {};
+
+      console.log("Selected value: ", vm.selectedNewsGroupId);
+      var donutData = {};
       SentimentsService.query(function (sentiments) {
         vm.sentiments = sentiments;
         var sentimentColorMap = {};
-        sentiments.forEach(function(sentiment) {
-            sentimentColorMap[sentiment._id] = sentiment.color;
+        sentiments.forEach(function (sentiment) {
+          sentimentColorMap[sentiment._id] = sentiment.color;
         });
-    
+
         LabelingbysentimentsStatisticService.query({ newsgroup: vm.selectedNewsGroupId }, function (rows) {
-            var labels = [];
-            var data = [];
-            var colors = [];
-            var sentimentMap = {};
-            var roles = vm.authentication.user.roles;
-            vm.isRole = -1;
-            roles.forEach(function (element) {
-                if (element === 'admin') {
-                    vm.isRole = 0;
-                } else if (element === 'manager' && vm.isRole === -1) {
-                    vm.isRole = 1;
-                } else if (element === 'user' && vm.isRole === -1) {
-                    vm.isRole = 2;
-                }
-            });
-    
-            vm.totals = rows.length;
-            for (var i = 0; i < rows.length; i++) {
-                var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
-                var sentimentName = '';
-                for (var k = 0; k < sentiments.length; k++) {
-                    if (sentiments[k]._id === sentimentValue) {
-                        sentimentName = sentiments[k].name;
-                        break;
-                    }
-                }
-                if (sentimentMap[sentimentName]) {
-                    sentimentMap[sentimentName].push(rows[i]);
-                } else {
-                    sentimentMap[sentimentName] = [rows[i]];
-                }
+
+          var roles = vm.authentication.user.roles;
+          vm.isRole = -1;
+          roles.forEach(function (element) {
+            if (element === 'admin') {
+              vm.isRole = 0;
+            } else if (element === 'manager' && vm.isRole === -1) {
+              vm.isRole = 1;
+            } else if (element === 'user' && vm.isRole === -1) {
+              vm.isRole = 2;
             }
-    
-            for (var sentimentName in sentimentMap) {
-                var sentimentCount = sentimentMap[sentimentName].length;
-    
-                if (vm.isRole === 2 && sentimentName === "") {
-                    continue;
-                }
-                labels.push(sentimentName);
-                data.push(sentimentCount);
-                var sentiment = sentiments.find(s => s.name === sentimentName);
-                colors.push(sentiment ? sentiment.color : '#' + Math.floor(Math.random() * 16777215).toString(16));
-            }
-    
+          });
+
+          vm.totals = rows.length;
+          for (var i = 0; i < rows.length; i++) {
+            var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
+            var sentimentName = '';
             for (var k = 0; k < sentiments.length; k++) {
-                var sentimentName = sentiments[k].name;
-                if (!sentimentMap[sentimentName]) {
-                    labels.push(sentimentName);
-                    data.push(0);
-                    colors.push(sentiments[k].color);
-                }
+              if (sentiments[k]._id === sentimentValue) {
+                sentimentName = sentiments[k].name;
+                break;
+              }
             }
-    
-            var donutData = {
-                labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: colors
-                }]
-            };
-    
-            var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-            var pieData = donutData;
-    
-            var pieOptions = {
-                maintainAspectRatio: false,
-                responsive: true,
-                tooltips: {
-                    callbacks: {
-                        label: function (tooltipItem, data) {
-                            var dataset = data.datasets[tooltipItem.datasetIndex];
-                            var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex) {
-                                var meta = dataset._meta[Object.keys(dataset._meta)[0]];
-                                if (!meta.data[currentIndex].hidden) {
-                                    return previousValue + currentValue;
-                                }
-                                return previousValue;
-                            }, 0);
-    
-                            var currentValue = dataset.data[tooltipItem.index];
-                            var percentage = (currentValue / total * 100).toFixed(2);
-                            return data.labels[tooltipItem.index] + ': ' + currentValue + ' (' + percentage + '%)';
-                        }
+            if (sentimentMap[sentimentName]) {
+              sentimentMap[sentimentName].push(rows[i]);
+            } else {
+              sentimentMap[sentimentName] = [rows[i]];
+            }
+          }
+
+          for (var sentimentName in sentimentMap) {
+            var sentimentCount = sentimentMap[sentimentName].length;
+
+            if (vm.isRole === 2 && sentimentName === "") {
+              continue;
+            }
+            labels.push(sentimentName);
+            data.push(sentimentCount);
+            var sentiment = sentiments.find(s => s.name === sentimentName);
+            colors.push(sentiment ? sentiment.color : '#' + Math.floor(Math.random() * 16777215).toString(16));
+          }
+
+          for (var k = 0; k < sentiments.length; k++) {
+            var sentimentName = sentiments[k].name;
+            if (!sentimentMap[sentimentName]) {
+              labels.push(sentimentName);
+              data.push(0);
+              colors.push(sentiments[k].color);
+            }
+          }
+
+          donutData = {
+            labels: labels,
+            datasets: [{
+              data: data,
+              backgroundColor: colors
+            }]
+          };
+
+          var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
+          var pieData = donutData;
+
+          var pieOptions = {
+            maintainAspectRatio: false,
+            responsive: true,
+            tooltips: {
+              callbacks: {
+                label: function (tooltipItem, data) {
+                  var dataset = data.datasets[tooltipItem.datasetIndex];
+                  var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex) {
+                    var meta = dataset._meta[Object.keys(dataset._meta)[0]];
+                    if (!meta.data[currentIndex].hidden) {
+                      return previousValue + currentValue;
                     }
+                    return previousValue;
+                  }, 0);
+
+                  var currentValue = dataset.data[tooltipItem.index];
+                  var percentage = (currentValue / total * 100).toFixed(2);
+                  return data.labels[tooltipItem.index] + ': ' + currentValue + ' (' + percentage + '%)';
                 }
-            };
-            var pieChart = new Chart(pieChartCanvas, {
-                type: 'pie',
-                data: pieData,
-                options: pieOptions
-            });
+              }
+            }
+          };
+
+          // Store the new chart instance in vm.pieChart
+          console.log("Creating new pie chart instance");
+          vm.pieChart = new Chart(pieChartCanvas, {
+            type: 'pie',
+            data: pieData,
+            options: pieOptions
+          });
         });
-    });
-    
+      });
+
     }
+
     //line chart
     vm.displayLineChart = function displayLineChart() {
       $("#pieChart").hide();
@@ -350,106 +169,109 @@
       $(".line-chart").addClass("active");
       $(".default").removeClass("active");
       console.log("Selected valuae: ", vm.selectedNewsGroupId);
+      if (vm.pieChart) {
+        vm.pieChart.destroy();
+      }
       SentimentsService.query(function (sentiments) {
         vm.sentiments = sentiments;
         var sentimentColorMap = {};
-        sentiments.forEach(function(sentiment) {
-            sentimentColorMap[sentiment._id] = sentiment.color;
+        sentiments.forEach(function (sentiment) {
+          sentimentColorMap[sentiment._id] = sentiment.color;
         });
-    
+
         LabelingbysentimentsStatisticService.query({ newsgroup: vm.selectedNewsGroupId }, function (rows) {
-            var sentimentMap = {};
-            var roles = vm.authentication.user.roles;
-            vm.isRole = -1;
-            roles.forEach(function (element) {
-                if (element === 'admin') {
-                    vm.isRole = 0;
-                } else if (element === 'manager' && vm.isRole === -1) {
-                    vm.isRole = 1;
-                } else if (element === 'user' && vm.isRole === -1) {
-                    vm.isRole = 2;
-                }
+          var sentimentMap = {};
+          var roles = vm.authentication.user.roles;
+          vm.isRole = -1;
+          roles.forEach(function (element) {
+            if (element === 'admin') {
+              vm.isRole = 0;
+            } else if (element === 'manager' && vm.isRole === -1) {
+              vm.isRole = 1;
+            } else if (element === 'user' && vm.isRole === -1) {
+              vm.isRole = 2;
+            }
+          });
+
+          vm.totals = rows.length;
+          console.log("aaa", rows);
+          for (var i = 0; i < rows.length; i++) {
+            var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
+            var sentimentName = '';
+            for (var k = 0; k < sentiments.length; k++) {
+              if (sentiments[k]._id === sentimentValue) {
+                sentimentName = sentiments[k].name;
+                break;
+              }
+            }
+            var date = rows[i].date_comment;
+            if (date.includes('/')) {
+              var parts = date.split('/');
+              date = parts[2] + '-' + parts[1] + '-' + parts[0];
+            }
+            if (!sentimentMap[sentimentName]) {
+              sentimentMap[sentimentName] = {};
+            }
+            if (!sentimentMap[sentimentName][date]) {
+              sentimentMap[sentimentName][date] = 1;
+            } else {
+              sentimentMap[sentimentName][date]++;
+            }
+          }
+
+          var labels = [];
+          var data = [];
+
+          for (var sentimentName in sentimentMap) {
+            var dates = Object.keys(sentimentMap[sentimentName]);
+            dates.sort();
+            for (var j = 0; j < dates.length; j++) {
+              if (!labels.includes(dates[j])) {
+                labels.push(dates[j]);
+              }
+            }
+          }
+
+          for (var sentimentName in sentimentMap) {
+            var sentimentData = [];
+            for (var j = 0; j < labels.length; j++) {
+              sentimentData.push(sentimentMap[sentimentName][labels[j]] || 0);
+            }
+            data.push(sentimentData);
+          }
+
+          var lineData = {
+            labels: labels,
+            datasets: []
+          };
+
+          for (var i = 0; i < Object.keys(sentimentMap).length; i++) {
+            var sentimentName = Object.keys(sentimentMap)[i];
+            var sentimentId = sentiments.find(sentiment => sentiment.name === sentimentName)._id;
+            var color = sentimentColorMap[sentimentId] || '#' + Math.floor(Math.random() * 16777215).toString(16);
+
+            lineData.datasets.push({
+              label: sentimentName,
+              data: data[i],
+              fill: false,
+              borderColor: color,
+              lineTension: 0.1
             });
-    
-            vm.totals = rows.length;
-            console.log("aaa", rows);
-            for (var i = 0; i < rows.length; i++) {
-                var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
-                var sentimentName = '';
-                for (var k = 0; k < sentiments.length; k++) {
-                    if (sentiments[k]._id === sentimentValue) {
-                        sentimentName = sentiments[k].name;
-                        break;
-                    }
-                }
-                var date = rows[i].date_comment;
-                if (date.includes('/')) { 
-                    var parts = date.split('/');
-                    date = parts[2] + '-' + parts[1] + '-' + parts[0];
-                }
-                if (!sentimentMap[sentimentName]) {
-                    sentimentMap[sentimentName] = {};
-                }
-                if (!sentimentMap[sentimentName][date]) {
-                    sentimentMap[sentimentName][date] = 1;
-                } else {
-                    sentimentMap[sentimentName][date]++;
-                }
-            }
-    
-            var labels = [];
-            var data = [];
-    
-            for (var sentimentName in sentimentMap) {
-                var dates = Object.keys(sentimentMap[sentimentName]);
-                dates.sort();
-                for (var j = 0; j < dates.length; j++) {
-                    if (!labels.includes(dates[j])) {
-                        labels.push(dates[j]);
-                    }
-                }
-            }
-    
-            for (var sentimentName in sentimentMap) {
-                var sentimentData = [];
-                for (var j = 0; j < labels.length; j++) {
-                    sentimentData.push(sentimentMap[sentimentName][labels[j]] || 0);
-                }
-                data.push(sentimentData);
-            }
-    
-            var lineData = {
-                labels: labels,
-                datasets: []
-            };
-    
-            for (var i = 0; i < Object.keys(sentimentMap).length; i++) {
-                var sentimentName = Object.keys(sentimentMap)[i];
-                var sentimentId = sentiments.find(sentiment => sentiment.name === sentimentName)._id;
-                var color = sentimentColorMap[sentimentId] || '#' + Math.floor(Math.random() * 16777215).toString(16);
-    
-                lineData.datasets.push({
-                    label: sentimentName,
-                    data: data[i],
-                    fill: false,
-                    borderColor: color,
-                    lineTension: 0.1
-                });
-            }
-    
-            var lineChartCanvas = $('#lineChartt').get(0).getContext('2d');
-            var lineOptions = {
-                maintainAspectRatio: false,
-                responsive: true
-            };
-            var lineChart = new Chart(lineChartCanvas, {
-                type: 'line',
-                data: lineData,
-                options: lineOptions,
-            });
+          }
+
+          var lineChartCanvas = $('#lineChartt').get(0).getContext('2d');
+          var lineOptions = {
+            maintainAspectRatio: false,
+            responsive: true
+          };
+          var lineChart = new Chart(lineChartCanvas, {
+            type: 'line',
+            data: lineData,
+            options: lineOptions,
+          });
         });
-    });
-    
+      });
+
       // SentimentsService.query(function (sentiments) {
       //   vm.sentiments = sentiments;
       //   LabelingbysentimentsStatisticService.query({ newsgroup: vm.selectedNewsGroupId }, function (rows) {
@@ -540,7 +362,6 @@
       //   });
       // });
     }
-    vm.displayPieChart();
 
     $('.filter-new-groups').on('click', 'li', function () {
       $('.filter-new-groups ul li.active').removeClass('active');
@@ -630,6 +451,10 @@
                 vm.isRole = 2;
               }
             });
+            if (vm.pieChart) {
+              console.log("Destroying existing pie chart instance");
+              vm.pieChart.destroy();
+            }
             vm.totals = rows.length;
             console.log("aaa", rows);
             if (vm.totals > 0) {
@@ -703,7 +528,7 @@
                   labels: ['No data'],
                   datasets: [{
                     data: [1],
-                    backgroundColor: ['#999999'] 
+                    backgroundColor: ['#999999']
                   }]
                 },
                 options: {
@@ -712,7 +537,7 @@
                   plugins: {
                     tooltip: {
                       callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                           return 'No data';
                         }
                       }
@@ -769,7 +594,7 @@
               }
             });
             vm.totals = rows.length;
-            if (vm.totals >0){
+            if (vm.totals > 0) {
               for (var i = 0; i < rows.length - 1; i++) {
                 var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
                 var sentimentName = '';
@@ -788,7 +613,7 @@
               }
               for (var sentimentName in sentimentMap) {
                 var sentimentCount = sentimentMap[sentimentName].length;
-  
+
                 labels.push(sentimentName);
                 data.push(sentimentCount);
                 colors.push('#' + Math.floor(Math.random() * 16777215).toString(16));
@@ -816,7 +641,7 @@
                         }
                         return previousValue;
                       }, 0);
-  
+
                       var currentValue = dataset.data[tooltipItem.index];
                       var percentage = (currentValue / total * 100).toFixed(2);
                       return data.labels[tooltipItem.index] + ': ' + currentValue + ' (' + percentage + '%)';
@@ -830,7 +655,7 @@
                 options: pieOptions
               });
               pieChart.update();
-            }else{
+            } else {
               var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
 
               pieChart = new Chart(pieChartCanvas, {
@@ -839,7 +664,7 @@
                   labels: ['No data'],
                   datasets: [{
                     data: [1],
-                    backgroundColor: ['#999999'] 
+                    backgroundColor: ['#999999']
                   }]
                 },
                 options: {
@@ -848,7 +673,7 @@
                   plugins: {
                     tooltip: {
                       callbacks: {
-                        label: function(context) {
+                        label: function (context) {
                           return 'No data';
                         }
                       }
@@ -857,7 +682,7 @@
                 }
               });
             }
-            
+
           });
         });
       }
