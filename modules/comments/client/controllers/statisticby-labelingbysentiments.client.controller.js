@@ -14,7 +14,7 @@
     vm.argumentMax = 5;
     vm.isLoaded = false;
     vm.newsGroups = [];
-
+    vm.selectedNewsGroupId = 0;
     loadNewsGroups();
 
     function loadNewsGroups() {
@@ -103,7 +103,7 @@
               sentimentMap[sentimentName] = [rows[i]];
             }
           }
-
+          
           for (var sentimentName in sentimentMap) {
             var sentimentCount = sentimentMap[sentimentName].length;
 
