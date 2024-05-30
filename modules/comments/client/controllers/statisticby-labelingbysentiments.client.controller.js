@@ -21,21 +21,27 @@
       NewsgroupsService.query({}, function (data) {
         vm.newsGroups = data;
         vm.isLoaded = true;
-        // if (vm.selectedNewsGroupId == 0) {
-        //   vm.filterByGroups()
-        // }
+        if (vm.selectedNewsGroupId == 0) {
+          vm.filterByGroups()
+        }
       });
     }
+    var params ={};
     vm.filterByGroups = function () {
       $("#pieChart").show();
       $("#lineChartt").hide();
       $(".default").addClass("active");
       $(".line-chart").removeClass("active");
-      vm.displayPieChart();
-
+      
+      if(vm.selectedNewsGroupId != undefined){
+        params = {
+          newsgroup: vm.selectedNewsGroupId
+        }
+      }
+      vm.displayPieChart(params);
     };
     //pie chart
-    vm.displayPieChart = function displayPieChart() {
+    vm.displayPieChart = function displayPieChart(params) {
       // Debugging log to check function call
       console.log("displayPieChart function called");
 
@@ -55,7 +61,11 @@
       var colors = [];
       var sentimentMap = {};
 
-      console.log("Selected value: ", vm.selectedNewsGroupId);
+      if(params == undefined){
+        params = {
+          newsgroup: vm.selectedNewsGroupId
+        }
+      }
       var donutData = {};
       SentimentsService.query(function (sentiments) {
         vm.sentiments = sentiments;
@@ -63,8 +73,7 @@
         sentiments.forEach(function (sentiment) {
           sentimentColorMap[sentiment._id] = sentiment.color;
         });
-
-        LabelingbysentimentsStatisticService.query({ newsgroup: vm.selectedNewsGroupId }, function (rows) {
+        LabelingbysentimentsStatisticService.query(params, function (rows) {
 
           var roles = vm.authentication.user.roles;
           vm.isRole = -1;
@@ -164,14 +173,12 @@
 
     //line chart
     vm.displayLineChart = function displayLineChart() {
+      console.log("displayLineChart function called");
+
       $("#pieChart").hide();
       $("#lineChartt").show();
       $(".line-chart").addClass("active");
       $(".default").removeClass("active");
-      console.log("Selected valuae: ", vm.selectedNewsGroupId);
-      if (vm.pieChart) {
-        vm.pieChart.destroy();
-      }
       SentimentsService.query(function (sentiments) {
         vm.sentiments = sentiments;
         var sentimentColorMap = {};
@@ -431,135 +438,20 @@
         }
         var params = {
           start: new Date(new Date(vm.filtergroupstartdate).setDate(new Date(vm.filtergroupstartdate).getDate() - 7)),
-          end: vm.filtergroupenddate
+          end: vm.filtergroupenddate,
+          newsgroup: vm.selectedNewsGroupId
         }
-        SentimentsService.query(function (sentiments) {
-          vm.sentiments = sentiments;
-          LabelingbysentimentsStatisticService.query(params, function (rows) {
-            var labels = [];
-            var data = [];
-            var colors = [];
-            var sentimentMap = {};
-            var roles = vm.authentication.user.roles;
-            vm.isRole = -1;
-            roles.forEach(function (element, index) {
-              if (element === 'admin') {
-                vm.isRole = 0;
-              } else if (element === 'manager' && vm.isRole === -1) {
-                vm.isRole = 1;
-              } else if (element === 'user' && vm.isRole === -1) {
-                vm.isRole = 2;
-              }
-            });
-            if (vm.pieChart) {
-              console.log("Destroying existing pie chart instance");
-              vm.pieChart.destroy();
-            }
-            vm.totals = rows.length;
-            console.log("aaa", rows);
-            if (vm.totals > 0) {
-              for (var i = 0; i < rows.length - 1; i++) {
-                var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
-                var sentimentName = '';
-                for (var k = 0; k < sentiments.length; k++) {
-                  if (sentiments[k]._id === sentimentValue) {
-                    sentimentName = sentiments[k].name;
-                    console.log("name", sentimentName);
-                    break;
-                  }
-                }
-                if (sentimentMap[sentimentName]) {
-                  sentimentMap[sentimentName].push(rows[i]);
-                } else {
-                  sentimentMap[sentimentName] = [rows[i]];
-                }
-              }
-              for (var sentimentName in sentimentMap) {
-                var sentimentCount = sentimentMap[sentimentName].length;
-
-                labels.push(sentimentName);
-                data.push(sentimentCount);
-                colors.push('#' + Math.floor(Math.random() * 16777215).toString(16));
-              }
-
-              var donutData = {
-                labels: labels,
-                datasets: [{
-                  data: data,
-                  backgroundColor: colors
-                }]
-              };
-              var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-              var pieData = donutData;
-              var pieOptions = {
-                maintainAspectRatio: false,
-                responsive: true,
-                tooltips: {
-                  callbacks: {
-                    label: function (tooltipItem, data) {
-                      var dataset = data.datasets[tooltipItem.datasetIndex];
-                      var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex) {
-                        var meta = dataset._meta[Object.keys(dataset._meta)[0]];
-                        if (!meta.data[currentIndex].hidden) {
-                          return previousValue + currentValue;
-                        }
-                        return previousValue;
-                      }, 0);
-
-                      var currentValue = dataset.data[tooltipItem.index];
-                      var percentage = (currentValue / total * 100).toFixed(2);
-                      return data.labels[tooltipItem.index] + ': ' + currentValue + ' (' + percentage + '%)';
-                    }
-                  }
-                }
-              };
-              var pieChart = new Chart(pieChartCanvas, {
-                type: 'pie',
-                data: pieData,
-                options: pieOptions
-              });
-              pieChart.update();
-            } else {
-              var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-
-              pieChart = new Chart(pieChartCanvas, {
-                type: 'pie',
-                data: {
-                  labels: ['No data'],
-                  datasets: [{
-                    data: [1],
-                    backgroundColor: ['#999999']
-                  }]
-                },
-                options: {
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    tooltip: {
-                      callbacks: {
-                        label: function (context) {
-                          return 'No data';
-                        }
-                      }
-                    }
-                  }
-                }
-              });
-
-            }
-
-          });
-        });
+        vm.displayPieChart(params);
       }
     }
     vm.filterArgumentByMonth = function () {
       const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-      $("#pieChart").show();
-      $("#lineChartt").hide();
-      $(".line-chart").removeClass("active");
-      $(".default").addClass("active");
       let startMonth = $('input#start-month').val();
       let endMonth = $('input#end-month').val();
+      if (vm.pieChart) {
+        console.log("Destroying existing pie chart instance");
+        vm.pieChart.destroy();
+      }
       var diffMonth = 0;
       if (startMonth !== '' && endMonth !== '') {
         let startMonthFormat = new Date(startMonth);
@@ -573,120 +465,27 @@
         }
         var params = {
           start: new Date(new Date(new Date(startMonth).setMonth(new Date(startMonth).getMonth() - 1)).setDate(1)),
-          end: new Date(endMonthFormat.setMonth(endMonthFormat.getMonth() + 1))
+          end: new Date(endMonthFormat.setMonth(endMonthFormat.getMonth() + 1)),
+          newsgroup: vm.selectedNewsGroupId
+
         };
-        SentimentsService.query(function (sentiments) {
-          vm.sentiments = sentiments;
-          LabelingbysentimentsStatisticService.query(params, function (rows) {
-            var labels = [];
-            var data = [];
-            var colors = [];
-            var sentimentMap = {};
-            var roles = vm.authentication.user.roles;
-            vm.isRole = -1;
-            roles.forEach(function (element, index) {
-              if (element === 'admin') {
-                vm.isRole = 0;
-              } else if (element === 'manager' && vm.isRole === -1) {
-                vm.isRole = 1;
-              } else if (element === 'user' && vm.isRole === -1) {
-                vm.isRole = 2;
-              }
-            });
-            vm.totals = rows.length;
-            if (vm.totals > 0) {
-              for (var i = 0; i < rows.length - 1; i++) {
-                var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
-                var sentimentName = '';
-                for (var k = 0; k < sentiments.length; k++) {
-                  if (sentiments[k]._id === sentimentValue) {
-                    sentimentName = sentiments[k].name;
-                    console.log("name", sentimentName);
-                    break;
-                  }
-                }
-                if (sentimentMap[sentimentName]) {
-                  sentimentMap[sentimentName].push(rows[i]);
-                } else {
-                  sentimentMap[sentimentName] = [rows[i]];
-                }
-              }
-              for (var sentimentName in sentimentMap) {
-                var sentimentCount = sentimentMap[sentimentName].length;
-
-                labels.push(sentimentName);
-                data.push(sentimentCount);
-                colors.push('#' + Math.floor(Math.random() * 16777215).toString(16));
-              }
-              var donutData = {
-                labels: labels,
-                datasets: [{
-                  data: data,
-                  backgroundColor: colors
-                }]
-              };
-              var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-              var pieData = donutData;
-              var pieOptions = {
-                maintainAspectRatio: false,
-                responsive: true,
-                tooltips: {
-                  callbacks: {
-                    label: function (tooltipItem, data) {
-                      var dataset = data.datasets[tooltipItem.datasetIndex];
-                      var total = dataset.data.reduce(function (previousValue, currentValue, currentIndex) {
-                        var meta = dataset._meta[Object.keys(dataset._meta)[0]];
-                        if (!meta.data[currentIndex].hidden) {
-                          return previousValue + currentValue;
-                        }
-                        return previousValue;
-                      }, 0);
-
-                      var currentValue = dataset.data[tooltipItem.index];
-                      var percentage = (currentValue / total * 100).toFixed(2);
-                      return data.labels[tooltipItem.index] + ': ' + currentValue + ' (' + percentage + '%)';
-                    }
-                  }
-                }
-              };
-              var pieChart = new Chart(pieChartCanvas, {
-                type: 'pie',
-                data: pieData,
-                options: pieOptions
-              });
-              pieChart.update();
-            } else {
-              var pieChartCanvas = $('#pieChart').get(0).getContext('2d');
-
-              pieChart = new Chart(pieChartCanvas, {
-                type: 'pie',
-                data: {
-                  labels: ['No data'],
-                  datasets: [{
-                    data: [1],
-                    backgroundColor: ['#999999']
-                  }]
-                },
-                options: {
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    tooltip: {
-                      callbacks: {
-                        label: function (context) {
-                          return 'No data';
-                        }
-                      }
-                    }
-                  }
-                }
-              });
-            }
-
-          });
-        });
+        vm.displayPieChart(params);
       }
     }
-
+    vm.downloadCanvasAsImage = function() {
+      var canvas = document.getElementById('pieChart');
+      var image = canvas.toDataURL('image/png');
+      
+      var link = document.createElement('a');
+      link.href = image;
+      link.download = 'chart.png';
+      
+      document.body.appendChild(link);
+      
+      link.click();
+      
+      document.body.removeChild(link);
+    }
+    
   }
 }());
