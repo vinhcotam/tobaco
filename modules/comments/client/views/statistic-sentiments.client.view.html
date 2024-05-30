@@ -10,9 +10,10 @@
             <div class="d-flex flex-column">
               <div class="d-flex justify-content-between align-items-center">
                 <a href="" ng-click="displayChartType(vm.chartType)">Total Sentiments: ({{vm.totals}} comments)</a>
-                <button id="downloadButton" class="btn btn-primary" ng-click="vm.downloadCanvasAsImage()">Download Chart</button>
-            </div>
-            
+                <button id="downloadButton" class="btn btn-primary" ng-click="vm.downloadCanvasAsImage()">Download
+                  Chart</button>
+              </div>
+
               <div class="form-group d-flex align-items-center" style="margin-left: 2%;"
                 ng-init="vm.selectedNewsGroupId = '0';">
                 <label style="white-space: nowrap;">News Group:</label>

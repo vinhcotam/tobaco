@@ -421,21 +421,6 @@
       vm.filtergroupenddate = $('input#enddate').val();
       $('#lineChartMonth').css('display', 'none');
       if (vm.filtergroupstartdate !== '' && vm.filtergroupenddate !== '') {
-        let startDate = new Date(vm.filtergroupstartdate);
-        let endDate = new Date(vm.filtergroupenddate);
-        let diffDay = endDate.getDate() - startDate.getDate();
-        if (diffDay > 7) {
-          Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>The date range must be in a week!' });
-          $('.spinner-border').addClass('hidden');
-          $('#pieChart').css('display', 'block');
-          return;
-        }
-        if (diffDay < 0) {
-          Notification.error({ message: '<i class="fa fa-bug" style="color: red;"></i>The end date must greater than start date!' });
-          $('.spinner-border').addClass('hidden');
-          $('#pieChart').css('display', 'block');
-          return;
-        }
         var params = {
           start: new Date(new Date(vm.filtergroupstartdate).setDate(new Date(vm.filtergroupstartdate).getDate() - 7)),
           end: vm.filtergroupenddate,

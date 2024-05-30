@@ -16,45 +16,36 @@
         vm.buildPager = buildPager;
         vm.figureOutItemsToDisplay = figureOutItemsToDisplay;
         vm.pageChanged = pageChanged;
-        vm.remove = remove;
+        // vm.remove = remove;
 
         vm.socialobjectactivities = SocialobjectactivitiesService.query(function (data) {
             vm.socialobjectactivities = data;
             vm.buildPager();
         });
 
-        //   vm.chooseType = function(){
-
-        //   }
         SocialobjectactivitiesService.getTotal().$promise.then(function (number) {
             vm.filterLength = number[0];
         });
+
         $('#datetimefilter').daterangepicker({
             opens: 'left'
         }, function (start, end, label) {
             vm.startfilterdate = start.format('YYYY-MM-DD');
             vm.endfilterdate = end.format('YYYY-MM-DD');
-
-
             figureOutItemsToDisplay();
         });
-        vm.typeFilter = 'week'
-        $('.choose_container input[value="week"]').prop('checked', true);
-        $('.choose_container input[type="radio"]').change(function () {
-            var selectedValue = $(this).val();
-            vm.typeFilter = selectedValue
-            // Thực hiện các thao tác khác dựa trên giá trị đã chọn
-        });
-        vm.isDateEmpty = false;
-        vm.checkDateEmpty = function () {
-            if (!vm.startfilterdate || !vm.endfilterdate) {
-                vm.isDateEmpty = true;
-            } else {
-                vm.isDateEmpty = false;
-            }
-        };
 
-        //get image from api
+        vm.chooseType = 'week';
+        vm.displayType = 'image';
+        vm.isDateEmpty = false;
+
+        vm.checkDateEmpty = function () {
+            vm.isDateEmpty = !vm.startfilterdate || !vm.endfilterdate;
+        };
+        if (vm.displayType === 'chart') {
+            console.log("zooo")
+            vm.initBarChart(vm.text_list);
+        }
         vm.analysisSocial = function () {
             vm.checkDateEmpty();
             if (vm.isDateEmpty) {
@@ -62,26 +53,35 @@
                 return;
             }
             var apiUrl = 'http://localhost:5000/wordscloud_v1';
-            var type = encodeURIComponent(vm.typeFilter);
+            var type = encodeURIComponent(vm.chooseType);
             var startDate = encodeURIComponent(vm.startfilterdate);
             var endDate = encodeURIComponent(vm.endfilterdate);
             document.getElementById("loading-container").style.display = "block";
             var url = apiUrl + '?type=' + type + '&start_date=' + startDate + '&end_date=' + endDate;
             $http.post(url)
                 .then(function (response) {
-                    console.log(response.data);
                     var base64DataArray = response.data.img_array;
                     vm.base64DataArray = base64DataArray;
+                    vm.text_list = response.data.text_list;
+
                     if (Array.isArray(base64DataArray) && base64DataArray.length > 0) {
-                        document.getElementById("loading-container").style.display = "none"
-                        displayImageSlider(base64DataArray);
-                        document.getElementById("demo").style.display = "block"
+                        document.getElementById("loading-container").style.display = "none";
+                        if (vm.displayType === 'chart') {
+                            console.log("zooo")
+                            vm.initBarChart();
+                        } else {
+                            vm.displayImageSlider();
+
+                        }
+                        document.getElementById("demo").style.display = "block";
                         document.querySelector("#demo .carousel-indicators").style.display = "flex !important";
                     } else {
                         document.getElementById("no_data").style.display = "block";
-                        document.getElementById("loading-container").style.display = "none"
+                        document.getElementById("loading-container").style.display = "none";
                         document.querySelector("#demo .carousel-indicators").style.display = "none";
                     }
+
+
                 })
                 .catch(function (error) {
                     console.error(error);
@@ -89,60 +89,123 @@
                 .finally(function () {
                     document.getElementById("demo").style.display = "block";
                 });
-        
-            // display image into slider
-            function displayImageSlider(base64DataArray) {
-                var imageWrapper = document.getElementById('imageWrapper');
-                if (imageWrapper) {
-                    imageWrapper.innerHTML = '';
-                    vm.base64DataArray = base64DataArray;
-                    base64DataArray.forEach(function (base64Data, index) {
-                        var image = new Image();
-                        image.onload = function () {
-                            var slide = document.createElement('div');
-                            slide.classList.add('carousel-item');
-                            if (index === 0) {
-                                slide.classList.add('active');
-                            }
-                            // Fix width, height of image
-                            var maxWidth = 720;
-                            var maxHeight = 1920;
-                            var width = image.width;
-                            var height = image.height;
-                            var aspectRatio = width / height;
-                            if (width > maxWidth) {
-                                width = maxWidth;
-                                height = width / aspectRatio;
-                            }
-                            if (height > maxHeight) {
-                                height = maxHeight;
-                                width = height * aspectRatio;
-                            }
-        
-                            var imgElement = document.createElement('img');
-                            imgElement.src = image.src;
-                            imgElement.classList.add('d-block');
-                            imgElement.classList.add('mx-auto');
-                            imgElement.width = width;
-                            imgElement.height = height;
-                            slide.appendChild(imgElement);
-                            imageWrapper.appendChild(slide);
-                        };
-                        image.onerror = function () {
-                            console.error('Error loading image:', image.src);
-                        };
-                        image.src = 'data:image/png;base64,' + base64Data;
-                    });
-                } else {
-                    console.error('Image wrapper not found.');
-                }
-            }
+
+
         };
-        
+        vm.displayImageSlider = function displayImageSlider() {
+            var imageWrapper = document.getElementById('imageWrapper');
+            if (imageWrapper) {
+                imageWrapper.innerHTML = '';
+                vm.base64DataArray.forEach(function (base64Data, index) {
+                    var image = new Image();
+                    image.onload = function () {
+                        var slide = document.createElement('div');
+                        slide.classList.add('carousel-item');
+                        if (index === 0) {
+                            slide.classList.add('active');
+                        }
+                        var maxWidth = 720;
+                        var maxHeight = 1920;
+                        var width = image.width;
+                        var height = image.height;
+                        var aspectRatio = width / height;
+                        if (width > maxWidth) {
+                            width = maxWidth;
+                            height = width / aspectRatio;
+                        }
+                        if (height > maxHeight) {
+                            height = maxHeight;
+                            width = height * aspectRatio;
+                        }
 
+                        var imgElement = document.createElement('img');
+                        imgElement.src = image.src;
+                        imgElement.classList.add('d-block');
+                        imgElement.classList.add('mx-auto');
+                        imgElement.width = width;
+                        imgElement.height = height;
+                        slide.appendChild(imgElement);
+                        imageWrapper.appendChild(slide);
+                    };
+                    image.onerror = function () {
+                        console.error('Error loading image:', image.src);
+                    };
+                    image.src = 'data:image/png;base64,' + base64Data;
+                });
+            } else {
+                console.error('Image wrapper not found.');
+            }
+        }
+        // vm.initBarChart = function () {
+        //     var labels = Object.values(vm.text_list); 
+        //     console.log("labelss", la)
+        //     var data = Object.keys(vm.text_list); 
+        //     var ctx = document.getElementById('barChart').getContext('2d');
+        //     new Chart(ctx, {
+        //         type: 'bar',
+        //         data: {
+        //             labels: labels,
+        //             datasets: [{
+        //                 label: 'Frequency',
+        //                 data: data,
+        //                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        //                 borderColor: 'rgba(75, 192, 192, 1)',
+        //                 borderWidth: 1
+        //             }]
+        //         },
+        //         options: {
+        //             indexAxis: 'y', 
+        //             scales: {
+        //                 x: { 
+        //                     beginAtZero: true
+        //                 }
+        //             }
+        //         }
+        //     });
+        // };
+        vm.initBarChart = function () {
+            var labels = Object.keys(vm.text_list); 
+            var data = Object.values(vm.text_list); 
+            var ctx = document.getElementById('barChart').getContext('2d');
+          
+            new Chart(ctx, {
+              type: 'bar',
+              data: {
+                labels: labels, 
+                datasets: [{
+                  label: 'Frequency',
+                  data: data,
+                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                  borderColor: 'rgba(75, 192, 192, 1)',
+                  borderWidth: 1
+                }]
+              },
+              options: {
+                scales: {
+                  x: {
 
-
-
+                  },
+                  y: {
+                    stacked: true, 
+                    ticks: {
+                      align: 'start' 
+                    },
+                    gridLines: {
+                      display: false 
+                    }
+                  }
+                },
+                legend: {
+                  display: true 
+                },
+                title: {
+                  display: true, 
+                  text: 'Bar Chart with Labels on Y-Axis' 
+                }
+              }
+            });
+          };
+          
         function buildPager() {
             vm.pagedItems = [];
             vm.itemsPerPage = 10;
@@ -155,16 +218,14 @@
             var end = begin + vm.itemsPerPage;
             var params = { currentPage: vm.currentPage };
 
-            if (vm.search != undefined) {
+            if (vm.search !== undefined) {
                 params.search = vm.search;
                 SocialobjectactivitiesService.getTotal(params).$promise.then(function (number) {
                     vm.filterLength = number[0];
                 });
-
             }
 
             SocialobjectactivitiesService.query(params, function (data) {
-                //vm.filterLength = data[0].count;
                 vm.filteredItems = data[0].data;
                 vm.pagedItems = data[0].data;
             });
@@ -172,16 +233,6 @@
 
         function pageChanged() {
             vm.figureOutItemsToDisplay();
-        }
-
-        //
-        function remove(id) {
-            if ($window.confirm('Are you sure you want to delete?')) {
-                var socialobjectactivity = SocialobjectactivitiesService.delete({
-                    socialobjectactivityId: id
-                });
-                window.location.reload();
-            }
         }
     }
 }());
