@@ -140,7 +140,6 @@
             var labels = Object.keys(vm.text_list);
             var data = Object.values(vm.text_list);
             var ctx = document.getElementById('barChart').getContext('2d');
-
             new Chart(ctx, {
                 type: 'bar',
                 data: {

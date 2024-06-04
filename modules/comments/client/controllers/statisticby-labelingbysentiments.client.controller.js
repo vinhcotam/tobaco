@@ -438,7 +438,11 @@
           end: vm.filtergroupenddate,
           newsgroup: vm.selectedNewsGroupId
         }
-        vm.displayPieChart(params);
+        if (vm.chartType == "line"){
+          vm.displayLineChart(params);
+        }else{
+          vm.displayPieChart(params);
+        }
       }
     }
     vm.filterArgumentByMonth = function () {
@@ -466,7 +470,11 @@
           newsgroup: vm.selectedNewsGroupId
 
         };
-        vm.displayPieChart(params);
+        if (vm.chartType == "line"){
+          vm.displayLineChart(params);
+        }else{
+          vm.displayPieChart(params);
+        }
       }
     }
     vm.downloadCanvasAsImage = function() {
