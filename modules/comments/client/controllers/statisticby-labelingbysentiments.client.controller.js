@@ -37,8 +37,15 @@
         params = {
           newsgroup: vm.selectedNewsGroupId
         }
+        
       }
-      vm.displayPieChart(params);
+      console.log("vm.chartType", vm.chartType);
+      if (vm.chartType == "line"){
+        vm.displayLineChart(params);
+      }else{
+        vm.displayPieChart(params);
+      }
+      
     };
     //pie chart
     vm.displayPieChart = function displayPieChart(params) {
@@ -159,7 +166,6 @@
             }
           };
 
-          // Store the new chart instance in vm.pieChart
           console.log("Creating new pie chart instance");
           vm.pieChart = new Chart(pieChartCanvas, {
             type: 'pie',
@@ -179,6 +185,10 @@
       $("#lineChartt").show();
       $(".line-chart").addClass("active");
       $(".default").removeClass("active");
+      if (vm.lineChart) {
+        console.log("Destroying existing pie chart instance");
+        vm.lineChart.destroy();
+      }
       SentimentsService.query(function (sentiments) {
         vm.sentiments = sentiments;
         var sentimentColorMap = {};
@@ -271,10 +281,12 @@
             maintainAspectRatio: false,
             responsive: true
           };
-          var lineChart = new Chart(lineChartCanvas, {
+
+          console.log("Creating new pie chart instance");
+          vm.lineChart = new Chart(lineChartCanvas, {
             type: 'line',
             data: lineData,
-            options: lineOptions,
+            options: lineOptions
           });
         });
       });

@@ -136,76 +136,79 @@
                 console.error('Image wrapper not found.');
             }
         }
-        // vm.initBarChart = function () {
-        //     var labels = Object.values(vm.text_list); 
-        //     console.log("labelss", la)
-        //     var data = Object.keys(vm.text_list); 
-        //     var ctx = document.getElementById('barChart').getContext('2d');
-        //     new Chart(ctx, {
-        //         type: 'bar',
-        //         data: {
-        //             labels: labels,
-        //             datasets: [{
-        //                 label: 'Frequency',
-        //                 data: data,
-        //                 backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        //                 borderColor: 'rgba(75, 192, 192, 1)',
-        //                 borderWidth: 1
-        //             }]
-        //         },
-        //         options: {
-        //             indexAxis: 'y', 
-        //             scales: {
-        //                 x: { 
-        //                     beginAtZero: true
-        //                 }
-        //             }
-        //         }
-        //     });
-        // };
         vm.initBarChart = function () {
-            var labels = Object.keys(vm.text_list); 
-            var data = Object.values(vm.text_list); 
+            var labels = Object.keys(vm.text_list);
+            var data = Object.values(vm.text_list);
             var ctx = document.getElementById('barChart').getContext('2d');
-          
-            new Chart(ctx, {
-              type: 'bar',
-              data: {
-                labels: labels, 
-                datasets: [{
-                  label: 'Frequency',
-                  data: data,
-                  backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                  borderColor: 'rgba(75, 192, 192, 1)',
-                  borderWidth: 1
-                }]
-              },
-              options: {
-                scales: {
-                  x: {
 
-                  },
-                  y: {
-                    stacked: true, 
-                    ticks: {
-                      align: 'start' 
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Frequency',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+
+                        },
+                        y: {
+                            stacked: true,
+                            ticks: {
+                                align: 'start'
+                            },
+                            gridLines: {
+                                display: false
+                            }
+                        }
                     },
-                    gridLines: {
-                      display: false 
+                    legend: {
+                        display: true
                     }
-                  }
-                },
-                legend: {
-                  display: true 
-                },
-                title: {
-                  display: true, 
-                  text: 'Bar Chart with Labels on Y-Axis' 
                 }
-              }
             });
-          };
-          
+        };
+        vm.downloadAsImage = function () {
+            console.log("checkkk", vm.displayType);
+            if(vm.displayType == "chart"){
+                vm.downloadBarChartAsImage();
+            }else{
+                vm.downloadCurrentCarouselImage();
+            }
+        }
+        vm.downloadBarChartAsImage = function () {
+            var canvas = document.getElementById('barChart');
+            var image = canvas.toDataURL('image/png');
+            var link = document.createElement('a');
+            link.href = image;
+            link.download = 'bar_chart.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        vm.downloadCurrentCarouselImage = function () {
+            var activeItem = document.querySelector('#demo .carousel-item.active img');
+            if (activeItem) {
+                var imageSrc = activeItem.getAttribute('ng-src') || activeItem.src;
+                
+                var link = document.createElement('a');
+                link.href = imageSrc;
+                link.download = 'carousel-image.png';
+        
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                console.error('No active image found in the carousel.');
+            }
+        };
+        
         function buildPager() {
             vm.pagedItems = [];
             vm.itemsPerPage = 10;
