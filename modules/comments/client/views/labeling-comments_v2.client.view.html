@@ -77,7 +77,7 @@
                                     <select class="form-control" ng-model="comment.sentiment_researcher"
                                         ng-change="updateResearcherScore(comment)"
                                         ng-style="{ 'background-color': vm.getSentimentBackgroundColor(comment.sentiment_researcher), 'color': '#fff' }">
-                                        <option value="">-- Select Sentiment --</option>
+                                        
                                         <option ng-repeat="sentiment in vm.sentiments" value="{{sentiment._id}}"
                                             ng-selected="sentiment._id === comment.sentiment_researcher"
                                             ng-style="{ 'background-color': vm.getSentimentBackgroundColor(sentiment._id), 'color': '#fff' }">

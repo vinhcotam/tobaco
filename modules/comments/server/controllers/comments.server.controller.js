@@ -283,7 +283,8 @@ exports.statisticbysentiment = async (req, res) => {
         const newsgroup = req.query.newsgroup;
         const start = req.query.start;
         const end = req.query.end;
-
+        const newsId = req.query.newsId;
+        console.log("newssss", newsId);
         let newsdailies;
         var isAdmin = req.user.roles.includes('admin');
         if (!isAdmin) {
@@ -312,12 +313,14 @@ exports.statisticbysentiment = async (req, res) => {
         const newsIds = newsdailies.map(news => news._id);
         console.log("newsIds", newsIds);
         var matchStage;
-            matchStage = {
-                $match: {
-                    news_id: { $in: newsIds.map(id => new mongoose.Types.ObjectId(id)) }
-                }
-            };
-        
+        matchStage = {
+            $match: {
+                news_id: { $in: newsIds.map(id => new mongoose.Types.ObjectId(id)) }
+            }
+        };
+        if (newsId) {
+            matchStage.$match.news_id = new mongoose.Types.ObjectId(newsId);
+        }
 
 
         if (start && end) {

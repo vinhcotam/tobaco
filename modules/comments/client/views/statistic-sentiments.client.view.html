@@ -4,50 +4,53 @@
       <div class="card-header">
         <h2 class="card-title">Statistic by Sentiments</h2>
       </div>
-      <div class="filter-new-groups" style="margin-bottom: 0px;">
+      <div class="form-group" style="margin-bottom: 0px; margin-top: 1%;">
         <ul>
-          <li class="active default">
+          <li style="list-style-type: none;">
             <div class="d-flex flex-column">
               <div class="d-flex justify-content-between align-items-center">
-                <a href="" ng-click="displayChartType(vm.chartType)">Total Sentiments: ({{vm.totals}} comments)</a>
-                <button id="downloadButton" class="btn btn-primary" ng-click="vm.downloadCanvasAsImage()">Download
+                <a href="" style="color: black; font-weight: bold;" ng-click="displayChartType(vm.chartType)">Total
+                  Sentiments: ({{vm.totals}} comments)</a>
+                <button style="margin-right: 1%;" id="downloadButton" class="btn btn-primary"
+                  ng-click="vm.downloadCanvasAsImage()">Download
                   Chart</button>
               </div>
 
-              <div class="form-group d-flex align-items-center" style="margin-left: 2%;"
-                ng-init="vm.selectedNewsGroupId = '0';">
+              <div class="form-group d-flex align-items-center" style="margin-top: 1%;">
                 <label style="white-space: nowrap;">News Group:</label>
-                <select ng-change="vm.filterByGroups()" style="width: 50%; margin-left: 2%;" name="group_news"
+                <select ng-change="vm.filterByGroups()" style="width: 200%; margin-left: 1%;" name="group_news"
                   class="form-control custom-select-small" ng-model="vm.selectedNewsGroupId" ng-if="vm.isLoaded">
                   <option value="0" selected>Tất cả</option>
                   <option ng-repeat="group in vm.newsGroups" value="{{group._id}}">
                     {{group.name}}
                   </option>
                 </select>
-                <div class="d-flex align-items-center" style="margin-left: 1%;">
-                  <label for="" style="padding-right: 12px; padding-top: 5px; margin-left: 3%;">From</label>
-                  <div class="input-group date" id="from-date" data-target-input="nearest">
-                    <input id="startdate" class="form-control datetimepicker-input" data-target="#from-date"
-                      ng-model="vm.filtergroupstartdate">
-                    <div class="input-group-append" data-target="#from-date" data-toggle="datetimepicker">
-                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
+                <label for="" style="padding-right: 12px; padding-top: 5px; margin-left: 3%;">From</label>
+                <div class="input-group date" id="from-date" data-target-input="nearest">
+                  <input style="width: 20%;" id="startdate" class="form-control datetimepicker-input"
+                    data-target="#from-date" ng-model="vm.filtergroupstartdate">
+                  <div class="input-group-append" data-target="#from-date" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                   </div>
-                  <label for="" style="padding-right: 12px; padding-top: 5px; margin-left: 4%;">To</label>
-                  <div class="input-group date" id="end-date" data-target-input="nearest">
-                    <input type="text" id="enddate" class="form-control datetimepicker-input" data-target="#end-date"
-                      ng-model="vm.filtergroupenddate">
-                    <div class="input-group-append" data-target="#end-date" data-toggle="datetimepicker">
-                      <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                    </div>
-                  </div>
-                  <button type="submit" style="margin-left: 1%;" class="btn btn-primary" id="btn_week_filter"
-                    ng-click="vm.filterArgumentByDate()"><i class="fa fa-filter"></i></button>
                 </div>
-
+                <label for="" style="padding-right: 12px; padding-top: 5px; margin-left: 4%;">To</label>
+                <div class="input-group date" id="end-date" data-target-input="nearest">
+                  <input style="width: 20%;" type="text" id="enddate" class="form-control datetimepicker-input"
+                    data-target="#end-date" ng-model="vm.filtergroupenddate">
+                  <div class="input-group-append" data-target="#end-date" data-toggle="datetimepicker">
+                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                  </div>
+                </div>
+                <button type="submit" style="margin-left: 1%;" class="btn btn-primary" id="btn_week_filter"
+                  ng-click="vm.filterArgumentByDate()"><i class="fa fa-filter"></i></button>
+                <div class="d-flex align-items-center" style="margin-left: 1%; display: flex;"></div>
+                <div style="margin-left: 2%;" id="error-container" class="error-text">
+                  Please
+                  enter the date.</div>
               </div>
 
-              <div class="chart-type-selector" style="margin-left: 2%;">
+
+              <div class="chart-type-selector">
                 <label>
                   <input type="radio" name="chart-type" value="pie" ng-model="vm.chartType"
                     ng-change="vm.displayPieChart()" ng-init="vm.chartType = 'pie'"> Pie Chart
@@ -59,9 +62,8 @@
               </div>
             </div>
 
+
           </li>
-          <!-- <li class="week"><a href=""> Week</a></li>
-          <li class="month"><a href="">Month</a></li> -->
         </ul>
 
       </div>

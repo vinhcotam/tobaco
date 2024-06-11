@@ -5,9 +5,9 @@
     .module('comments')
     .controller('LabelingbysentimentsStatisticController', LabelingbysentimentsStatisticController);
 
-  LabelingbysentimentsStatisticController.$inject = ['$scope', '$filter', '$state', '$window', 'Authentication', 'CommentsAllService', 'Notification', 'CommentsService', 'SentimentsService', 'LabelingbysentimentsStatisticService', 'NewsgroupsService'];
+  LabelingbysentimentsStatisticController.$inject = ['$scope', '$filter', '$state', '$stateParams', '$window', 'Authentication', 'CommentsAllService', 'Notification', 'CommentsService', 'SentimentsService', 'LabelingbysentimentsStatisticService', 'NewsgroupsService'];
 
-  function LabelingbysentimentsStatisticController($scope, $filter, $state, $window, Authentication, CommentsAllService, Notification, CommentsService, SentimentsService, LabelingbysentimentsStatisticService, NewsgroupsService) {
+  function LabelingbysentimentsStatisticController($scope, $filter, $state, $stateParams, $window, Authentication, CommentsAllService, Notification, CommentsService, SentimentsService, LabelingbysentimentsStatisticService, NewsgroupsService) {
     var vm = this;
     vm.authentication = Authentication;
     vm.argumentMin = 0;
@@ -16,7 +16,9 @@
     vm.newsGroups = [];
     vm.selectedNewsGroupId = 0;
     loadNewsGroups();
-
+    var newsId = $stateParams.newsId;
+    vm.newsId = newsId;
+    console.log("vm.newsId", vm.newsId);
     function loadNewsGroups() {
       NewsgroupsService.query({}, function (data) {
         vm.newsGroups = data;
@@ -26,26 +28,30 @@
         }
       });
     }
-    var params ={};
+    var params = {};
     vm.filterByGroups = function () {
       $("#pieChart").show();
       $("#lineChartt").hide();
       $(".default").addClass("active");
       $(".line-chart").removeClass("active");
-      
-      if(vm.selectedNewsGroupId != undefined){
-        params = {
+
+      if (vm.selectedNewsGroupId !== undefined) {
+        var params = {
           newsgroup: vm.selectedNewsGroupId
+        };
+
+        if (vm.newsId !== undefined) {
+          params.newsId = vm.newsId;
         }
-        
       }
+
       console.log("vm.chartType", vm.chartType);
-      if (vm.chartType == "line"){
+      if (vm.chartType == "line") {
         vm.displayLineChart(params);
-      }else{
+      } else {
         vm.displayPieChart(params);
       }
-      
+
     };
     //pie chart
     vm.displayPieChart = function displayPieChart(params) {
@@ -68,10 +74,13 @@
       var colors = [];
       var sentimentMap = {};
 
-      if(params == undefined){
+      if (params == undefined) {
         params = {
           newsgroup: vm.selectedNewsGroupId
         }
+      }
+      if (vm.newsId !== undefined) {
+        params.newsId = vm.newsId;
       }
       var donutData = {};
       SentimentsService.query(function (sentiments) {
@@ -110,7 +119,7 @@
               sentimentMap[sentimentName] = [rows[i]];
             }
           }
-          
+
           for (var sentimentName in sentimentMap) {
             var sentimentCount = sentimentMap[sentimentName].length;
 
@@ -222,6 +231,7 @@
               }
             }
             var date = rows[i].date_comment;
+            console.log("dateee", date)
             if (date.includes('/')) {
               var parts = date.split('/');
               date = parts[2] + '-' + parts[1] + '-' + parts[0];
@@ -264,7 +274,13 @@
 
           for (var i = 0; i < Object.keys(sentimentMap).length; i++) {
             var sentimentName = Object.keys(sentimentMap)[i];
-            var sentimentId = sentiments.find(sentiment => sentiment.name === sentimentName)._id;
+            var sentiment = sentiments.find(sentiment => sentiment.name === sentimentName);
+
+            if (!sentiment) {
+              continue;
+            }
+
+            var sentimentId = sentiment._id;
             var color = sentimentColorMap[sentimentId] || '#' + Math.floor(Math.random() * 16777215).toString(16);
 
             lineData.datasets.push({
@@ -275,6 +291,7 @@
               lineTension: 0.1
             });
           }
+
 
           var lineChartCanvas = $('#lineChartt').get(0).getContext('2d');
           var lineOptions = {
@@ -382,47 +399,13 @@
       // });
     }
 
-    $('.filter-new-groups').on('click', 'li', function () {
-      $('.filter-new-groups ul li.active').removeClass('active');
-      $(this).addClass('active');
-      if ($(this).hasClass('week')) {
-        $('#btn_month_filter').addClass('hidden');
-        $('#btn_week_filter').removeClass('hidden');
-        $('.filter-new-groups-detail').removeClass('hidden');
-        $('.start-date').removeClass('hidden');
-        $('.end-date').removeClass('hidden');
-        $('.start-month').addClass('hidden');
-        $('.end-month').addClass('hidden');
-      } else {
-        if ($(this).hasClass('month')) {
-          $('#btn_week_filter').addClass('hidden');
-          $('#btn_month_filter').removeClass('hidden');
-          $('.filter-new-groups-detail').removeClass('hidden');
-          $('.start-date').addClass('hidden');
-          $('.end-date').addClass('hidden');
-          $('.start-month').removeClass('hidden');
-          $('.end-month').removeClass('hidden');
-        } else {
-          $('.filter-new-groups-detail').addClass('hidden');
-        }
-      }
-    });
-
     $(function () {
       $('#from-date').datetimepicker({
         format: 'YYYY-MM-DD'
       });
+
       $('#end-date').datetimepicker({
         format: 'YYYY-MM-DD',
-        useCurrent: false
-      });
-    });
-    $(function () {
-      $('#startMonth').datetimepicker({
-        format: 'YYYY-MM'
-      });
-      $('#endMonth').datetimepicker({
-        format: 'YYYY-MM',
         useCurrent: false
       });
     });
@@ -431,19 +414,25 @@
     vm.filterArgumentByDate = function () {
       vm.filtergroupstartdate = $('input#startdate').val();
       vm.filtergroupenddate = $('input#enddate').val();
-      $('#lineChartMonth').css('display', 'none');
-      if (vm.filtergroupstartdate !== '' && vm.filtergroupenddate !== '') {
-        var params = {
-          start: new Date(new Date(vm.filtergroupstartdate).setDate(new Date(vm.filtergroupstartdate).getDate() - 7)),
-          end: vm.filtergroupenddate,
-          newsgroup: vm.selectedNewsGroupId
+      if (vm.filtergroupstartdate != '' || vm.filtergroupenddate != '') {
+        $('#lineChartMonth').css('display', 'none');
+        if (vm.filtergroupstartdate !== '' && vm.filtergroupenddate !== '') {
+          var params = {
+            start: new Date(new Date(vm.filtergroupstartdate).setDate(new Date(vm.filtergroupstartdate).getDate() - 7)),
+            end: vm.filtergroupenddate,
+            newsgroup: vm.selectedNewsGroupId
+          }
+          if (vm.chartType == "line") {
+            vm.displayLineChart(params);
+          } else {
+            vm.displayPieChart(params);
+          }
         }
-        if (vm.chartType == "line"){
-          vm.displayLineChart(params);
-        }else{
-          vm.displayPieChart(params);
-        }
+      } else {
+        document.getElementById("error-container").style.display = "block";
+        return;
       }
+
     }
     vm.filterArgumentByMonth = function () {
       const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -470,27 +459,27 @@
           newsgroup: vm.selectedNewsGroupId
 
         };
-        if (vm.chartType == "line"){
+        if (vm.chartType == "line") {
           vm.displayLineChart(params);
-        }else{
+        } else {
           vm.displayPieChart(params);
         }
       }
     }
-    vm.downloadCanvasAsImage = function() {
+    vm.downloadCanvasAsImage = function () {
       var canvas = document.getElementById('pieChart');
       var image = canvas.toDataURL('image/png');
-      
+
       var link = document.createElement('a');
       link.href = image;
       link.download = 'chart.png';
-      
+
       document.body.appendChild(link);
-      
+
       link.click();
-      
+
       document.body.removeChild(link);
     }
-    
+
   }
 }());

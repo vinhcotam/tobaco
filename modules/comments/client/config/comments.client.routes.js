@@ -33,6 +33,16 @@
           pageTitle: 'Statistic by Sentiments'
         }
       })
+      .state('comments.statisticbysentimentsbyNews', {
+        url: '/comments/statistic/sentimentbyNews/:newsId',
+        templateUrl: '/modules/comments/client/views/statistic-sentiments.client.view.html',
+        controller: 'LabelingbysentimentsStatisticController',
+        controllerAs: 'vm',
+        
+        data: {
+          pageTitle: 'Statistic by Sentiments'
+        }
+      })
       .state('comments.listByNewsId', {
         url: '/:newsId',
         templateUrl: '/modules/comments/client/views/list-comments.client.view.html',

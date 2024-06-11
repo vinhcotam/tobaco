@@ -44,11 +44,11 @@
             vm.comments.push(updatedComment);
             figureOutItemsToDisplay()
         });
-        $scope.updateResearcherScore = function(comment) {
-            var selectedSentiment = vm.sentiments.find(function(sentiment) {
+        $scope.updateResearcherScore = function (comment) {
+            var selectedSentiment = vm.sentiments.find(function (sentiment) {
                 return sentiment._id === comment.sentiment_researcher;
             });
-        
+
             switch (selectedSentiment.name) {
                 case 'positive':
                     comment.researcher_score = 1;
@@ -64,15 +64,16 @@
                     break;
             }
         };
-        
-        
+
+
         vm.confirmLabeling = function () {
             if (confirm("Confirm labels ?")) {
                 var updatePromises = [];
+                console.log("vmmm", vm.comments)
                 vm.comments.forEach(function (element) {
                     updatePromises.push(CommentsService.update(element).$promise);
                 });
-        
+
                 Promise.all(updatePromises)
                     .then(function (results) {
                         console.log("All comments have been updated:", results);
@@ -86,7 +87,7 @@
                 console.log("Update canceled!");
             }
         };
-    
+
         vm.newsId = $stateParams.newsId;
         vm.autoLabeling = function () {
             console.log("print", vm.newsId)
@@ -112,7 +113,7 @@
             vm.currentPage = 1;
             vm.figureOutItemsToDisplay();
         }
-        
+
         function figureOutItemsToDisplay() {
             var begin = ((vm.currentPage - 1) * vm.itemsPerPage);
             var end = begin + vm.itemsPerPage;
@@ -133,38 +134,34 @@
             CommentsService.query(params, function (data) {
                 vm.filteredItems = data;
                 vm.pagedItems = data;
+                vm.comments = data;
+                console.log("vmm", data)
                 SentimentsService.query(function (sentiments) {
-                  vm.sentiments = sentiments;
-                  data.forEach(function (element) {
-                    if (!element.hasOwnProperty('sentiment_researcher')) {
-                      element.sentiment_researcher = element.sentiment_ai;
-                    }
-                  });
-        
-                  vm.getSentimentName = function (sentimentId) {
-                    for (var i = 0; i < vm.sentiments.length; i++) {
-                      if (vm.sentiments[i]._id === sentimentId) {
-                        return vm.sentiments[i].name;
-                      }
-                    }
-                    return '';
-                  };
-                  vm.getSentimentBackgroundColor = function (sentimentId) {
-                    for (var i = 0; i < vm.sentiments.length; i++) {
-                        if (vm.sentiments[i]._id === sentimentId) {
-                            if (vm.sentiments[i].name === 'positive') {
-                                return '#45AA16'; 
-                            } else if (vm.sentiments[i].name === 'negative') {
-                                return '#D30000'; 
-                            }else{
-                              return '#FFD467';
+                    vm.sentiments = sentiments;
+                    data.forEach(function (element) {
+                        if (!element.hasOwnProperty('sentiment_researcher')) {
+                            element.sentiment_researcher = element.sentiment_ai;
+                        }
+                    });
+
+                    vm.getSentimentName = function (sentimentId) {
+                        for (var i = 0; i < vm.sentiments.length; i++) {
+                            if (vm.sentiments[i]._id === sentimentId) {
+                                return vm.sentiments[i].name;
                             }
                         }
-                    }
-                    return ''; 
-                };
+                        return '';
+                    };
+                    vm.getSentimentBackgroundColor = function (sentimentId) {
+                        for (var i = 0; i < vm.sentiments.length; i++) {
+                            if (vm.sentiments[i]._id === sentimentId) {
+                                return vm.sentiments[i].color;
+                            }
+                        }
+                        return '';
+                    };
                 });
-              });
+            });
 
 
         }
