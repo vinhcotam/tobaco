@@ -26,6 +26,14 @@
                     <p class="help-block error-text" ng-message="required">Sentiment description is required.</p>
                   </div>
                 </div>
+                <!-- <div class="form-group" show-errors>
+                  <label class="control-label" for="sentiment_score">Sentiment Score</label>
+                  <input type="number" name="sentiment_score" ng-model="vm.sentiment.score" id="sentiment_score"
+                    class="form-control" placeholder="Sentiment Score" required>
+                  <div ng-messages="vm.form.sentimentForm.sentiment_score.$error" role="alert">
+                    <p class="help-block error-text" ng-message="required">Sentiment score is required.</p>
+                  </div>
+                </div> -->
                 <div class="form-group" show-errors>
                   <label class="control-label" for="sentiment_color">Color</label>
                   <input type="color" name="sentiment_color" ng-model="vm.sentiment.color" id="sentiment_color"
@@ -34,6 +42,7 @@
                     <p class="help-block error-text" ng-message="required">Sentiment color is required.</p>
                   </div>
                 </div>
+                
 
 
                 <div class="form-group">

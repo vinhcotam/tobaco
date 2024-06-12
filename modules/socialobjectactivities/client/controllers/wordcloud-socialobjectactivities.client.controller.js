@@ -139,9 +139,10 @@
         vm.initBarChart = function () {
             var labels = Object.keys(vm.text_list);
             var data = Object.values(vm.text_list);
+        
             var ctx = document.getElementById('barChart').getContext('2d');
             new Chart(ctx, {
-                type: 'bar',
+                type: 'horizontalBar',
                 data: {
                     labels: labels,
                     datasets: [{
@@ -153,31 +154,52 @@
                     }]
                 },
                 options: {
+                    layout: {
+                        padding: {
+                            left: 0,
+                            right: 0,
+                            top: 0,
+                            bottom: 0
+                        }
+                    },
                     scales: {
                         x: {
-
+                            beginAtZero: true
                         },
                         y: {
                             stacked: true,
                             ticks: {
-                                align: 'start'
+                                font: {
+                                    size: 500
+                                }
                             },
                             gridLines: {
-                                display: false
+                                display: true
                             }
                         }
                     },
                     legend: {
-                        display: true
+                        display: true,
+                        labels: {
+                            font: {
+                                size: 500 
+                            }
+                        }
                     }
                 }
             });
         };
+        
+        
+        
+        
+        
+        
         vm.downloadAsImage = function () {
             console.log("checkkk", vm.displayType);
-            if(vm.displayType == "chart"){
+            if (vm.displayType == "chart") {
                 vm.downloadBarChartAsImage();
-            }else{
+            } else {
                 vm.downloadCurrentCarouselImage();
             }
         }
@@ -195,11 +217,11 @@
             var activeItem = document.querySelector('#demo .carousel-item.active img');
             if (activeItem) {
                 var imageSrc = activeItem.getAttribute('ng-src') || activeItem.src;
-                
+
                 var link = document.createElement('a');
                 link.href = imageSrc;
                 link.download = 'carousel-image.png';
-        
+
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -207,7 +229,7 @@
                 console.error('No active image found in the carousel.');
             }
         };
-        
+
         function buildPager() {
             vm.pagedItems = [];
             vm.itemsPerPage = 10;
