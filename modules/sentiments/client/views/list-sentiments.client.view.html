@@ -23,6 +23,7 @@
               <th style="width: 10px">#</th>
               <th style="width: 20%;">Name</th>
               <th>Description</th>
+              <th class="text-center" >Sentiment Score</th>
               <th>Color</th>
               <th style="width: 10%">User</th>
               <th style="width: 10%">Created</th>
@@ -35,6 +36,7 @@
                   ng-bind="index + (vm.currentPage-1)*vm.itemsPerPage + 1"></span></td>
               <td ui-sref="sentiments.view({ sentimentsId: variable._id })"><span ng-bind="variable.name"></span></td>
               <td ui-sref="sentiments.view({ sentimentsId: variable._id })"><span ng-bind="variable.description"></span>
+              <td class="text-center" ui-sref="sentiments.view({ sentimentsId: variable._id })"><span ng-bind="variable.sentiment_score"></span>
               </td>
               <td ui-sref="sentiments.view({ sentimentsId: variable._id })">
                 <span ng-style="{'background-color': variable.color}"

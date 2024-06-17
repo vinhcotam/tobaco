@@ -182,6 +182,17 @@
         console.log("Destroying existing line chart instance");
         vm.lineChart.destroy();
       }
+
+      // Prepare colors and labels for each sentiment
+      var sentimentColors = {};
+      var sentimentLabels = {};
+      for (var i = 0; i < vm.sentiments.length; i++) {
+        var sentiment = vm.sentiments[i];
+        sentimentColors[sentiment._id] = sentiment.color;
+        sentimentLabels[sentiment._id] = sentiment.name;
+      }
+
+      // Populate sentimentMap with sentiment data by date
       for (var i = 0; i < comments.length; i++) {
         var sentimentValue = comments[i].sentiment_researcher || comments[i].sentiment_ai;
         var sentimentName = '';
@@ -191,12 +202,7 @@
             break;
           }
         }
-        var date = comments[i].date_comment;
-        console.log("dateee", date)
-        if (date.includes('/')) {
-          var parts = date.split('/');
-          date = parts[2] + '-' + parts[1] + '-' + parts[0];
-        }
+        var date = new Date(comments[i].date_comment).toISOString().split('T')[0]; // Extracting the date part
         if (!sentimentMap[sentimentName]) {
           sentimentMap[sentimentName] = {};
         }
@@ -210,9 +216,9 @@
       var labels = [];
       var data = [];
 
+      // Collect all dates
       for (var sentimentName in sentimentMap) {
         var dates = Object.keys(sentimentMap[sentimentName]);
-        dates.sort();
         for (var j = 0; j < dates.length; j++) {
           if (!labels.includes(dates[j])) {
             labels.push(dates[j]);
@@ -220,12 +226,20 @@
         }
       }
 
-      for (var sentimentName in sentimentMap) {
-        var sentimentData = [];
+      // Initialize data array for each sentiment with cumulative counts for consecutive days
+      for (var sentimentId in sentimentColors) {
+        var sentimentName = sentimentLabels[sentimentId];
+        var cumulativeData = [];
+        var cumulativeCount = 0;
+
         for (var j = 0; j < labels.length; j++) {
-          sentimentData.push(sentimentMap[sentimentName][labels[j]] || 0);
+          var date = labels[j];
+          if (sentimentMap[sentimentName] && sentimentMap[sentimentName][date]) {
+            cumulativeCount += sentimentMap[sentimentName][date];
+          }
+          cumulativeData.push(cumulativeCount);
         }
-        data.push(sentimentData);
+        data.push(cumulativeData);
       }
 
       var lineData = {
@@ -233,12 +247,14 @@
         datasets: []
       };
 
+      // Assign color and label to each sentiment based on sentiment's id
       for (var i = 0; i < vm.sentiments.length; i++) {
         var sentiment = vm.sentiments[i];
-        var color = sentiment.color;
+        var color = sentimentColors[sentiment._id];
+        var label = sentimentLabels[sentiment._id];
 
         lineData.datasets.push({
-          label: sentiment.name,
+          label: label,
           data: data[i] || [],
           fill: false,
           borderColor: color,
@@ -248,8 +264,13 @@
 
       var lineChartCanvas = $('#lineChartt').get(0).getContext('2d');
       var lineOptions = {
+        indexAxis: 'y',
         maintainAspectRatio: false,
-        responsive: true
+        responsive: true,
+        legend: {
+          position: 'right',
+          display: false
+        }
       };
 
       console.log("Creating new line chart instance");
@@ -259,6 +280,8 @@
         options: lineOptions
       });
     }
+
+    
     $('#datetimefilter').daterangepicker({
       opens: 'left'
     }, function (start, end, label) {

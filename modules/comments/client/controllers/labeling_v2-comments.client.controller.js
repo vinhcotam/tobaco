@@ -7,10 +7,10 @@
     .controller('Labelingv2commentsController', Labelingv2commentsController);
 
   Labelingv2commentsController.$inject = ['$scope', '$filter', '$state', '$window', 'Authentication', 'CommentsService', '$stateParams',
-    '$http', 'SentimentsService', 'Notification', 'NewsdailiesService'
+    '$http', 'SentimentsService', 'Notification', 'NewsdailiesService', 'LabelingbysentimentsStatisticService'
   ];
 
-  function Labelingv2commentsController($scope, $filter, $state, $window, Authentication, CommentsService, $stateParams, $http, SentimentsService, Notification, NewsdailiesService) {
+  function Labelingv2commentsController($scope, $filter, $state, $window, Authentication, CommentsService, $stateParams, $http, SentimentsService, Notification, NewsdailiesService, LabelingbysentimentsStatisticService) {
     var vm = this;
     vm.authentication = Authentication;
     if (vm.authentication.user == null) {
@@ -48,22 +48,14 @@
       var selectedSentiment = vm.sentiments.find(function (sentiment) {
         return sentiment._id === comment.sentiment_researcher;
       });
-
-      switch (selectedSentiment.name) {
-        case 'positive':
-          comment.researcher_score = 1;
-          break;
-        case 'negative':
-          comment.researcher_score = -1;
-          break;
-        case 'neutral':
-          comment.researcher_score = 0;
-          break;
-        default:
-          comment.researcher_score = null;
-          break;
+    
+      if (selectedSentiment) {
+        comment.researcher_score = selectedSentiment.sentiment_score;
+      } else {
+        comment.researcher_score = null;
       }
     };
+    
 
     vm.openReportModal = function () {
       vm.reportInfo = "Thông tin báo cáo của bạn";
@@ -193,7 +185,8 @@
         options: pieOptions
       });
     }
-    vm.displayLineChart = function (comments) {
+
+    vm.displayLineChart = function(comments) {
       var sentimentMap = {};
       comments = comments || vm.filteredComments;
       console.log("displayLineChart function called");
@@ -204,6 +197,15 @@
       if (vm.lineChart) {
         console.log("Destroying existing line chart instance");
         vm.lineChart.destroy();
+      }
+    
+      // Prepare colors and labels for each sentiment
+      var sentimentColors = {};
+      var sentimentLabels = {};
+      for (var i = 0; i < vm.sentiments.length; i++) {
+        var sentiment = vm.sentiments[i];
+        sentimentColors[sentiment._id] = sentiment.color;
+        sentimentLabels[sentiment._id] = sentiment.name;
       }
     
       // Populate sentimentMap with sentiment data by date
@@ -230,10 +232,9 @@
       var labels = [];
       var data = [];
     
-      // Collect all dates and sort them
+      // Collect all dates
       for (var sentimentName in sentimentMap) {
         var dates = Object.keys(sentimentMap[sentimentName]);
-        dates.sort();
         for (var j = 0; j < dates.length; j++) {
           if (!labels.includes(dates[j])) {
             labels.push(dates[j]);
@@ -242,19 +243,17 @@
       }
     
       // Initialize data array for each sentiment with cumulative counts for consecutive days
-      for (var sentimentName in sentimentMap) {
+      for (var sentimentId in sentimentColors) {
+        var sentimentName = sentimentLabels[sentimentId];
         var cumulativeData = [];
         var cumulativeCount = 0;
-        var prevDate = null;
+    
         for (var j = 0; j < labels.length; j++) {
           var date = labels[j];
-          if (prevDate && (new Date(date) - new Date(prevDate)) / (1000 * 60 * 60 * 24) === 1) {
-            cumulativeCount += sentimentMap[sentimentName][date] || 0;
-          } else {
-            cumulativeCount = sentimentMap[sentimentName][date] || 0;
+          if (sentimentMap[sentimentName] && sentimentMap[sentimentName][date]) {
+            cumulativeCount += sentimentMap[sentimentName][date];
           }
           cumulativeData.push(cumulativeCount);
-          prevDate = date;
         }
         data.push(cumulativeData);
       }
@@ -264,12 +263,14 @@
         datasets: []
       };
     
+      // Assign color and label to each sentiment based on sentiment's id
       for (var i = 0; i < vm.sentiments.length; i++) {
         var sentiment = vm.sentiments[i];
-        var color = sentiment.color;
+        var color = sentimentColors[sentiment._id];
+        var label = sentimentLabels[sentiment._id];
     
         lineData.datasets.push({
-          label: sentiment.name,
+          label: label,
           data: data[i] || [],
           fill: false,
           borderColor: color,
@@ -294,6 +295,107 @@
     
     
     
+    
+    
+    
+    // vm.displayLineChart = function (comments) {
+    //   var sentimentMap = {};
+    //   comments = comments || vm.filteredComments;
+    //   console.log("displayLineChart function called");
+    //   $("#pieChart").hide();
+    //   $("#lineChartt").show();
+    //   $(".line-chart").addClass("active");
+    //   $(".default").removeClass("active");
+    //   if (vm.lineChart) {
+    //     console.log("Destroying existing line chart instance");
+    //     vm.lineChart.destroy();
+    //   }
+
+    //   // Populate sentimentMap with sentiment data by date
+    //   for (var i = 0; i < comments.length; i++) {
+    //     var sentimentValue = comments[i].sentiment_researcher || comments[i].sentiment_ai;
+    //     var sentimentName = '';
+    //     for (var k = 0; k < vm.sentiments.length; k++) {
+    //       if (vm.sentiments[k]._id === sentimentValue) {
+    //         sentimentName = vm.sentiments[k].name;
+    //         break;
+    //       }
+    //     }
+    //     var date = new Date(comments[i].date_comment).toISOString().split('T')[0]; // Extracting the date part
+    //     if (!sentimentMap[sentimentName]) {
+    //       sentimentMap[sentimentName] = {};
+    //     }
+    //     if (!sentimentMap[sentimentName][date]) {
+    //       sentimentMap[sentimentName][date] = 1;
+    //     } else {
+    //       sentimentMap[sentimentName][date]++;
+    //     }
+    //   }
+
+    //   var labels = [];
+    //   var data = [];
+
+    //   // Collect all dates and sort them
+    //   for (var sentimentName in sentimentMap) {
+    //     var dates = Object.keys(sentimentMap[sentimentName]);
+    //     dates.sort();
+    //     for (var j = 0; j < dates.length; j++) {
+    //       if (!labels.includes(dates[j])) {
+    //         labels.push(dates[j]);
+    //       }
+    //     }
+    //   }
+
+    //   // Initialize data array for each sentiment with cumulative counts for consecutive days
+    //   for (var sentimentName in sentimentMap) {
+    //     var cumulativeData = [];
+    //     var cumulativeCount = 0;
+    //     var prevDate = null;
+    //     for (var j = 0; j < labels.length; j++) {
+    //       var date = labels[j];
+    //       if (prevDate && (new Date(date) - new Date(prevDate)) / (1000 * 60 * 60 * 24) === 1) {
+    //         cumulativeCount += sentimentMap[sentimentName][date] || 0;
+    //       } else {
+    //         cumulativeCount = sentimentMap[sentimentName][date] || 0;
+    //       }
+    //       cumulativeData.push(cumulativeCount);
+    //       prevDate = date;
+    //     }
+    //     data.push(cumulativeData);
+    //   }
+
+    //   var lineData = {
+    //     labels: labels,
+    //     datasets: []
+    //   };
+
+    //   for (var i = 0; i < vm.sentiments.length; i++) {
+    //     var sentiment = vm.sentiments[i];
+    //     var color = sentiment.color;
+
+    //     lineData.datasets.push({
+    //       label: sentiment.name,
+    //       data: data[i] || [],
+    //       fill: false,
+    //       borderColor: color,
+    //       lineTension: 0.1
+    //     });
+    //   }
+
+    //   var lineChartCanvas = $('#lineChartt').get(0).getContext('2d');
+    //   var lineOptions = {
+    //     maintainAspectRatio: false,
+    //     responsive: true
+    //   };
+
+    //   console.log("Creating new line chart instance");
+    //   vm.lineChart = new Chart(lineChartCanvas, {
+    //     type: 'line',
+    //     data: lineData,
+    //     options: lineOptions
+    //   });
+    // }
+
     $('#datetimefilter').daterangepicker({
       opens: 'left'
     }, function (start, end, label) {
@@ -301,7 +403,6 @@
       vm.endfilterdate = end.format('YYYY-MM-DD');
       figureOutItemsToDisplay();
     });
-
 
     vm.checkDateEmpty = function () {
       vm.isDateEmpty = !vm.startfilterdate || !vm.endfilterdate;
@@ -370,12 +471,15 @@
         params.newsId = newsId;
       }
 
-
+      LabelingbysentimentsStatisticService.query(params, function (data) {
+        vm.comments = data;
+        
+      });
       CommentsService.query(params, function (data) {
         vm.filteredItems = data;
         vm.pagedItems = data;
-        vm.comments = data;
-        console.log("vmm", data)
+        // vm.comments = data;
+        // console.log("vmm", data)
         SentimentsService.query(function (sentiments) {
           vm.sentiments = sentiments;
           data.forEach(function (element) {

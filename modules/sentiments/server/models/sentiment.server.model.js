@@ -21,6 +21,9 @@ var SentimentSchema = new Schema({
     default: '',
     trim: true
   },
+  sentiment_score: {
+    type: String
+  },
   color: {
     type: String
   }
