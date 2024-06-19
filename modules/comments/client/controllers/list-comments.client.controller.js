@@ -29,7 +29,7 @@
     };
     CommentsService.getTotal({ newsId: vm.newsId }).$promise.then(function (number) {
       vm.filterLength = number[0];
-      console.log("vm.itemsPerPage", vm.itemsPerPage)
+      vm.total = vm.filterLength;
       vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
     });
     vm.goToLabeling = function (newsId) {
@@ -59,6 +59,7 @@
     };
     vm.filterArgumentByDate = function () {
       if (vm.startfilterdate != undefined || vm.endfilterdate != undefined) {
+        document.getElementById("error-container").style.display = "none";
         var startDate = new Date(vm.startfilterdate);
         var endDate = new Date(vm.endfilterdate);
         endDate.setHours(23, 59, 59, 999);
@@ -79,10 +80,19 @@
       }
 
     }
+    
     vm.displayPieChart = function (comments) {
       var donutData = {};
       console.log("displayPieChart function called");
       comments = comments || vm.filteredComments;
+      vm.total = comments.length
+      if(vm.total ==0){
+        document.getElementById("no_data").style.display = "block";
+
+      }else{
+        document.getElementById("no_data").style.display = "none";
+
+      }
       // Check and destroy the existing chart instance if it exists
       if (vm.pieChart) {
         console.log("Destroying existing pie chart instance");
@@ -173,6 +183,14 @@
     vm.displayLineChart = function (comments) {
       var sentimentMap = {};
       comments = comments || vm.filteredComments;
+      vm.total = comments.length;
+      if(vm.total ==0){
+        document.getElementById("no_data").style.display = "block";
+
+      }else{
+        document.getElementById("no_data").style.display = "none";
+
+      }
       console.log("displayLineChart function called");
       $("#pieChart").hide();
       $("#lineChartt").show();
@@ -303,6 +321,7 @@
       vm.currentPage = 1;
       vm.figureOutItemsToDisplay();
     }
+
     function figureOutItemsToDisplay() {
       var begin = ((vm.currentPage - 1) * vm.itemsPerPage);
       var end = begin + vm.itemsPerPage;
@@ -312,16 +331,22 @@
         params.search = vm.search;
         CommentsService.getTotal(params).$promise.then(function (number) {
           vm.filterLength = number[0];
+          vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
         });
       }
       if (angular.isDefined(newsId)) {
         params.newsId = newsId;
       }
+
+      LabelingbysentimentsStatisticService.query(params, function (data) {
+        vm.comments = data;
+        
+      });
       CommentsService.query(params, function (data) {
         vm.filteredItems = data;
         vm.pagedItems = data;
-        vm.comments = data;
-        console.log("Dataaa", data)
+        // vm.comments = data;
+        // console.log("vmm", data)
         SentimentsService.query(function (sentiments) {
           vm.sentiments = sentiments;
           data.forEach(function (element) {
@@ -341,15 +366,17 @@
           vm.getSentimentBackgroundColor = function (sentimentId) {
             for (var i = 0; i < vm.sentiments.length; i++) {
               if (vm.sentiments[i]._id === sentimentId) {
-
                 return vm.sentiments[i].color;
               }
             }
-            return vm.sentiments[i].color;
+            return '';
           };
         });
       });
+
+
     }
+
     function pageChanged() {
       vm.figureOutItemsToDisplay();
     }

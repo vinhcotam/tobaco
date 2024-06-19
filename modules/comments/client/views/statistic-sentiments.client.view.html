@@ -25,6 +25,7 @@
                     {{group.name}}
                   </option>
                 </select>
+                
                 <label for="" style="padding-right: 12px; padding-top: 5px; margin-left: 3%;">From</label>
                 <div class="input-group date" id="from-date" data-target-input="nearest">
                   <input style="width: 20%;" id="startdate" class="form-control datetimepicker-input"
@@ -72,6 +73,7 @@
         <span class="sr-only">Loading...</span>
       </div>
       <div class="card-body">
+        <p style="display: none; text-align: center;" id="no_data">No data found</p>
         <canvas id="pieChart" style="width: 100%;" class="pieChart"></canvas>
         <canvas id="lineChartt" style="width: 100%;" class="lineChartt"></canvas>
 

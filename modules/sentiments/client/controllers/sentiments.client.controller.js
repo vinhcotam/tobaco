@@ -11,6 +11,8 @@
       var vm = this;
       vm.authentication = Authentication;
       vm.sentiment = sentiment;
+      console.log("vm.sentiment,",vm.sentiment.sentiment_score);
+      
       vm.error = null;
       vm.form = {};
       vm.remove = remove;

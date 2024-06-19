@@ -113,10 +113,12 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="reportModalLabel">Report sentiment</h5>
+                
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <h6 style="margin-left: 3%; " class="modal-title" id="reportModalLabel"><strong>Total comments: {{vm.total}}</strong></h6>
             <div class="modal-body">
                 <div class="chart-type-selector" style="margin-left: 2%;">
                     <label>
@@ -146,6 +148,7 @@
                     Please
                     enter the date.</div>
                 <div class="card-body">
+                    <p style="display: none; text-align: center;" id="no_data">No data found</p>
                     <canvas id="pieChart" style="width: 100%;" class="pieChart"></canvas>
                     <canvas id="lineChartt" style="width: 100%;" class="lineChartt"></canvas>
 

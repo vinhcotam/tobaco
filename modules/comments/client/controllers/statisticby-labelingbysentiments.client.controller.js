@@ -14,45 +14,43 @@
     vm.argumentMax = 5;
     vm.isLoaded = false;
     vm.newsGroups = [];
-    vm.selectedNewsGroupId = 0;
+    vm.selectedNewsGroupId = '0';  // Ensure default value is set to '0'
     loadNewsGroups();
     var newsId = $stateParams.newsId;
     vm.newsId = newsId;
     console.log("vm.newsId", vm.newsId);
+    
     function loadNewsGroups() {
-      NewsgroupsService.query({}, function (data) {
-        vm.newsGroups = data;
-        vm.isLoaded = true;
-        if (vm.selectedNewsGroupId == 0) {
-          vm.filterByGroups()
-        }
-      });
+        NewsgroupsService.query({}, function (data) {
+            vm.newsGroups = data;
+            vm.isLoaded = true;
+            vm.selectedNewsGroupId = '0';  // Set default value to '0' after loading news groups
+            vm.filterByGroups();  // Call filterByGroups after loading
+        });
     }
-    var params = {};
+    
     vm.filterByGroups = function () {
-      $("#pieChart").show();
-      $("#lineChartt").hide();
-      $(".default").addClass("active");
-      $(".line-chart").removeClass("active");
-
-      if (vm.selectedNewsGroupId !== undefined) {
+        $("#pieChart").show();
+        $("#lineChartt").hide();
+        $(".default").addClass("active");
+        $(".line-chart").removeClass("active");
+    
         var params = {
-          newsgroup: vm.selectedNewsGroupId
+            newsgroup: vm.selectedNewsGroupId
         };
-
+    
         if (vm.newsId !== undefined) {
-          params.newsId = vm.newsId;
+            params.newsId = vm.newsId;
         }
-      }
-
-      console.log("vm.chartType", vm.chartType);
-      if (vm.chartType == "line") {
-        vm.displayLineChart(params);
-      } else {
-        vm.displayPieChart(params);
-      }
-
+    
+        console.log("vm.chartType", vm.chartType);
+        if (vm.chartType == "line") {
+            vm.displayLineChart(params);
+        } else {
+            vm.displayPieChart(params);
+        }
     };
+    
     //pie chart
     vm.displayPieChart = function displayPieChart(params) {
       // Debugging log to check function call
@@ -104,6 +102,13 @@
           });
 
           vm.totals = rows.length;
+          if(vm.totals ==0){
+            document.getElementById("no_data").style.display = "block";
+    
+          }else{
+            document.getElementById("no_data").style.display = "none";
+    
+          }
           for (var i = 0; i < rows.length; i++) {
             var sentimentValue = rows[i].sentiment_researcher || rows[i].sentiment_ai;
             var sentimentName = '';
@@ -202,7 +207,7 @@
       if (params == undefined) {
         params = {
           newsgroup: vm.selectedNewsGroupId
-        }
+        };
       }
     
       if (vm.newsId !== undefined) {
@@ -231,7 +236,13 @@
           });
     
           vm.totals = rows.length;
-          console.log("aaa", rows);
+          if(vm.totals ==0){
+            document.getElementById("no_data").style.display = "block";
+    
+          }else{
+            document.getElementById("no_data").style.display = "none";
+    
+          }
     
           // Build sentimentMap with counts per year
           for (var i = 0; i < rows.length; i++) {
@@ -261,7 +272,7 @@
           for (var sentimentName in sentimentMap) {
             var sentimentData = [];
             var years = Object.keys(sentimentMap[sentimentName]).sort((a, b) => a - b);
-            
+    
             // Ensure labels include all years in ascending order
             years.forEach(year => {
               if (!labels.includes(year)) {
@@ -276,11 +287,40 @@
               sentimentData.push(cumulativeCount);
             });
     
-            data.push(sentimentData);
+            data.push({
+              sentimentName: sentimentName,
+              sentimentData: sentimentData,
+              lastCount: cumulativeCount,
+              lastYear: years[years.length - 1]
+            });
           }
     
           // Ensure labels are sorted in ascending order
           labels.sort((a, b) => a - b);
+    
+          // Determine the latest year
+          var latestYear = Math.max(...labels.map(year => parseInt(year)));
+    
+          // Ensure all sentiments have data for all years up to the latest year
+          data.forEach(item => {
+            var sentimentData = item.sentimentData;
+            var lastCount = item.lastCount;
+            var lastYear = parseInt(item.lastYear);
+            var sentimentName = item.sentimentName;
+    
+            // Fill in missing years with the last known count
+            for (var year = lastYear + 1; year <= latestYear; year++) {
+              sentimentData.push(lastCount);
+            }
+          });
+    
+          // Ensure all data arrays are padded to match the length of labels
+          data.forEach(item => {
+            var sentimentData = item.sentimentData;
+            while (sentimentData.length < labels.length) {
+              sentimentData.push(item.lastCount);
+            }
+          });
     
           var lineData = {
             labels: labels,
@@ -288,12 +328,12 @@
           };
     
           // Build datasets for each sentiment
-          for (var i = 0; i < Object.keys(sentimentMap).length; i++) {
-            var sentimentName = Object.keys(sentimentMap)[i];
+          data.forEach(item => {
+            var sentimentName = item.sentimentName;
             var sentiment = sentiments.find(sentiment => sentiment.name === sentimentName);
     
             if (!sentiment) {
-              continue;
+              return;
             }
     
             var sentimentId = sentiment._id;
@@ -301,12 +341,12 @@
     
             lineData.datasets.push({
               label: sentimentName,
-              data: data[i],
+              data: item.sentimentData,
               fill: false,
               borderColor: color,
               lineTension: 0.1
             });
-          }
+          });
     
           var lineChartCanvas = $('#lineChartt').get(0).getContext('2d');
           var lineOptions = {
@@ -337,13 +377,9 @@
     
         });
       });
-    }
+    };
     
-    
-    
-    
-    
-    
+  
     // vm.displayLineChart = function displayLineChart(params) {
     //   console.log("displayLineChart function called");
     
@@ -764,7 +800,8 @@
       }
     }
     vm.downloadCanvasAsImage = function () {
-      var canvas = document.getElementById('pieChart');
+      if (vm.chartType == "line") {
+        var canvas = document.getElementById('lineChartt');
       var image = canvas.toDataURL('image/png');
 
       var link = document.createElement('a');
@@ -776,6 +813,21 @@
       link.click();
 
       document.body.removeChild(link);
+      } else {
+        var canvas = document.getElementById('pieChart');
+      var image = canvas.toDataURL('image/png');
+
+      var link = document.createElement('a');
+      link.href = image;
+      link.download = 'chart.png';
+
+      document.body.appendChild(link);
+
+      link.click();
+
+      document.body.removeChild(link);
+      }
+      
     }
 
   }

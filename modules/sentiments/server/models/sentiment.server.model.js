@@ -1,5 +1,7 @@
 'use strict';
 
+const { Int32 } = require('mongodb');
+
 /**
  * Module dependencies.
  */
@@ -22,7 +24,8 @@ var SentimentSchema = new Schema({
     trim: true
   },
   sentiment_score: {
-    type: String
+    type: Number,
+    default: 0
   },
   color: {
     type: String

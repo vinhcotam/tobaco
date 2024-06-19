@@ -31,6 +31,12 @@
     vm.figureOutItemsToDisplay = figureOutItemsToDisplay;
     vm.pageChanged = pageChanged;
     vm.buildPager();
+    CommentsService.getTotal({ newsId: vm.newsId }).$promise.then(function (number) {
+      vm.filterLength = number[0];
+      vm.total = vm.filterLength;
+      console.log("vm.itemsPerPage", vm.itemsPerPage)
+      vm.totalPages = Math.ceil(vm.filterLength / vm.itemsPerPage);
+    });
     vm.goToLabel = function (newsId) {
       $state.go('comments.labeling', { newsId: vm.newsId });
     };
@@ -74,6 +80,7 @@
     };
     vm.filterArgumentByDate = function () {
       if (vm.startfilterdate != undefined || vm.endfilterdate != undefined) {
+        document.getElementById("error-container").style.display = "none";
         var startDate = new Date(vm.startfilterdate);
         var endDate = new Date(vm.endfilterdate);
         endDate.setHours(23, 59, 59, 999);
@@ -87,6 +94,8 @@
           vm.displayPieChart(vm.filteredComments);
         }
         console.log(vm.filteredComments)
+        
+
       } else {
         console.log("zo")
         document.getElementById("error-container").style.display = "block";
@@ -98,6 +107,14 @@
       var donutData = {};
       console.log("displayPieChart function called");
       comments = comments || vm.filteredComments;
+      vm.total = comments.length;
+      if(vm.total ==0){
+        document.getElementById("no_data").style.display = "block";
+
+      }else{
+        document.getElementById("no_data").style.display = "none";
+
+      }
       // Check and destroy the existing chart instance if it exists
       if (vm.pieChart) {
         console.log("Destroying existing pie chart instance");
@@ -189,6 +206,14 @@
     vm.displayLineChart = function(comments) {
       var sentimentMap = {};
       comments = comments || vm.filteredComments;
+      vm.total = comments.length;
+      if(vm.total ==0){
+        document.getElementById("no_data").style.display = "block";
+
+      }else{
+        document.getElementById("no_data").style.display = "none";
+
+      }
       console.log("displayLineChart function called");
       $("#pieChart").hide();
       $("#lineChartt").show();
