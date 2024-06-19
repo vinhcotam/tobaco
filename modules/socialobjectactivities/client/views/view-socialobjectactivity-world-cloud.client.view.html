@@ -8,31 +8,23 @@
             <div class="card-body table-responsive p-0">
                 <div class="choose_container" style="display: flex; padding-top: 2%; padding-left: 2%;">
                     <label for="week" style="margin-right: 10px;">Week</label>
-                    <input type="radio" id="week" name="chooseType" value="week" style="margin-right: 10px;"
-                        ng-model="vm.chooseType">
+                    <input type="radio" id="week" name="chooseType" value="week" style="margin-right: 10px;" ng-model="vm.chooseType">
                     <label for="month" style="margin-right: 10px;">Month</label>
-                    <input type="radio" id="month" name="chooseType" value="month" style="margin-right: 10px;"
-                        ng-model="vm.chooseType">
+                    <input type="radio" id="month" name="chooseType" value="month" style="margin-right: 10px;" ng-model="vm.chooseType">
                 </div>
                 <div class="date_container" style="display: flex; align-items: center; padding-top: 2%;">
-                    <label for="datetimefilter"
-                        style="align-self: center; margin-right: 2%; margin-left: 2%;">Date</label>
-                    <input id="datetimefilter" type="text" class="form-control" ng-model="vm.filterbydate"
-                        ng-change="vm.figureOutItemsToDisplay()" maxlength="10" style="width: 30%;">
+                    <label for="datetimefilter" style="align-self: center; margin-right: 2%; margin-left: 2%;">Date</label>
+                    <input id="datetimefilter" type="text" class="form-control" ng-model="vm.filterbydate" ng-change="vm.figureOutItemsToDisplay()" maxlength="10" style="width: 30%;">
                     <div class="d-flex justify-content-between align-items-center">
-                        <button type="submit" class="btn btn-success" style="margin: 2%;"
-                            ng-click="vm.analysisSocial()">Analysis</button>
-                        <button id="downloadButton" class="btn btn-primary"
-                            ng-click="vm.downloadAsImage()">Download</button>
+                        <button type="submit" class="btn btn-success" style="margin: 2%;" ng-click="vm.analysisSocial()">Analysis</button>
+                        <button id="downloadButton" class="btn btn-primary" ng-click="vm.downloadAsImage()">Download</button>
                     </div>
                 </div>
                 <div class="choose_container_display" style="display: flex; padding-top: 2%; padding-left: 2%;">
                     <label for="" style="margin-right: 10px;">Display:</label>
-                    <input type="radio" id="image" name="chooseTypeDisplay" value="image" style="margin-right: 10px;"
-                        ng-model="vm.displayType" ng-change="vm.displayImageSlider()">
+                    <input type="radio" id="image" name="chooseTypeDisplay" value="image" style="margin-right: 10px;" ng-model="vm.displayType" ng-change="vm.displayImageSlider()">
                     <label for="image" style="margin-right: 10px;">Image</label>
-                    <input type="radio" id="chart" name="chooseTypeDisplay" value="chart" style="margin-right: 10px;"
-                        ng-model="vm.displayType" ng-change="vm.initBarChart()">
+                    <input type="radio" id="chart" name="chooseTypeDisplay" value="chart" style="margin-right: 10px;" ng-model="vm.displayType" ng-change="vm.initBarChart()">
                     <label for="chart" style="margin-right: 10px;">Chart</label>
                 </div>
                 <div id="loading-container" style="display: none; text-align: center;">
@@ -42,19 +34,15 @@
                     <p>Loading...</p>
                 </div>
                 <p style="display: none; text-align: center;" id="no_data">No data found</p>
-                <div style="margin-left: 2%;" id="error-container" ng-show="vm.isDateEmpty" class="error-text">Please
-                    enter the date.</div>
-                <div id="demo" class="carousel slide" data-ride="carousel" style="margin-bottom: 1%; display: none;"
-                    ng-show="vm.displayType === 'image'">
+                <div style="margin-left: 2%;" id="error-container" ng-show="vm.isDateEmpty" class="error-text">Please enter the date.</div>
+                <div id="demo" class="carousel slide" data-ride="carousel" style="margin-bottom: 1%; display: none;" ng-show="vm.displayType === 'image'">
                     <ol class="carousel-indicators" style="display: flex !important;" id="carousel-image">
-                        <li ng-repeat="image in vm.base64DataArray" data-target="#demo" data-slide-to="{{$index}}"
-                            ng-class="{active: $index === 0}"
+                        <li ng-repeat="image in vm.base64DataArray" data-target="#demo" data-slide-to="{{$index}}" ng-class="{active: $index === 0}"
                             style="background-color: aqua; border-radius: 50%; margin-right: 5px; width: 20px; height: 20px; display: inline-block; box-shadow: 0px 0px 5px 2px rgba(0,0,0,0.5);">
                         </li>
                     </ol>
                     <div class="carousel-inner" id="imageWrapper">
-                        <div ng-repeat="image in vm.base64DataArray" class="carousel-item"
-                            ng-class="{active: $index === 0}">
+                        <div ng-repeat="image in vm.base64DataArray" class="carousel-item" ng-class="{active: $index === 0}">
                             <img ng-src="{{image}}" class="d-block w-100" alt="Slide {{$index + 1}}">
                         </div>
                     </div>
@@ -65,11 +53,10 @@
                         <span class="carousel-control-next-icon"></span>
                     </a>
                 </div>
-                <div ng-show="vm.displayType === 'chart'">
-                    <canvas id="barChart"></canvas>
+                <div id="chartContainer" style="position: relative; margin: 0; padding: 0; width: 100%; box-sizing: border-box;" ng-show="vm.displayType === 'chart'">
+                    <canvas id="barChart" style="display: block; margin: 0; padding: 0; width: 100%; height: 650px !important;"></canvas>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>

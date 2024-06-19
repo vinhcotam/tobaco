@@ -92,6 +92,7 @@
 
 
         };
+        
         vm.displayImageSlider = function displayImageSlider() {
             var imageWrapper = document.getElementById('imageWrapper');
             if (imageWrapper) {
@@ -136,6 +137,7 @@
                 console.error('Image wrapper not found.');
             }
         }
+
         vm.initBarChart = function () {
             var labels = Object.keys(vm.text_list);
             var data = Object.values(vm.text_list);
@@ -152,43 +154,10 @@
                         borderColor: 'rgba(37, 96, 245, 1)',
                         borderWidth: 1
                     }]
-                },
-                options: {
-                    layout: {
-                        padding: {
-                            left: 0,
-                            right: 0,
-                            top: 0,
-                            bottom: 0
-                        }
-                    },
-                    scales: {
-                        x: {
-                            beginAtZero: true
-                        },
-                        y: {
-                            stacked: true,
-                            ticks: {
-                                font: {
-                                    size: 500
-                                }
-                            },
-                            gridLines: {
-                                display: true
-                            }
-                        }
-                    },
-                    legend: {
-                        display: true,
-                        labels: {
-                            font: {
-                                size: 500 
-                            }
-                        }
-                    }
                 }
             });
         };
+        
         
         
         

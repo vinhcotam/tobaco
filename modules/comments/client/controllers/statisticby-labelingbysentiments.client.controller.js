@@ -257,16 +257,25 @@
           var labels = [];
           var data = [];
     
-          // Gather years and their corresponding comment counts
+          // Gather years and ensure labels are sorted in ascending order
           for (var sentimentName in sentimentMap) {
             var sentimentData = [];
-            for (var j = 0; j < Object.keys(sentimentMap[sentimentName]).length; j++) {
-              var year = Object.keys(sentimentMap[sentimentName])[j];
+            var years = Object.keys(sentimentMap[sentimentName]).sort((a, b) => a - b);
+            
+            // Ensure labels include all years in ascending order
+            years.forEach(year => {
               if (!labels.includes(year)) {
                 labels.push(year);
               }
-              sentimentData.push(sentimentMap[sentimentName][year]);
-            }
+            });
+    
+            // Accumulate counts per year for cumulative sum
+            var cumulativeCount = 0;
+            years.forEach(year => {
+              cumulativeCount += sentimentMap[sentimentName][year];
+              sentimentData.push(cumulativeCount);
+            });
+    
             data.push(sentimentData);
           }
     
@@ -329,6 +338,7 @@
         });
       });
     }
+    
     
     
     
